@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Display Webcam Stream</title>
- 
-<style>
-#container {
-	margin: 0px auto;
-	width: 500px;
-	height: 375px;
-	border: 10px #333 solid;
-}
-#videoElement {
-	width: 500px;
-	height: 375px;
-	background-color: #666;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/image.css" rel="stylesheet">
 </head>
- 
-<body>
-<div id="container">
-	<video autoplay="true" id="videoElement">
-	
-	</video>
-</div>
-<script>
-var video = document.querySelector("#videoElement");
+<body>           
 
-if (navigator.mediaDevices.getUserMedia) {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function (stream) {
-      video.srcObject = stream;
-    })
-    .catch(function (err0r) {
-      console.log("Something went wrong!");
-    });
-}
-</script>
+        <div class="contentarea">
+            <h1>
+                Using Javascript to capture Photo
+            </h1>
+            <div class="camera">
+                <video id="video">Video stream not available.</video>
+            </div>
+            <div></div>
+            <canvas id="canvas"></canvas>
+            <div class="output">
+                <img id="photo" alt="The screen capture will appear in this box.">
+            </div>
+        </div>
+
+    <script src="js/image.js"></script>
 </body>
 </html>
