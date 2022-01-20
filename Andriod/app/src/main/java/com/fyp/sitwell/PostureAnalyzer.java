@@ -22,7 +22,7 @@ public class PostureAnalyzer {
         PoseLandmark leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
         String message;
         if(leftShoulder != null){
-            message = leftShoulder.toString();
+            message = "x: " + leftShoulder.getPosition().x+" y: "+ leftShoulder.getPosition().y;
         }else {
             message = "empty";
         }

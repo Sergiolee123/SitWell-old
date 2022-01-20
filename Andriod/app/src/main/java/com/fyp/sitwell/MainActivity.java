@@ -188,25 +188,16 @@ public class MainActivity extends AppCompatActivity {
                         InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
                 // Pass image to an ML Kit Vision API
                 // ...
+                // Task completed successfully
+                // ...
+                // Task failed with an exception
+                // ...
                 Task<Pose> result =
                         poseDetector.process(image)
                                 .addOnSuccessListener(
-                                        new OnSuccessListener<Pose>() {
-                                            @Override
-                                            public void onSuccess(Pose pose) {
-                                                // Task completed successfully
-                                                // ...
-                                                new PostureAnalyzer(pose);
-                                            }
-                                        })
+                                        PostureAnalyzer::new)
                                 .addOnFailureListener(
-                                        new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Task failed with an exception
-                                                // ...
-                                            }
-                                        })
+                                        Throwable::printStackTrace)
                                 .addOnCompleteListener(
                                         (r) -> {
                                             imageProxy.close();
