@@ -18,6 +18,7 @@ public class PostureAnalyzer {
     }
 
     protected void getPose(){
+
         List<PoseLandmark> allPoseLandmarks = pose.getAllPoseLandmarks();
         PoseLandmark leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
         String message;
