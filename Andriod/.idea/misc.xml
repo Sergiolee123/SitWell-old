@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndriodProject/SitWell/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_main.xml" value="0.20625" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_posture_detect.xml" value="0.27219202898550726" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/settings_style.xml" value="0.27219202898550726" />
       </map>
     </option>
   </component>
