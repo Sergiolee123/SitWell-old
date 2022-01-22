@@ -21,6 +21,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.util.Size;
 import android.view.View;
 import android.widget.Button;
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void analyze(ImageProxy imageProxy) {
+            Log.e("The rotation is ",imageProxy.getImageInfo().getRotationDegrees()+"");
             @SuppressLint("UnsafeExperimentalUsageError") Image mediaImage = imageProxy.getImage();
             if (mediaImage != null) {
                 InputImage image =
@@ -206,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @Override
     public void onStop() {
