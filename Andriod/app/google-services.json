@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1071817787547",
+    "project_id": "sitwell-5b25b",
+    "storage_bucket": "sitwell-5b25b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071817787547:android:ab5ac8a6c46a332f0dde3e",
+        "android_client_info": {
+          "package_name": "com.fyp.sitwell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071817787547-268r3g9mt40168vc4etccv0s4acoch5i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fyp.sitwell",
+            "certificate_hash": "d953a285139bd1f209477217adf35a4aa3e28f0c"
+          }
+        },
+        {
+          "client_id": "1071817787547-oka3p1r6sn4s6qo2n44nt6vhh3vt5f9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQr7zSK91wVKAjxs2F1gR9NoJRyBojVMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071817787547-oka3p1r6sn4s6qo2n44nt6vhh3vt5f9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
