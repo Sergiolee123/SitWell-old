@@ -3,7 +3,7 @@ const Websocket = require('ws')
 const app = express()
 
 app.set('view engine', 'ejs')
-const wss = new Websocket.Server({ port: 25566 })
+const wss = new Websocket.Server({ port: 25565 })
 app.use(express.json({limit: '5mb'}))
 
 

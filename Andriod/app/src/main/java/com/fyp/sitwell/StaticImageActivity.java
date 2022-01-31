@@ -5,15 +5,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
@@ -22,7 +19,6 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
@@ -32,14 +28,14 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class StaticImageActivity extends AppCompatActivity {
-    private final String YOURIP = "";
+    private final String YOURIP = "138.19.62.124:25565";
     private final String SERVER_PATH = "ws://"+ YOURIP;
     private WebSocket webSocket;
 
 
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
-    PreviewView mPreviewView;
+    PreviewView previewView;
     Button captureImage;
 
     @Override
@@ -48,7 +44,7 @@ public class StaticImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_static_image);
         initiateSocketConnection();
 
-        mPreviewView = findViewById(R.id.viewFinder);
+        previewView = findViewById(R.id.viewFinder);
         captureImage = findViewById(R.id.camera_capture_button);
 
         options =
@@ -87,8 +83,8 @@ public class StaticImageActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
         webSocket = client.newWebSocket(request, new SocketListener());
-        JSONObject jsonObject = new JSONObject();
         /*
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("name", "Tom");
             jsonObject.put("message", "Hi");
@@ -97,7 +93,8 @@ public class StaticImageActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
+        */
     }
 
     private class SocketListener extends WebSocketListener {

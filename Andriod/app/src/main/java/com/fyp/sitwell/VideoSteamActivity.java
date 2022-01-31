@@ -6,7 +6,6 @@ import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -19,17 +18,11 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.util.Size;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
@@ -38,17 +31,12 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
-public class MainActivity extends AppCompatActivity {
+public class VideoSteamActivity extends AppCompatActivity {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private int REQUEST_CODE_PERMISSIONS = 1001;
@@ -62,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_video_steam);
 
         mPreviewView = findViewById(R.id.viewFinder);
         captureImage = findViewById(R.id.camera_capture_button);
@@ -150,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(MainActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VideoSteamActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
