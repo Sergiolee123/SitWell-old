@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_h_.05line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_h_.1line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_h_.95line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_v_.05line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_v_.95line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/guide_h_.1line"
+        app:layout_constraintLeft_toRightOf="@id/guide_v_.05line"
+        app:layout_constraintRight_toLeftOf="@id/guide_v_.95line"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+
+        android:id="@+id/edit_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Please enter your email"
+        android:minHeight="48dp"
+        android:textSize="12sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:inputType="textEmailAddress"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@+id/guide_v_.05line"
+        app:layout_constraintRight_toRightOf="@id/guide_v_.95line"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/edit_password"/>
+
+
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:hint="Please enter your password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textSize="12sp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@+id/guide_v_.05line"
+        app:layout_constraintRight_toLeftOf="@+id/guide_v_.95line"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/button_signup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:textSize="12sp"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        app:layout_constraintLeft_toLeftOf="@+id/edit_password"
+        app:layout_constraintRight_toRightOf="@+id/edit_password"
+        app:layout_constraintTop_toBottomOf="@id/edit_password"
+        app:layout_constraintBottom_toTopOf="@+id/text_OR"
+
+        />
+
+    <View
+        android:id="@+id/view_leftLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#CCA5A5A5"
+        app:layout_constraintLeft_toLeftOf="@id/button_signup"
+        app:layout_constraintRight_toLeftOf="@+id/text_OR"
+        app:layout_constraintTop_toBottomOf="@+id/button_signup"
+        app:layout_constraintBottom_toTopOf="@+id/button_login"/>
+
+    <View
+        android:id="@+id/view_RightLine"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#CCA5A5A5"
+        app:layout_constraintLeft_toRightOf="@+id/text_OR"
+        app:layout_constraintRight_toRightOf="@id/button_signup"
+        app:layout_constraintTop_toBottomOf="@+id/button_signup"
+        app:layout_constraintBottom_toTopOf="@+id/button_login"/>
+
+    <TextView
+        android:id="@+id/text_OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="OR"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/view_leftLine"
+        app:layout_constraintRight_toLeftOf="@+id/view_RightLine"
+        app:layout_constraintTop_toBottomOf="@id/button_signup"
+        app:layout_constraintBottom_toTopOf="@id/button_login"/>
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textSize="12sp"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_OR"
+        app:layout_constraintLeft_toLeftOf="@+id/edit_password"
+        app:layout_constraintRight_toRightOf="@+id/edit_password"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
