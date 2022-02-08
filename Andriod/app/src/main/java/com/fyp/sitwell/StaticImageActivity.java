@@ -2,6 +2,9 @@ package com.fyp.sitwell;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -21,6 +24,14 @@ import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
 import org.json.JSONObject;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,9 +39,10 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class StaticImageActivity extends AppCompatActivity {
-    private final String YOURIP = "138.19.62.124:25565";
+    private final String YOURIP = "138.19.62.124:25566";
     private final String SERVER_PATH = "ws://"+ YOURIP;
     private WebSocket webSocket;
+    Ringtone r;
 
 
     PoseDetector poseDetector;
@@ -42,7 +54,6 @@ public class StaticImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_static_image);
-        initiateSocketConnection();
 
         previewView = findViewById(R.id.viewFinder);
         captureImage = findViewById(R.id.camera_capture_button);
@@ -53,12 +64,33 @@ public class StaticImageActivity extends AppCompatActivity {
                         .build();
 
         poseDetector = PoseDetection.getClient(options);
-
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        r = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
         initiateSocketConnection();
 
     }
 
+    protected String decoding(){
+        String st = "12345678";
+        byte[] key = st.getBytes();
+        String result = "null";
+
+
+        SecretKey secret = null;
+        try {
+            DESKeySpec spec = new DESKeySpec(key);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("DES");
+            secret = factory.generateSecret(spec);
+            Cipher c = Cipher.getInstance("DES");
+            c.init(Cipher.DECRYPT_MODE, secret);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     protected void getPose(String encodedImage){
+
         encodedImage = encodedImage.substring(encodedImage.indexOf(",")  + 1);
         byte[] imageByte = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
@@ -66,7 +98,10 @@ public class StaticImageActivity extends AppCompatActivity {
         Task<Pose> result =
                 poseDetector.process(image)
                         .addOnSuccessListener(
-                                PostureAnalyzer::new)
+                                (pose) -> {
+                                    new PostureAnalyzer(pose,this, r);
+                                }
+                                )
                         .addOnFailureListener(
                                 Throwable::printStackTrace)
                         .addOnCompleteListener(

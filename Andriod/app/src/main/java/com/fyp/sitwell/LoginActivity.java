@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             // Snackbar.make(mLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
                             startActivity(intent);
                             //updateUI(user);
                         } else {
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
                             //updateUI(user);
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(),Main2Activity.class));
 
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
