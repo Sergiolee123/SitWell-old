@@ -17,6 +17,9 @@ import androidx.lifecycle.LifecycleOwner;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.media.Image;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -46,6 +49,7 @@ public class VideoSteamActivity extends AppCompatActivity {
     PreviewView mPreviewView;
     Button captureImage;
     ImageAnalysis imageAnalysis;
+    Ringtone r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,9 @@ public class VideoSteamActivity extends AppCompatActivity {
 
         mPreviewView = findViewById(R.id.viewFinder);
         captureImage = findViewById(R.id.camera_capture_button);
+
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        r = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
 
         options =
                 new AccuratePoseDetectorOptions.Builder()
@@ -166,12 +173,14 @@ public class VideoSteamActivity extends AppCompatActivity {
         return app_folder_path;
     }
 */
+    protected void getPose(Pose pose){
+        new PostureAnalyzer(pose, this, r);
+    }
 
     private class PoseAnalyzer implements ImageAnalysis.Analyzer {
 
         @Override
         public void analyze(ImageProxy imageProxy) {
-            Log.e("The rotation is ",imageProxy.getImageInfo().getRotationDegrees()+"");
             @SuppressLint("UnsafeExperimentalUsageError") Image mediaImage = imageProxy.getImage();
             if (mediaImage != null) {
                 InputImage image =
@@ -185,7 +194,10 @@ public class VideoSteamActivity extends AppCompatActivity {
                 Task<Pose> result =
                         poseDetector.process(image)
                                 .addOnSuccessListener(
-                                        PostureAnalyzer::new)
+                                        (pose) -> {
+                                            getPose(pose);
+                                        }
+                                        )
                                 .addOnFailureListener(
                                         Throwable::printStackTrace)
                                 .addOnCompleteListener(
