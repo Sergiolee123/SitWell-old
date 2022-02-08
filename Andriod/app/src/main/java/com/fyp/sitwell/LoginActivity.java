@@ -86,6 +86,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+        if(currentUser != null){
+            Toast.makeText(LoginActivity.this, "Current User.",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(LoginActivity.this, "Null User.",
+                    Toast.LENGTH_SHORT).show();
+        }
         //updateUI(currentUser);
     }
 
