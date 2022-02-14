@@ -87,8 +87,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
         if(currentUser != null){
-            Toast.makeText(LoginActivity.this, "Current User.",
+            Toast.makeText(LoginActivity.this, "Have Current User.",
                     Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+            finish();
         }else {
             Toast.makeText(LoginActivity.this, "Null User.",
                     Toast.LENGTH_SHORT).show();

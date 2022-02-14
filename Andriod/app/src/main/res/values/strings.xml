@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">SitWell</string>
+    <string name="instruction_title_habit">Please follow the steps to set up your environment:</string>
+    <string name="instruction_content_habit">
+        Please follow the steps to set up your environment:\n
+        <br>1. Connect the web camera to your computer.\n</br>
+        <br>2. Make sure your camera has the required drivers installed.\n</br>
+        <br>3. Place the webcam at the top mid of the monitor as shown below:</br>
+
+    </string>
+    <string name="instruction_content_habit4">Finally, use computer to browse the following websites:\n
+        <br>www. Website.com \n</br>
+    </string>
 </resources>
