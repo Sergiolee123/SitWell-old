@@ -30,10 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Main2Activity"
-            android:exported="true" >
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:exported="true" >
         </activity>
@@ -46,6 +42,15 @@
         <activity
             android:name=".VideoSteamActivity"
             android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
