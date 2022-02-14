@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_height"
+        android:text="@string/course_instruction"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_height"
         android:layout_width="match_parent"

@@ -21,10 +21,13 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.util.Size;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.fyp.sitwell.mucleTraining.RepeatCounter;
 import com.fyp.sitwell.mucleTraining.TrainingPostureAnalyer;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -35,26 +38,33 @@ import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MuscleStrengthActivity extends AppCompatActivity {
-    private Executor executor = Executors.newSingleThreadExecutor();
+    private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
     PreviewView previewView;
     ImageAnalysis imageAnalysis;
+    RepeatCounter repeatCounter;
+    TextToSpeech textToSpeech;
+    Boolean started;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_steam);
+        setContentView(R.layout.activity_muscle_strength);
 
-        previewView = findViewById(R.id.viewFinder);
+        previewView = findViewById(R.id.viewBinder);
+
+        repeatCounter = new RepeatCounter();
+        started = false;
 
 
         options =
@@ -64,6 +74,11 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
         poseDetector = PoseDetection.getClient(options);
 
+        textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
+            if(i!=TextToSpeech.ERROR){
+                textToSpeech.setLanguage(Locale.UK);
+            }
+        });
 
         if(allPermissionsGranted()){
             startCamera(); //start camera if permission has been granted by user
@@ -98,7 +113,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                 .build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
         imageAnalysis = new ImageAnalysis.Builder()
@@ -124,7 +139,34 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
 
     protected void getPose(Pose pose){
-        pose.getPoseLandmark(PoseLandmark.LEFT_FOOT_INDEX);
+        String message = null;
+        TrainingPostureAnalyer t = new TrainingPostureAnalyer(pose, "leftFoot");
+        if(!t.isPrepare()){
+            Log.e("muscle","isPrepare");
+            message = "Please make sure you are inside the phone camera";
+            started = false;
+        }else if(!t.isReady()){
+            Log.e("muscle","isReady");
+            message = "Please make sure you are in a correct posture";
+            started = false;
+        }else if(t.isReady() && started){
+            Log.e("muscle","started");
+            message = "You can start now, the app will count how many time you do";
+            started = true;
+        }else if(t.isUp()){
+            Log.e("muscle","isUp");
+            repeatCounter.finishedHalf();
+        }else if(t.isDown()){
+            if(repeatCounter.addCounter()){
+                message = "You have complete " + repeatCounter.getCounter() + " times";
+            }
+        }
+
+        if(!textToSpeech.isSpeaking() && message != null){
+            textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
+        }
+
+
     }
 
     private class PoseAnalyzer implements ImageAnalysis.Analyzer {

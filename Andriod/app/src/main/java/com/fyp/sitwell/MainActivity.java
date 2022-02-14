@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Sitting view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), StaticImageActivity.class));
+                startActivity(new Intent(getApplicationContext(), HabitCorrectionActivity.class));
             }
         });
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Exercise view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), VideoSteamActivity.class));
+                startActivity(new Intent(getApplicationContext(), MuscleStrengthActivity.class));
             }
         });
         setSupportActionBar(mToolBar);

@@ -17,9 +17,6 @@ import androidx.lifecycle.LifecycleOwner;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.media.Image;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Size;
 import android.widget.Button;
@@ -173,8 +170,8 @@ public class VideoSteamActivity extends AppCompatActivity {
         s.isNeckLateralBend();
         s.isBackUpStraight();
         s.isShoulderAlignment();
-        s.isLeftArmAbduction();
-        s.isRightArmAdduction();
+        s.isLeftArmCorrect();
+        s.isRightArmCorrect();
     }
 
     private class PoseAnalyzer implements ImageAnalysis.Analyzer {

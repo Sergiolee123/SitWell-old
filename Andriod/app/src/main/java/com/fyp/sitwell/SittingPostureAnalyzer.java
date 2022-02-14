@@ -18,6 +18,11 @@ public class SittingPostureAnalyzer {
     private Context context;
     private static double leftShoulderZ, rightShoulderZ;
 
+    public SittingPostureAnalyzer(Pose pose, Context context){
+        this.pose = pose;
+        this.context = context;
+    }
+
     public boolean setLeftShoulderZ() {
         try {
             leftShoulderZ =
@@ -40,10 +45,6 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    public SittingPostureAnalyzer(Pose pose, Context context){
-        this.pose = pose;
-        this.context = context;
-    }
 
     protected PointF midPoint(PointF p1, PointF p2){
         return new PointF((p1.x+p2.x)/2, (p1.y+p2.y)/2);
@@ -78,7 +79,7 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    protected Boolean isRightArmAdduction(){
+    protected Boolean isRightArmCorrect(){
         PoseLandmark rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER);
         PoseLandmark rightElbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW);
         try {
@@ -97,7 +98,7 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    protected Boolean isLeftArmAbduction(){
+    protected Boolean isLeftArmCorrect(){
         PoseLandmark leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
         PoseLandmark leftElbow = pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW);
         try {

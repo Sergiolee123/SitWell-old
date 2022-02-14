@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
 
+import java.util.ArrayList;
+
 public class TrainingPostureAnalyer {
     private Pose pose;
     private String side;
@@ -15,18 +17,9 @@ public class TrainingPostureAnalyer {
         this.side = side;
     }
 
-    protected double angleOfThreePoint(PoseLandmark firstPoint, PoseLandmark midPoint, PoseLandmark lastPoint) {
-        double result =
-                Math.toDegrees(
-                        Math.atan2(lastPoint.getPosition().y - midPoint.getPosition().y,
-                                lastPoint.getPosition().x - midPoint.getPosition().x)
-                                - Math.atan2(firstPoint.getPosition().y - midPoint.getPosition().y,
-                                firstPoint.getPosition().x - midPoint.getPosition().x));
-        result = Math.abs(result); // Angle should never be negative
-        if (result > 180) {
-            result = (360.0 - result); // Always get the acute representation of the angle
-        }
-        return result;
+    protected double angleOfTwoPoint(PoseLandmark p1,PoseLandmark p2){
+        return Math.abs(Math.toDegrees(Math.atan2(p1.getPosition().y-p2.getPosition().y,
+                p1.getPosition().x-p2.getPosition().x)));
     }
 
     public double lengthOfTwoPoint(PointF p1, PointF p2){
@@ -34,17 +27,11 @@ public class TrainingPostureAnalyer {
     }
 
     public Boolean isPrepare(){
-        try{
-            for(PoseLandmark p : pose.getAllPoseLandmarks()){
-                if(p.getInFrameLikelihood()<0.7){
-                    return false;
-                }
-            }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
+        ArrayList<Float> inFrameLikelihoods = new ArrayList<Float>();
+        for(PoseLandmark p : pose.getAllPoseLandmarks()){
+            inFrameLikelihoods.add(p.getInFrameLikelihood());
         }
-        return false;
+        return !inFrameLikelihoods.isEmpty();
     }
 
     public Boolean isReady(){
@@ -57,18 +44,43 @@ public class TrainingPostureAnalyer {
             wrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST).getPosition();
             ear = pose.getPoseLandmark(PoseLandmark.RIGHT_EAR).getPosition();
         }
+
         }catch (Exception e){
-            e.printStackTrace();
-            return false;
+
         }
-        Log.e("LLLF",lengthOfTwoPoint(wrist, ear)+"");
-        return lengthOfTwoPoint(wrist, ear) < 30;
+
+        PoseLandmark leftHip = pose.getPoseLandmark(PoseLandmark.LEFT_HIP);
+        PoseLandmark rightHip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP);
+
+        double hipsAngle = Math.abs(angleOfTwoPoint(leftHip,rightHip) - 90);
+        Log.e("LLLF","wrist " + lengthOfTwoPoint(wrist, ear));
+        double length = lengthOfTwoPoint(pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE).getPosition(),
+                pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE).getPosition());
+
+        Log.e("LLLF","Ankle " + length+" Hip"+ hipsAngle);
+        return lengthOfTwoPoint(wrist, ear) < 50 && hipsAngle < 20;
     }
 
     public Boolean isUp(){
         try{
-            lengthOfTwoPoint(pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE).getPosition(),
+            double length = lengthOfTwoPoint(pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE).getPosition(),
                     pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE).getPosition());
+            if(length > 100){
+                return true;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Boolean isDown(){
+        try{
+            double length = lengthOfTwoPoint(pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE).getPosition(),
+                    pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE).getPosition());
+            if(length < 60){
+                return true;
+            }
         } catch (Exception e){
             e.printStackTrace();
         }

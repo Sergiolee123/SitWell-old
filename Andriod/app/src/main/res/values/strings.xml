@@ -9,6 +9,17 @@
 
     </string>
     <string name="instruction_content_habit4">Finally, use computer to browse the following websites:\n
-        <br>www. Website.com \n</br>
+        <br>https://yourwebsite.com \n</br>
     </string>
+    <string name="instruction_content_habit_setUp">
+        Please follow the steps to set up your correct sitting posture:\n
+        <br>1. The screen will display a photo which captured by your webcam\n</br>
+        <br>2. If the photo contain your correct sitting posture, please press the ok button\n</br>
+
+    </string>
+    <string name="course_instruction">Welcome to sitwell. sitwell is a sitting posture correct app that will provide a 9-weeks course to correct your sitting habit.</string>
+    <string name="lying_lateral_leg_lift_instruction">Requirement for this training:\n
+        <br>A place to lie down Lie on one side, keeping your lower leg slightly bent on the ground.\n</br>
+        <br>Engage your core by drawing your belly button in toward your spine.\n</br>
+        <br>Raise your top leg without moving the rest of your body. Hold for 2 seconds at the top. Repeat 10 times.\n</br></string>
 </resources>
