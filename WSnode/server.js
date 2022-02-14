@@ -1,9 +1,25 @@
 const express = require("express")
 const Websocket = require('ws')
+const https = require('https');
+const fs = require('fs');
+
 const app = express()
 
 app.set('view engine', 'ejs')
-const wss = new Websocket.Server({ port: 25565 })
+
+const server = https
+.createServer(
+  {
+    // ...
+    cert: fs.readFileSync('public-cert.pem'),
+    key: fs.readFileSync('private-key.pem'),
+    // ...
+  },
+  app
+)
+.listen(25565);
+
+const wss = new Websocket.Server({ server })
 app.use(express.json({limit: '5mb'}))
 
 
@@ -34,4 +50,14 @@ wss.on('connection', (ws) => {
   });
 
 
-app.listen(8099)
+ https
+  .createServer(
+    {
+      // ...
+      cert: fs.readFileSync('public-cert.pem'),
+      key: fs.readFileSync('private-key.pem'),
+      // ...
+    },
+    app
+  )
+  .listen(8099);

@@ -25,12 +25,14 @@ import android.util.Size;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.fyp.sitwell.mucleTraining.TrainingPostureAnalyer;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
+import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
 import java.util.concurrent.ExecutionException;
@@ -38,15 +40,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class VideoSteamActivity extends AppCompatActivity {
-
+public class MuscleStrengthActivity extends AppCompatActivity {
     private Executor executor = Executors.newSingleThreadExecutor();
-    private int REQUEST_CODE_PERMISSIONS = 1001;
+    private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
-    PreviewView mPreviewView;
-    Button captureImage;
+    PreviewView previewView;
     ImageAnalysis imageAnalysis;
 
     @Override
@@ -54,8 +54,8 @@ public class VideoSteamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_steam);
 
-        mPreviewView = findViewById(R.id.viewFinder);
-        captureImage = findViewById(R.id.camera_capture_button);
+        previewView = findViewById(R.id.viewFinder);
+
 
         options =
                 new AccuratePoseDetectorOptions.Builder()
@@ -63,6 +63,7 @@ public class VideoSteamActivity extends AppCompatActivity {
                         .build();
 
         poseDetector = PoseDetection.getClient(options);
+
 
         if(allPermissionsGranted()){
             startCamera(); //start camera if permission has been granted by user
@@ -97,7 +98,7 @@ public class VideoSteamActivity extends AppCompatActivity {
                 .build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                 .build();
 
         imageAnalysis = new ImageAnalysis.Builder()
@@ -107,15 +108,10 @@ public class VideoSteamActivity extends AppCompatActivity {
                 .build();
 
         ExecutorService analysisExecutor = Executors.newSingleThreadExecutor();;
-        imageAnalysis.setAnalyzer(analysisExecutor, new PoseAnalyzer());
+        imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthActivity.PoseAnalyzer());
 
-        ImageCapture.Builder builder = new ImageCapture.Builder();
-
-        final ImageCapture imageCapture = builder
-                .setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
-                .build();
-        preview.setSurfaceProvider(mPreviewView.createSurfaceProvider());
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis, imageCapture);
+        preview.setSurfaceProvider(previewView.createSurfaceProvider());
+        cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis);
 
         AccuratePoseDetectorOptions options =
                 new AccuratePoseDetectorOptions.Builder()
@@ -124,57 +120,11 @@ public class VideoSteamActivity extends AppCompatActivity {
 
         poseDetector = PoseDetection.getClient(options);
 
-
-/*
-        captureImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-                File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date())+ ".jpg");
-
-                ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
-                imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback () {
-                    @Override
-                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(VideoSteamActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    @Override
-                    public void onError(@NonNull ImageCaptureException error) {
-                        error.printStackTrace();
-                    }
-                });
-            }
-        });
-*/
     }
 
 
-/*
-    public String getBatchDirectoryName() {
-
-        String app_folder_path = "";
-        app_folder_path = Environment.getExternalStorageDirectory().toString() + "/images";
-        File dir = new File(app_folder_path);
-        if (!dir.exists() && !dir.mkdirs()) {
-            Toast.makeText(this, "Cannot store file", Toast.LENGTH_SHORT).show();
-        }
-
-        return app_folder_path;
-    }
-*/
     protected void getPose(Pose pose){
-        SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose, this);
-        s.isNeckLateralBend();
-        s.isBackUpStraight();
-        s.isShoulderAlignment();
-        s.isLeftArmAbduction();
-        s.isRightArmAdduction();
+        pose.getPoseLandmark(PoseLandmark.LEFT_FOOT_INDEX);
     }
 
     private class PoseAnalyzer implements ImageAnalysis.Analyzer {
@@ -197,14 +147,14 @@ public class VideoSteamActivity extends AppCompatActivity {
                                         (pose) -> {
                                             getPose(pose);
                                         }
-                                        )
+                                )
                                 .addOnFailureListener(
                                         Throwable::printStackTrace)
                                 .addOnCompleteListener(
                                         (r) -> {
                                             imageProxy.close();
                                         }
-                        );
+                                );
             }
         }
     }

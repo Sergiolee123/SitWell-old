@@ -6,6 +6,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
@@ -22,10 +23,7 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
-import org.json.JSONObject;
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -39,24 +37,29 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class StaticImageActivity extends AppCompatActivity {
-    private final String YOURIP = "138.19.62.124:25566";
-    private final String SERVER_PATH = "ws://"+ YOURIP;
+    private final String YOURIP = "nodejsssltest.herokuapp.com";
+    //nodejsssltest.herokuapp.com:
+    private final String SERVER_PATH = "wss://"+ YOURIP;
     private WebSocket webSocket;
-    Ringtone r;
 
-
+    TextToSpeech textToSpeech;
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
-    PreviewView previewView;
-    Button captureImage;
+    Boolean setup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_static_image);
 
-        previewView = findViewById(R.id.viewFinder);
-        captureImage = findViewById(R.id.camera_capture_button);
+
+        setup = false;
+
+        textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
+            if(i!=TextToSpeech.ERROR){
+                textToSpeech.setLanguage(Locale.UK);
+            }
+        });
 
         options =
                 new AccuratePoseDetectorOptions.Builder()
@@ -64,42 +67,86 @@ public class StaticImageActivity extends AppCompatActivity {
                         .build();
 
         poseDetector = PoseDetection.getClient(options);
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        r = RingtoneManager.getRingtone(this.getApplicationContext(), notification);
         initiateSocketConnection();
 
     }
 
-    protected String decoding(){
-        String st = "12345678";
-        byte[] key = st.getBytes();
-        String result = "null";
+    protected boolean setup(SittingPostureAnalyzer s){
 
+        String message = "";
 
-        SecretKey secret = null;
-        try {
-            DESKeySpec spec = new DESKeySpec(key);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("DES");
-            secret = factory.generateSecret(spec);
-            Cipher c = Cipher.getInstance("DES");
-            c.init(Cipher.DECRYPT_MODE, secret);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(s.isNeckLateralBend()) {
+            message += "Your Neck is not straight";
         }
-        return result;
+        if(s.isShoulderAlignment()) {
+            message += "Your shoulder is not align";
+        }
+        if(s.isLeftArmAbduction()) {
+            message += "Your left arm is abduction";
+        }
+        if(s.isRightArmAdduction()) {
+            message += "Your right arm is adduction";
+        }
+
+        if(!message.equals("")){
+            textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
+            return false;
+        }else if(!s.setLeftShoulderZ() || !s.setRightShoulderZ()){
+            return false;
+        }
+
+        return true;
+
     }
+
+    protected void analyzePose(SittingPostureAnalyzer s){
+
+        String message = "";
+
+        if(s.isNeckLateralBend()) {
+            message += "Your Neck is not straight";
+        }
+        if(s.isBackUpStraight()) {
+            message += "Your Back is not straight";
+        }
+        if(s.isShoulderAlignment()) {
+            message += "Your shoulder is not align";
+        }
+        if(s.isLeftArmAbduction()) {
+            message += "Your left arm is abduction";
+        }
+        if(s.isRightArmAdduction()) {
+            message += "Your right arm is adduction";
+        }
+
+        if(!message.equals("")){
+            textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
+        }
+
+    }
+
 
     protected void getPose(String encodedImage){
 
         encodedImage = encodedImage.substring(encodedImage.indexOf(",")  + 1);
         byte[] imageByte = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
+        Log.e("post","image");
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         Task<Pose> result =
                 poseDetector.process(image)
                         .addOnSuccessListener(
                                 (pose) -> {
-                                    new PostureAnalyzer(pose,this, r);
+                                    Log.e("post","posta");
+                                    SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose,this);
+                                    if(setup) {
+                                        analyzePose(s);
+                                    }else{
+                                        setup = setup(s);
+                                        if(setup){
+                                            Log.e("SA","setup success");
+                                        }
+                                    }
                                 }
                                 )
                         .addOnFailureListener(
@@ -147,7 +194,7 @@ public class StaticImageActivity extends AppCompatActivity {
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             super.onMessage(webSocket, text);
-            Log.e("Re",text);
+            //Log.e("Re",text);
             getPose(text);
         }
 
