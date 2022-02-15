@@ -85,11 +85,11 @@ public class SittingPostureAnalyzer {
         try {
             String message = "Left x: " + rightShoulder.getPosition().x+" y: "+ rightShoulder.getPosition().y;
             String message1 = "right x: " + rightElbow.getPosition().x+" y: "+ rightElbow.getPosition().y;
-            double angle = Math.abs(angleOfTwoPoint(rightShoulder,rightElbow) - 90);
+            double angle = angleOfTwoPoint(rightShoulder,rightElbow) - 90;
             Log.e("PA",message);
             Log.e("PA",message1);
-            Log.e("PA",angle+"");
-            if(angle>15){
+            Log.e("PA","right arm" + angle);
+            if(angle > 15 || angle < -27) {
                 return true;
             }
         } catch (NullPointerException p){
@@ -104,11 +104,11 @@ public class SittingPostureAnalyzer {
         try {
             String message = "Left x: " + leftShoulder.getPosition().x+" y: "+ leftShoulder.getPosition().y;
             String message1 = "right x: " + leftElbow.getPosition().x+" y: "+ leftElbow.getPosition().y;
-            double angle = Math.abs(angleOfTwoPoint(leftShoulder,leftElbow) - 90);
+            double angle = angleOfTwoPoint(leftShoulder,leftElbow) - 90;
             Log.e("PA",message);
             Log.e("PA",message1);
             Log.e("PA",angle+"");
-            if(angle>15){
+            if(angle > 20 || angle < -15) {
                 return true;
             }
         } catch (NullPointerException p){
@@ -149,9 +149,10 @@ public class SittingPostureAnalyzer {
     }
 
     protected Boolean isBackUpStraight(){
-        Float leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER).getPosition3D().getZ();
-        Float rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER).getPosition3D().getZ();
+
         try {
+            float leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER).getPosition3D().getZ();
+            float rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER).getPosition3D().getZ();
             String message = "Left z: " + leftShoulder;
             String message1 = "right z: " + rightShoulder;
 

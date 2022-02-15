@@ -52,7 +52,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         connectWebcamFragment = new ConnectWebcamFragment();
         setupPostureFragment = new SetupPostureFragment();
-        habitCorrectionFragment = new HabitCorrectionFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.habit_fragment, connectWebcamFragment, "ConnectWebcam")
@@ -125,10 +124,14 @@ public class HabitCorrectionActivity extends FragmentActivity{
             message += "Your right arm is in bad position@";
         }
 
-        if(!message.equals("")){
+        if(message.equals("")){
+            habitCorrectionFragment.clearAll();
+        }else{
             habitCorrectionFragment.setTextView(message.replace("@", "\n"));
+            habitCorrectionFragment.showCorrectPose();
             textToSpeech.speak(message.replace("@", ",")
-                    ,TextToSpeech.QUEUE_FLUSH,null,null);
+                            + " Please refer to your correct posture" ,
+                    TextToSpeech.QUEUE_FLUSH,null,null);
         }
 
     }
@@ -184,6 +187,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                             SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose,this);
                             setup = isSetup(s);
                             if(setup){
+                                habitCorrectionFragment = new HabitCorrectionFragment(bitmap);
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.habit_fragment, habitCorrectionFragment, "habit")
                                         .commit();
@@ -287,9 +291,9 @@ public class HabitCorrectionActivity extends FragmentActivity{
     public void onStop() {
 
         super.onStop();
+        scheduler.shutdownNow();
         webSocket.close(1000,"User left");
         webSocket.cancel();
-        scheduler.shutdownNow();
         textToSpeech.shutdown();
         this.finish();
     }

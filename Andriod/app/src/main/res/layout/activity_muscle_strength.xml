@@ -24,7 +24,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="24dp"
             android:lineSpacingExtra="4sp"
-            android:textSize="15sp"
+            android:textSize="30sp"
             android:fontFamily="sans-serif"
             android:elegantTextHeight="true"
             android:text="@string/lying_lateral_leg_lift_instruction"
