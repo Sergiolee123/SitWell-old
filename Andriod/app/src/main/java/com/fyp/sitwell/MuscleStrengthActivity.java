@@ -25,6 +25,7 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fyp.sitwell.mucleTraining.RepeatCounter;
@@ -56,12 +57,15 @@ public class MuscleStrengthActivity extends AppCompatActivity {
     TextToSpeech textToSpeech;
     Boolean started;
 
+    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_muscle_strength);
 
         previewView = findViewById(R.id.viewBinder);
+        textView = (TextView) findViewById(R.id.text_instr_content);
 
         repeatCounter = new RepeatCounter();
         started = false;
@@ -113,7 +117,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                 .build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                 .build();
 
         imageAnalysis = new ImageAnalysis.Builder()
@@ -166,6 +170,8 @@ public class MuscleStrengthActivity extends AppCompatActivity {
             textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
         }
 
+        textView.setText(t.debug());
+
 
     }
 
@@ -207,6 +213,8 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
         super.onStop();
         imageAnalysis.clearAnalyzer();
+        textToSpeech.shutdown();
+        this.finish();
 
     }
 

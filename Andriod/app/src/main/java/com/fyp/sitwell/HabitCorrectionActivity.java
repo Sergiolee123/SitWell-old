@@ -31,7 +31,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class HabitCorrectionActivity extends FragmentActivity{
-    private final String YOURIP = "";
+    private final String YOURIP = "nodejsssltest.herokuapp.com/";
     private final String SERVER_PATH = "wss://"+ YOURIP;
     private WebSocket webSocket;
 
@@ -134,7 +134,8 @@ public class HabitCorrectionActivity extends FragmentActivity{
     }
 
     public void setCorrectSitting(View v) {
-        getPose(setupPostureFragment.getImage());
+        if(setupPostureFragment.getImage() != null)
+            getPose(setupPostureFragment.getImage());
     }
 
     private boolean isConnected(String encodedImage){
@@ -287,7 +288,9 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         super.onStop();
         webSocket.close(1000,"User left");
+        webSocket.cancel();
         scheduler.shutdownNow();
+        textToSpeech.shutdown();
         this.finish();
     }
 }
