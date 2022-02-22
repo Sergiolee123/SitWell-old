@@ -81,6 +81,11 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         String message = "";
 
+        if(!s.isPrepare()) {
+            textToSpeech.speak("Your body are not captured by the Webcam",TextToSpeech.QUEUE_FLUSH,null,null);
+            return false;
+        }
+
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight ";
         }
