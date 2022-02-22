@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SittingPostureAnalyzer {
@@ -58,6 +59,22 @@ public class SittingPostureAnalyzer {
     protected double angleOfTwoPoint(PointF p1,PointF p2){
         return Math.abs(Math.toDegrees(Math.atan2(p1.y-p2.y,
                 p1.x-p2.x)));
+    }
+
+    public Boolean isPrepare(){
+        ArrayList<Float> inFrameLikelihoods = new ArrayList<>();
+        for(PoseLandmark p : pose.getAllPoseLandmarks()){
+            inFrameLikelihoods.add(p.getInFrameLikelihood());
+        }
+        if(inFrameLikelihoods.size() < 32)
+            return false;
+        for(Float f : inFrameLikelihoods){
+            if(f < 0.5){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected Boolean isShoulderAlignment(){

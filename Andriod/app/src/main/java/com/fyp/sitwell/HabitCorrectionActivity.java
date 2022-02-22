@@ -108,6 +108,11 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         String message = "";
 
+        if(!s.isPrepare()) {
+            habitCorrectionFragment.setTextView("Your body are not captured by the Webcam");
+            return;
+        }
+
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight@";
         }

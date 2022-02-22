@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.media.Ringtone;
@@ -24,6 +25,8 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
+import android.util.SparseIntArray;
+import android.view.Surface;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +51,7 @@ import java.util.concurrent.Executors;
 public class MuscleStrengthActivity extends AppCompatActivity {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
-    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
     PreviewView previewView;
@@ -62,6 +65,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_muscle_strength);
 
         previewView = findViewById(R.id.viewBinder);
@@ -117,7 +121,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                 .build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
         imageAnalysis = new ImageAnalysis.Builder()
@@ -143,43 +147,52 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
 
     protected void getPose(Pose pose){
+
+
+
         String message = null;
         TrainingPostureAnalyer t = new TrainingPostureAnalyer(pose, "leftFoot");
         if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
-            message = "Please make sure you are inside the phone camera";
+            message = "Please make sure your whole body is inside the phone camera";
             started = false;
         }else if(!t.isReady()){
             Log.e("muscle","isReady");
             message = "Please make sure you are in a correct posture";
             started = false;
-        }else if(t.isReady() && started){
+        }else if(t.isReady() && !started){
             Log.e("muscle","started");
-            message = "You can start now, the app will count how many time you do";
+            textView.setText("");
+            textToSpeech.speak( "You can start now, the app will count how many time you do"
+                    ,TextToSpeech.QUEUE_ADD,null,null);
             started = true;
         }else if(t.isUp()){
             Log.e("muscle","isUp");
             repeatCounter.finishedHalf();
         }else if(t.isDown()){
             if(repeatCounter.addCounter()){
-                message = "You have complete " + repeatCounter.getCounter() + " times";
+                textToSpeech.speak("You have complete " + repeatCounter.getCounter() + " times"
+                        ,TextToSpeech.QUEUE_ADD,null,null);
             }
         }
 
         if(!textToSpeech.isSpeaking() && message != null){
-            textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
+            textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
+            textView.setText(R.string.lying_lateral_leg_lift_instruction);
         }
 
-        textView.setText(t.debug());
+        //textView.setText(t.debug());
 
 
     }
+
 
     private class PoseAnalyzer implements ImageAnalysis.Analyzer {
 
         @Override
         public void analyze(ImageProxy imageProxy) {
             @SuppressLint("UnsafeExperimentalUsageError") Image mediaImage = imageProxy.getImage();
+
             if (mediaImage != null) {
                 InputImage image =
                         InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
