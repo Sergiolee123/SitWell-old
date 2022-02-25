@@ -82,6 +82,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         String message = "";
 
         if(!s.isPrepare()) {
+            Log.e("isPrepare", s.isPrepare()+"");
             textToSpeech.speak("Your body are not captured by the Webcam",TextToSpeech.QUEUE_FLUSH,null,null);
             return false;
         }
@@ -193,7 +194,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         poseDetector.process(image)
                 .addOnSuccessListener(
                         (pose) -> {
-                            Log.e("post","posta");
+                            Log.e("post","posts");
                             SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose,this);
                             setup = isSetup(s);
                             if(setup){

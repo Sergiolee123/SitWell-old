@@ -62,12 +62,17 @@ public class SittingPostureAnalyzer {
     }
 
     public Boolean isPrepare(){
+        if(pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER) == null
+                || pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER) == null){
+            return false;
+        }
         ArrayList<Float> inFrameLikelihoods = new ArrayList<>();
         for(PoseLandmark p : pose.getAllPoseLandmarks()){
+            Log.e("isPrepare", p.getLandmarkType()+ " : " +p.getInFrameLikelihood() + "\n");
+            if(p.getLandmarkType() > 12)
+                break;
             inFrameLikelihoods.add(p.getInFrameLikelihood());
         }
-        if(inFrameLikelihoods.size() < 32)
-            return false;
         for(Float f : inFrameLikelihoods){
             if(f < 0.5){
                 return false;
