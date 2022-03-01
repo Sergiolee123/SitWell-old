@@ -42,10 +42,6 @@
             android:exported="true" >
         </activity>
         <activity
-            android:name=".ResetPasswordActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false" />
-        <activity
             android:name=".RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />

@@ -4,31 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:weightSum="100"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+    android:layout_height="match_parent">
         <TextView
-
             android:id="@+id/text_instr_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lineSpacingExtra="4sp"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:background="#802E2E2E"
+            android:elegantTextHeight="true"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="24dp"
-            android:lineSpacingExtra="4sp"
-            android:textSize="30sp"
-            android:fontFamily="sans-serif"
-            android:elegantTextHeight="true"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="18dp"
             android:text="@string/lying_lateral_leg_lift_instruction"
-            tools:ignore="MissingConstraints" />
+            android:elevation="1dp"
+            android:visibility="visible"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:cardBackgroundColor="#40000000"
+            app:cardCornerRadius="18dp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="72sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:paddingHorizontal="12dp"
+                    android:text="0:00"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:cardBackgroundColor="#40000000"
+            app:cardCornerRadius="18dp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
+            >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="72sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:paddingHorizontal="12dp"
+                    android:text="00"/>
+        </androidx.cardview.widget.CardView>
 
 
 
@@ -36,7 +76,5 @@
             android:id="@+id/viewBinder"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
