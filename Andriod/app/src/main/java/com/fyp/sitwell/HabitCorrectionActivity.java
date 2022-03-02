@@ -14,26 +14,32 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import io.socket.client.IO;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
+
 public class HabitCorrectionActivity extends FragmentActivity{
-    private final String YOURIP = "nodejsssltest.herokuapp.com/";
-    private final String SERVER_PATH = "wss://"+ YOURIP;
-    private WebSocket webSocket;
 
     private TextToSpeech textToSpeech;
     private PoseDetector poseDetector;
@@ -43,7 +49,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private ConnectWebcamFragment connectWebcamFragment;
     private SetupPostureFragment setupPostureFragment;
     private HabitCorrectionFragment habitCorrectionFragment;
-    private ScheduledExecutorService scheduler;
+    private Socket socket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 .add(R.id.habit_fragment, connectWebcamFragment, "ConnectWebcam")
                 .commit();
 
-        scheduler = Executors.newScheduledThreadPool(1);
+        //scheduler = Executors.newScheduledThreadPool(1);
         setup = false;
         connected = false;
 
@@ -73,6 +79,10 @@ public class HabitCorrectionActivity extends FragmentActivity{
                         .build();
 
         poseDetector = PoseDetection.getClient(options);
+
+        URI uri = URI.create("https://nodesitwell.herokuapp.com");
+        socket = IO.socket(uri);
+
         initiateSocketConnection("onCreate");
 
     }
@@ -221,40 +231,33 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private void initiateSocketConnection(String text) {
 
         Log.e("Init", "The initiateSocketConnection " + text);
-        OkHttpClient client = new OkHttpClient();
+        /*OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
         webSocket = client.newWebSocket(request, new SocketListener());
-
-    }
-
-    private void keepAlive(){
-
-        scheduler.scheduleAtFixedRate(() -> {
-                    webSocket.send("ping");
-                    Log.e("live","ping");
-                }
-                , 0,15, TimeUnit.SECONDS);
-
-    }
-
-    private class SocketListener extends WebSocketListener {
-
-        @Override
-        public void onOpen(WebSocket webSocket, Response response) {
-            super.onOpen(webSocket, response);
-            Log.e("SocketListener", "The SocketListener");
-            runOnUiThread(HabitCorrectionActivity.this::keepAlive);
+         */
+        String uid = null;
+        try {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (Exception e){
+            Toast.makeText(this, "Error",
+                    Toast.LENGTH_SHORT).show();
+            this.finish();
         }
 
-        @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            super.onMessage(webSocket, text);
-            Log.e("Re",text);
-            if(text.equals("ping")){
-                return;
-            }
+        socket.on("full", (args) -> {
+            runOnUiThread(() -> {
+                Toast.makeText(HabitCorrectionActivity.this, "You already have other " +
+                                "device connected to the server.",
+                        Toast.LENGTH_LONG).show();
+            });
+        });
+
+        socket.on("pm", (args) -> runOnUiThread(() -> {
+            String text1 = (String) args[0];
+            //Log.e("", (String) args[0]);
+
             if(!connected){
-                connected = isConnected(text);
+                connected = isConnected(text1);
                 if(connected){
                     runOnUiThread(() -> {
 
@@ -272,40 +275,45 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
             if(!setup){
                 runOnUiThread(() -> {
-                    setupPostureFragment.setImage(decodeBase64(text));
+                    setupPostureFragment.setImage(decodeBase64(text1));
                 });
                 return;
             }
             runOnUiThread(() -> {
-                getPose(text);
+                getPose(text1);
             });
-        }
 
-        @Override
-        public void onClosed(WebSocket webSocket, int code, String reason) {
-            super.onClosed(webSocket, code, reason);
-            Log.e("onClose", "Close: " + reason);
-        }
+        }));
 
-        @Override
-        public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
-            super.onFailure(webSocket, t, response);
-            Log.e("onFailure","connect fail");
-            t.printStackTrace();
-            initiateSocketConnection("onFailure");
-        }
+        socket.connect();
+
+        Log.e("id: ", uid);
+
+        socket.emit("join", uid);
 
     }
+
 
 
     @Override
     public void onStop() {
 
         super.onStop();
+        /*
         scheduler.shutdownNow();
         webSocket.close(1000,"User left");
         webSocket.cancel();
+
+         */
         textToSpeech.shutdown();
         this.finish();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        socket.disconnect();
+        socket.off();
     }
 }

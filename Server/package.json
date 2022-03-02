@@ -1,23 +1,21 @@
 {
-  "name": "wsnode",
+  "name": "nodesocket",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.6",
     "express": "^4.17.2",
-    "express-ws": "^5.0.2",
-    "ws": "^8.4.2"
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1"
   },
   "engines": {
     "node": "14.16.1"
   }
-
-  
 }

@@ -69,7 +69,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_muscle_strength);
 
         previewView = findViewById(R.id.viewBinder);
-        textView = (TextView) findViewById(R.id.text_instr_content);
+        textView = findViewById(R.id.text_instr_content);
 
         repeatCounter = new RepeatCounter();
         started = false;
@@ -134,7 +134,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
         imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthActivity.PoseAnalyzer());
 
         preview.setSurfaceProvider(previewView.createSurfaceProvider());
-        cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis);
+        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
 
         AccuratePoseDetectorOptions options =
                 new AccuratePoseDetectorOptions.Builder()
