@@ -33,34 +33,13 @@ public class LoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN_GOOGLE = 9001;
     private static final String TAG = "LoginActivity";
 
-    private EditText mEmail,mPassword;
-    private Button mLoginBtn,mGoogleLoginBtn;
-    private TextView mRegisterBtn;
-    private ConstraintLayout mLayout;
+    private Button mGoogleLoginBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
         createRequest();
-
-
-        mRegisterBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
-            }
-        });
-
-        mLoginBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                String email    = mEmail.getText().toString();
-                String password = mPassword.getText().toString();
-                signInWithEmail(email, password);
-            }
-        });
-
 
         mGoogleLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -74,12 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void init(){
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mEmail    = findViewById(R.id.edit_email);
-        mPassword = findViewById(R.id.edit_password);
-        mLoginBtn       = findViewById(R.id.button_login);
         mGoogleLoginBtn = findViewById(R.id.button_googleLogin);
-        mRegisterBtn    = findViewById(R.id.text_register);
-        mLayout         = findViewById(R.id.layout_parent);
     }
 
     @Override
@@ -140,26 +114,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
     }
 
-    private void signInWithEmail(String email, String password) {
-        mFirebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            //updateUI(user);
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
