@@ -2,44 +2,33 @@ package com.fyp.sitwell;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.Image;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Size;
-import android.util.SparseIntArray;
-import android.view.Surface;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fyp.sitwell.mucleTraining.RepeatCounter;
-import com.fyp.sitwell.mucleTraining.TrainingPostureAnalyer;
+import com.fyp.sitwell.mucleTraining.TrainingPostureAnalyzer;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
-import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
 import java.util.Locale;
@@ -151,7 +140,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
 
         String message = null;
-        TrainingPostureAnalyer t = new TrainingPostureAnalyer(pose, "leftFoot");
+        TrainingPostureAnalyzer t = new TrainingPostureAnalyzer(pose, "leftFoot");
         if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
@@ -166,10 +155,10 @@ public class MuscleStrengthActivity extends AppCompatActivity {
             textToSpeech.speak( "You can start now, the app will count how many time you do"
                     ,TextToSpeech.QUEUE_ADD,null,null);
             started = true;
-        }else if(t.isUp()){
+        }else if(t.isHalf()){
             Log.e("muscle","isUp");
             repeatCounter.finishedHalf();
-        }else if(t.isDown()){
+        }else if(t.isFinished()){
             if(repeatCounter.addCounter()){
                 textToSpeech.speak("You have complete " + repeatCounter.getCounter() + " times"
                         ,TextToSpeech.QUEUE_ADD,null,null);

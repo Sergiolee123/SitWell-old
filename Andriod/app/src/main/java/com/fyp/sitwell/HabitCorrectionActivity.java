@@ -241,7 +241,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }catch (Exception e){
             Toast.makeText(this, "Error",
                     Toast.LENGTH_SHORT).show();
-            this.finish();
+            return;
         }
 
         socket.on("full", (args) -> {
@@ -252,7 +252,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
             });
         });
 
-        socket.on("pm", (args) -> runOnUiThread(() -> {
+        socket.on("pm", (args) -> {
             String text1 = (String) args[0];
             //Log.e("", (String) args[0]);
 
@@ -283,7 +283,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 getPose(text1);
             });
 
-        }));
+        });
 
         socket.connect();
 

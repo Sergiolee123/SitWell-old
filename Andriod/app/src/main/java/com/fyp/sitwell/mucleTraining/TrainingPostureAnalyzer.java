@@ -8,12 +8,12 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 
 import java.util.ArrayList;
 
-public class TrainingPostureAnalyer {
+public class TrainingPostureAnalyzer implements MuscleTrainingInterface{
     private Pose pose;
     private String side;
     private String hipsAngle, HipKeenAngle, wiseEar;
 
-    public TrainingPostureAnalyer(Pose pose, String side){
+    public TrainingPostureAnalyzer(Pose pose, String side){
         this.pose = pose;
         this.side = side;
     }
@@ -92,7 +92,7 @@ public class TrainingPostureAnalyer {
         return lengthOfTwoPoint(wrist, ear) < 250 && hipsAngle < 30 && hipsAngle > -30;
     }
 
-    public Boolean isUp(){
+    public Boolean isHalf(){
         try{
             double angle = getHipKeenAngle();
             if(angle > 22){
@@ -104,7 +104,7 @@ public class TrainingPostureAnalyer {
         return false;
     }
 
-    public Boolean isDown(){
+    public Boolean isFinished(){
         try{
             double angle = getHipKeenAngle();
             if(angle < 10){
