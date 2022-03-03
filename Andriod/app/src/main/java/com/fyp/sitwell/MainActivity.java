@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import com.fyp.sitwell.muscleTraining.MuscleStrengthenActivity;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Exercise view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MuscleStrengthActivity.class));
+                startActivity(new Intent(getApplicationContext(), MuscleStrengthenActivity.class));
             }
         });
         setSupportActionBar(mToolBar);

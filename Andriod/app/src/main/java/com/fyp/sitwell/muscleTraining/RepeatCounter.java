@@ -1,4 +1,4 @@
-package com.fyp.sitwell.mucleTraining;
+package com.fyp.sitwell.muscleTraining;
 
 public class RepeatCounter {
     private int counter;

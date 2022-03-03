@@ -1,4 +1,4 @@
-package com.fyp.sitwell.mucleTraining;
+package com.fyp.sitwell.muscleTraining;
 
 import android.graphics.PointF;
 import android.util.Log;
@@ -8,14 +8,14 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 
 import java.util.ArrayList;
 
-public class TrainingPostureAnalyzer implements MuscleTrainingInterface{
+public class GluteStrengthen implements MuscleTrainingInterface {
     private Pose pose;
     private String side;
     private String hipsAngle, HipKeenAngle, wiseEar;
 
-    public TrainingPostureAnalyzer(Pose pose, String side){
+    public GluteStrengthen(Pose pose){
         this.pose = pose;
-        this.side = side;
+        this.side = "right";
     }
 
 
@@ -79,14 +79,16 @@ public class TrainingPostureAnalyzer implements MuscleTrainingInterface{
 
         PoseLandmark leftHip = pose.getPoseLandmark(PoseLandmark.LEFT_HIP);
         PoseLandmark rightHip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP);
-
-        wiseEar = lengthOfTwoPoint(wrist, ear)+"";
-
+        try {
+            wiseEar = lengthOfTwoPoint(wrist, ear) + "";
+        }catch (Exception e){
+            return false;
+        }
         double hipsAngle = Math.abs(angleOfTwoPoint(leftHip,rightHip)) - 90;
         Log.e("LLLF","wrist " + lengthOfTwoPoint(wrist, ear));
 
         this.HipKeenAngle =getHipKeenAngle()+"";
-                this.hipsAngle = hipsAngle+"";
+        this.hipsAngle = hipsAngle+"";
         Log.e("LLLF","Ankle " + HipKeenAngle+" Hip"+ hipsAngle);
 
         return lengthOfTwoPoint(wrist, ear) < 250 && hipsAngle < 30 && hipsAngle > -30;
@@ -116,11 +118,4 @@ public class TrainingPostureAnalyzer implements MuscleTrainingInterface{
 
         return false;
     }
-
-    public String debug(){
-        return "Hips " + hipsAngle + "\n wiseEar " + wiseEar + "\n ankleLength" + HipKeenAngle;
-    }
-
-
-
 }
