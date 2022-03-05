@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
 import com.fyp.sitwell.muscleTraining.MuscleStrengthenActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Relax view clicked.", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), VideoSteamActivity.class));
+                startActivity(new Intent(getApplicationContext(), MuscleRelaxActivity.class));
             }
         });
         mExerciseView.setOnClickListener(new View.OnClickListener(){

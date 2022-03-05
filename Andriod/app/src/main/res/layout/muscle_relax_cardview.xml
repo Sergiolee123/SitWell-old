@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_exercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="18dp"
+        app:cardElevation="5dp"
+        android:minHeight="120dp"
+        app:cardBackgroundColor="#81C784"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_cardView_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_margin="12dp">
+            <TextView
+                android:id="@+id/title_exercise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercise"
+                android:textColor="#FFFF"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/text_desc_exercise"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/layout_cardView_exercise" />
+            <TextView
+                android:id="@+id/text_desc_exercise"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingRight="12dp"
+                android:text="Strengthen your seated core muscles"
+                android:textSize="16sp"
+                android:textColor="#EDFFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/image_exercise"
+                app:layout_constraintTop_toBottomOf="@id/title_exercise" />
+            <ImageView
+                android:id="@+id/image_exercise"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:background="#81C784"
+                app:layout_constraintTop_toTopOf="@+id/layout_cardView_exercise"
+                app:layout_constraintBottom_toBottomOf="@id/layout_cardView_exercise"
+                app:layout_constraintRight_toRightOf="@+id/layout_cardView_exercise"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

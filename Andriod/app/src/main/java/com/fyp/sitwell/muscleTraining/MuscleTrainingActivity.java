@@ -30,6 +30,7 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -51,7 +52,7 @@ public class MuscleTrainingActivity extends AppCompatActivity {
     RepeatCounter repeatCounter;
     TextToSpeech textToSpeech;
     Boolean started;
-    Class<?extends MuscleTrainingInterface> mClass;
+    static Class<?extends MuscleTrainingInterface> mClass;
     TextView textView;
 
     @Override
@@ -141,13 +142,27 @@ public class MuscleTrainingActivity extends AppCompatActivity {
 
     }
 
+    public static MuscleTrainingInterface getMuscleTraining(Class<?extends MuscleTrainingInterface> mClass, Pose pose){
+        MuscleTrainingInterface t = null;
+        try {
+            t = (MuscleTrainingInterface) mClass.getConstructors()[0].newInstance(pose);
+        }catch (IllegalAccessException | InstantiationException | InvocationTargetException e){
+            e.printStackTrace();
+        }catch (IllegalArgumentException e){
+            Log.e("MTFactory", mClass.getName() + ": Constructors error");
+        }
+        return t;
+    }
 
     protected void getPose(Pose pose){
 
-
-
         String message = null;
-        GluteStrengthen t = (GluteStrengthen) MuscleTrainingFactory.getMuscleTraining(mClass, pose);
+        MuscleTrainingInterface t = getMuscleTraining(mClass, pose);;
+
+        if(t == null){
+            throw new NullPointerException();
+        }
+
         if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
@@ -178,6 +193,7 @@ public class MuscleTrainingActivity extends AppCompatActivity {
         }
 
         //textView.setText(t.debug());
+
 
 
     }

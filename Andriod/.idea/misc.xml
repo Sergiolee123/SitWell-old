@@ -9,7 +9,9 @@
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_login.xml" value="0.25407608695652173" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_main.xml" value="0.20625" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_main2.xml" value="0.25407608695652173" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_muscle_relax.xml" value="0.23385416666666667" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_muscle_strength.xml" value="0.33" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_muscle_strengthen.xml" value="0.23385416666666667" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_muscle_training.xml" value="0.36614583333333334" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_posture_detect.xml" value="0.27219202898550726" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/activity_profile.xml" value="0.32563405797101447" />
@@ -24,6 +26,7 @@
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/fragment_connect_webcam.xml" value="0.23177083333333334" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/fragment_habit_correction.xml" value="0.32563405797101447" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/fragment_setup_posture.xml" value="0.32563405797101447" />
+        <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/muscle_relax_cardview.xml" value="0.23385416666666667" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/muscle_strengthen_cardview.xml" value="0.36614583333333334" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/settings_style.xml" value="0.27219202898550726" />
         <entry key="..\:/OUHK/FYP/SitWell/Andriod/app/src/main/res/layout/toolbar_main.xml" value="0.32563405797101447" />

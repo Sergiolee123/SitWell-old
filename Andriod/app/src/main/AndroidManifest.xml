@@ -22,9 +22,12 @@
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
         <activity
+            android:name=".muscleTraining.MuscleRelaxActivity"
+            android:exported="false" />
+        <activity
             android:name=".muscleTraining.MuscleTrainingActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".muscleTraining.MuscleStrengthenActivity"
             android:exported="false" />
@@ -41,7 +44,7 @@
         <activity
             android:name=".HabitCorrectionActivity"
             android:exported="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
