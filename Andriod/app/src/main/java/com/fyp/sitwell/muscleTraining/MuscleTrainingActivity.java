@@ -142,22 +142,10 @@ public class MuscleTrainingActivity extends AppCompatActivity {
 
     }
 
-    public static MuscleTrainingInterface getMuscleTraining(Class<?extends MuscleTrainingInterface> mClass, Pose pose){
-        MuscleTrainingInterface t = null;
-        try {
-            t = (MuscleTrainingInterface) mClass.getConstructors()[0].newInstance(pose);
-        }catch (IllegalAccessException | InstantiationException | InvocationTargetException e){
-            e.printStackTrace();
-        }catch (IllegalArgumentException e){
-            Log.e("MTFactory", mClass.getName() + ": Constructors error");
-        }
-        return t;
-    }
-
     protected void getPose(Pose pose){
 
         String message = null;
-        MuscleTrainingInterface t = getMuscleTraining(mClass, pose);;
+        MuscleTrainingInterface t = MuscleTrainingFactory.getMuscleTraining(mClass, pose);;
 
         if(t == null){
             throw new NullPointerException();
