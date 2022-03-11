@@ -1,5 +1,6 @@
 package com.fyp.sitwell;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -8,9 +9,9 @@ import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -21,22 +22,12 @@ import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
 
-import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 
 public class HabitCorrectionActivity extends FragmentActivity{
@@ -50,12 +41,16 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private SetupPostureFragment setupPostureFragment;
     private HabitCorrectionFragment habitCorrectionFragment;
     private Socket socket;
+    private Button endBtn;
+    private DBHandler dbHandler;
+    long startTime, endTime;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_correction);
-
+        endBtn= findViewById(R.id.endBtn);
         connectWebcamFragment = new ConnectWebcamFragment();
         setupPostureFragment = new SetupPostureFragment();
         fragmentManager = getSupportFragmentManager();
@@ -84,8 +79,13 @@ public class HabitCorrectionActivity extends FragmentActivity{
         socket = IO.socket(uri);
 
         initiateSocketConnection("onCreate");
+        dbHandler = new DBHandler(this);
 
+        endBtn.setOnClickListener((view -> {
+            EndBtnClick();
+        }));
     }
+    //need to add End detection button
 
     protected boolean isSetup(SittingPostureAnalyzer s){
 
@@ -131,28 +131,35 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight@";
+            dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
         }
         if(s.isBackUpStraight()) {
             message += "Your Back is not straight@";
+            dbHandler.setBackNum(dbHandler.getBackNum()+1);
         }
         if(s.isShoulderAlignment()) {
             message += "Your shoulder is not align@";
+            dbHandler.setSHLDRNum(dbHandler.getSHLDRNum()+1);
         }
         if(s.isLeftArmCorrect()) {
             message += "Your left arm is in bad position@";
+            dbHandler.setLeftArmNum(dbHandler.getLeftArmNum()+1);
         }
         if(s.isRightArmCorrect()) {
             message += "Your right arm is in bad position@";
+            dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
         }
 
         if(message.equals("")){
             habitCorrectionFragment.clearAll();
+            dbHandler.setSitWellNum(dbHandler.getSitWellNum()+1);
         }else{
             habitCorrectionFragment.setTextView(message.replace("@", "\n"));
             habitCorrectionFragment.showCorrectPose();
             textToSpeech.speak(message.replace("@", ",")
                             + " Please refer to your correct posture" ,
                     TextToSpeech.QUEUE_FLUSH,null,null);
+            dbHandler.setSitPoorNum(dbHandler.getSitPoorNum()+1);
         }
 
     }
@@ -212,6 +219,9 @@ public class HabitCorrectionActivity extends FragmentActivity{
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.habit_fragment, habitCorrectionFragment, "habit")
                                         .commit();
+                                endBtn.setVisibility(View.VISIBLE);
+                                startTime = System.currentTimeMillis();
+                                Log.d("calTime", "startTime = " + startTime);
 
                             }else{
                                 Toast.makeText(this,
@@ -290,9 +300,29 @@ public class HabitCorrectionActivity extends FragmentActivity{
         Log.e("id: ", uid);
 
         socket.emit("join", uid);
-
     }
 
+    private void EndBtnClick() {
+
+        String uid = null;
+        try {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (Exception e){
+        }
+        dbHandler.setUserID(uid);
+        endTime = System.currentTimeMillis();
+        dbHandler.setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime))); //min unit
+        dbHandler.calAccuracy();
+        dbHandler.addNewRecord();
+        dbHandler.resetAllCol();
+        dbHandler.printDetails();
+
+        Intent intent = new Intent( getApplicationContext(),ReportActivity.class);
+        startActivity(intent);
+
+        count++;
+        Log.d("CheckCounts", "Btn count =" + count );
+    }
 
 
     @Override
@@ -316,4 +346,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
         socket.disconnect();
         socket.off();
     }
+
+
 }
