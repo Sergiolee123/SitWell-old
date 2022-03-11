@@ -50,6 +50,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private SetupPostureFragment setupPostureFragment;
     private HabitCorrectionFragment habitCorrectionFragment;
     private Socket socket;
+    private int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

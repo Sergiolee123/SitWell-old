@@ -7,7 +7,7 @@ import com.google.mlkit.vision.pose.Pose;
 import java.lang.reflect.InvocationTargetException;
 
 public class MuscleTrainingFactory {
-    public static MuscleTrainingInterface getMuscleTraining(Class<?extends MuscleTrainingInterface> mClass, Pose pose){
+    public static MuscleTrainingInterface getMuscleTraining(Class<?> mClass, Pose pose){
         MuscleTrainingInterface t = null;
         try {
             t = (MuscleTrainingInterface) mClass.getConstructors()[0].newInstance(pose);

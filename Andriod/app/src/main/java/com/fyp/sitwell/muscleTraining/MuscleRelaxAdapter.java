@@ -1,6 +1,7 @@
 package com.fyp.sitwell.muscleTraining;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.sitwell.R;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.ViewHolder>{
@@ -22,6 +24,7 @@ public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.
         this.trainingMethod = trainingMethod;
         this.trainingNames = new String[trainingMethod.keySet().size()];
         trainingMethod.keySet().toArray(trainingNames);
+        Log.e("abcdefg", Arrays.toString(trainingNames));
     }
 
     @NonNull
@@ -36,9 +39,10 @@ public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.
     @Override
     public void onBindViewHolder(@NonNull MuscleRelaxAdapter.ViewHolder holder, int position) {
         holder.title_exercise.setText(trainingNames[position]);
-
+        Log.e("abcdefg", position+"");
+        Log.e("abcdefg", trainingNames[position]);
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), MuscleTrainingActivity.class);
+            Intent intent = new Intent(holder.itemView.getContext(), MuscleRelaxTrainingActivity.class);
             intent.putExtra("class",trainingMethod.get(trainingNames[position]));
             holder.itemView.getContext().startActivity(intent);
         });

@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.sitwell.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 public class MuscleStrengthenAdapter extends RecyclerView.Adapter<MuscleStrengthenAdapter.ViewHolder> {
     private HashMap<String, Class<?extends MuscleTrainingInterface>> trainingMethod;
@@ -40,7 +37,7 @@ public class MuscleStrengthenAdapter extends RecyclerView.Adapter<MuscleStrength
         holder.title_exercise.setText(trainingNames[position]);
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), MuscleTrainingActivity.class);
+            Intent intent = new Intent(holder.itemView.getContext(), MuscleStrengthenTrainingActivity.class);
             intent.putExtra("class",trainingMethod.get(trainingNames[position]));
            holder.itemView.getContext().startActivity(intent);
         });
