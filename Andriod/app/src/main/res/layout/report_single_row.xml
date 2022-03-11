@@ -29,7 +29,7 @@
             android:textColor="@color/headercolor"/>
 
             <TextView
-                android:layout_width="180dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/duration"
                 android:textSize="20sp"
@@ -38,7 +38,7 @@
                 />
 
             <TextView
-                android:layout_width="180dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/sitAccuracy"
                 android:textSize="20sp"

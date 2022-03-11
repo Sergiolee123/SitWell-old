@@ -18,7 +18,7 @@ public class report_model {
         this.sitWellNum = sitWellNum;
         this.sitPoorNum = sitPoorNum;
         this.duration = convertDurUnit(duration);
-        this.sitAccuracy = String.valueOf(sitAccuracy*100);
+        this.sitAccuracy = String.valueOf(sitAccuracy*100)+" %";
     }
 
     public String convertDurUnit(float duration){

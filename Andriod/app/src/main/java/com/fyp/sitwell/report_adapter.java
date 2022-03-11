@@ -38,7 +38,7 @@ public class report_adapter extends RecyclerView.Adapter<report_adapter.recViewH
     {
         holder.recID.setText("Record ID : "+dataholder.get(position).getRecordID());
         holder.duration.setText( "Duration : "+ dataholder.get(position).getDuration());
-        holder.accuracy.setText("Sit Accuracy : " +dataholder.get(position).getSitAccuracy()+" %");
+        holder.accuracy.setText("Sit Accuracy : " +dataholder.get(position).getSitAccuracy());
         holder.review.setText("Review : " + reviewMsg(dataholder.get(position).getNeckNum(), dataholder.get(position).getBackNum()
                 ,dataholder.get(position).getSHLDRNum(),dataholder.get(position).getLeftArmNum(),dataholder.get(position).getRightArmNum()));
 
