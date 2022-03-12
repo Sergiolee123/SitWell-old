@@ -24,7 +24,7 @@ public class ReportActivity extends AppCompatActivity {
         recyclerView=(RecyclerView)findViewById(R.id.recview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Cursor cursor=new DBHandler(this).getAllData();
+        Cursor cursor=new DBHandler(this).getALLDataDESC();
 
         String msg="";
         String [] colNames = cursor.getColumnNames();

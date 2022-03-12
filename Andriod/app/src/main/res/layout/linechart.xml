@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/linechart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </com.github.mikephil.charting.charts.LineChart>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Topic"
+        android:textColor="@color/black"
+        android:id="@+id/topic"></TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignBottom="@id/linechart"
+        android:text="Days"
+        android:textColor="@color/black"
+        android:id="@+id/XAxisLabel"></TextView>
+
+    <TextView
+        android:transformPivotX="20dp"
+        android:transformPivotY="23dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="1.9in"
+        android:rotation="270"
+        android:text="Y-axis"
+        android:textColor="@android:color/black"
+        />
+
+</RelativeLayout>

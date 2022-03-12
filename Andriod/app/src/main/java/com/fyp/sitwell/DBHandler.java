@@ -124,9 +124,15 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Cursor getAllData() {
+    public Cursor getAllData() { //ASC
         SQLiteDatabase db = this.getWritableDatabase();
         android.database.Cursor cursor = db.rawQuery("Select * from " + DB_NAME, null);
+        return cursor;
+    }
+
+    public Cursor getALLDataDESC(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        android.database.Cursor cursor = db.rawQuery("Select * from " + DB_NAME + " order by " + recordID_col + " DESC", null);
         return cursor;
     }
 
