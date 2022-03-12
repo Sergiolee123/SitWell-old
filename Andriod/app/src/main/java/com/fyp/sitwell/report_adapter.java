@@ -1,5 +1,6 @@
 package com.fyp.sitwell;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class report_adapter extends RecyclerView.Adapter<report_adapter.recViewHolder> {
 
     ArrayList<report_model> dataholder;
+    int count=0;
 
     public report_adapter(ArrayList<report_model> dataholder) {
         this.dataholder = dataholder;
@@ -36,11 +38,15 @@ public class report_adapter extends RecyclerView.Adapter<report_adapter.recViewH
     @Override
     public void onBindViewHolder(@NonNull recViewHolder holder, int position) //holer means ui
     {
+        count++;
+        Log.d("checkPosition",""+count);
         holder.recID.setText("Record ID : "+dataholder.get(position).getRecordID());
         holder.duration.setText( "Duration : "+ dataholder.get(position).getDuration());
         holder.accuracy.setText("Sit Accuracy : " +dataholder.get(position).getSitAccuracy());
         holder.review.setText("Review : " + reviewMsg(dataholder.get(position).getNeckNum(), dataholder.get(position).getBackNum()
                 ,dataholder.get(position).getSHLDRNum(),dataholder.get(position).getLeftArmNum(),dataholder.get(position).getRightArmNum()));
+        holder.startTime.setText("start Time :"+ dataholder.get(position).getStartTime());
+        holder.endTime.setText("end Time :"+ dataholder.get(position).getEndTime());
 
     }
 
@@ -82,7 +88,7 @@ public class report_adapter extends RecyclerView.Adapter<report_adapter.recViewH
 
     class recViewHolder extends RecyclerView.ViewHolder
     {
-        TextView recID,duration,accuracy, review;
+        TextView recID,duration,accuracy, review, startTime, endTime;
         public recViewHolder(@NonNull View itemView)
         {
             super(itemView);
@@ -90,6 +96,9 @@ public class report_adapter extends RecyclerView.Adapter<report_adapter.recViewH
             duration=(TextView)itemView.findViewById(R.id.duration);
             accuracy=(TextView)itemView.findViewById(R.id.sitAccuracy);
             review=(TextView)itemView.findViewById(R.id.comment);
+            startTime=(TextView)itemView.findViewById(R.id.startTime);
+            endTime=(TextView)itemView.findViewById(R.id.endTime);
+
 
 
         }

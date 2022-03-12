@@ -22,6 +22,8 @@ import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -124,6 +126,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         String message = "";
 
+
         if(!s.isPrepare()) {
             habitCorrectionFragment.setTextView("Your body are not captured by the Webcam");
             return;
@@ -221,6 +224,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                                         .commit();
                                 endBtn.setVisibility(View.VISIBLE);
                                 startTime = System.currentTimeMillis();
+                                dbHandler.setStartTime(dateStr());
                                 Log.d("calTime", "startTime = " + startTime);
 
                             }else{
@@ -310,6 +314,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }catch (Exception e){
         }
         dbHandler.setUserID(uid);
+        dbHandler.setEndTime(dateStr());
         endTime = System.currentTimeMillis();
         dbHandler.setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime))); //min unit
         dbHandler.calAccuracy();
@@ -322,6 +327,13 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         count++;
         Log.d("CheckCounts", "Btn count =" + count );
+    }
+
+    private String dateStr(){
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+        String nowDate= formatter1.format(new Date());
+        Log.d("Time", nowDate);
+        return nowDate;
     }
 
 

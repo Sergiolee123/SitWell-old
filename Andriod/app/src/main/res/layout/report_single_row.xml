@@ -34,7 +34,6 @@
                 android:id="@+id/duration"
                 android:textSize="20sp"
                 android:text="Duration"
-                android:layout_marginTop="3dp"
                 />
 
             <TextView
@@ -43,7 +42,22 @@
                 android:id="@+id/sitAccuracy"
                 android:textSize="20sp"
                 android:text="Accuracy"
-                android:layout_marginTop="3dp"
+                />
+
+            <TextView
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/startTime"
+                android:textSize="20sp"
+                android:text="startTime"
+                />
+
+            <TextView
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/endTime"
+                android:textSize="20sp"
+                android:text="endTime"
                 />
 
         <TextView
@@ -55,6 +69,7 @@
             android:textColor="@color/headercolor"
             android:id="@+id/comment"
             />
+
 
     </LinearLayout>
 

@@ -24,11 +24,13 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String sitPoorCount = "sitBadCount";
     public static final String duration_col = "duration";
     public static final String sit_accuracy_col = "sitAccuracy";
+    public static final String startTime_col = "startTime";
+    public static final String endTime_col = "endTime";
 
     private static final int DB_VERSION = 1;
     private static final String TAG = "CheckCounts";
 
-    private String userID ="";
+    private String userID ="", startTime="", endTime="";
     private int recordID =0 ,neckNum=0, backNum=0, SHLDRNum=0,  leftArmNum=0, rightArmNum=0, sitWellNum=0, sitPoorNum=0 ;
     private float duration=0, sitAccuracy =0;
 
@@ -51,7 +53,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void printDetails(){
         String str = " printDetails =  userID = " + userID + ", recordID = " + recordID + ", neckNum = " + neckNum + ", backCount = " + backNum + ", SHLDRCount = " + SHLDRNum +
                 " , leftArmNum = " + leftArmNum + ", rightArmNum = " + rightArmNum + ", sitWellNum = " + sitWellNum + ", sitPoorNum = " + sitPoorNum +
-                " , duration = " + duration + " , accuracy = " + sitAccuracy;
+                " , duration = " + duration + " , accuracy = " + sitAccuracy + " , startTime = " + startTime +" , endTime = " + endTime ;
         Log.d(TAG,str );
     }
 
@@ -68,8 +70,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 RT_ARM_Count + " INTEGER,"+
                 sitWellCount + " INTEGER,"+
                 sitPoorCount + " INTEGER," +
-                duration_col + " REAL," +
-                sit_accuracy_col + " REAL"+ ")";
+                sit_accuracy_col + " REAL,"+
+                startTime_col + " TEXT NOT NULL,"+
+                endTime_col + " TEXT NOT NULL,"+
+                duration_col + " REAL NOT NULL"
+                +")";
 
         Log.d(TAG, query);
         db.execSQL(query);
@@ -80,7 +85,6 @@ public class DBHandler extends SQLiteOpenHelper {
         long result;
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
-            //values.put(recordID_col, recordID);
             values.put(userID_col, userID);
             values.put(neckCount, neckNum);
             values.put(backCount, backNum);
@@ -89,23 +93,24 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(RT_ARM_Count, rightArmNum);
             values.put(sitWellCount, sitWellNum);
             values.put(sitPoorCount, sitPoorNum);
-            values.put(duration_col, duration);
             values.put(sit_accuracy_col, sitAccuracy);
+            values.put(startTime_col, startTime);
+            values.put(endTime_col, endTime);
+            values.put(duration_col, duration);
 
             String StoredRecord = " userID = " + userID + ", recordID = " + recordID + ", neckNum = " + neckNum + ", backCount = " + backNum + ", SHLDRCount = " + SHLDRNum +
                     " , leftArmNum = " + leftArmNum + ", rightArmNum = " + rightArmNum + ", sitWellNum = " + sitWellNum + ", sitPoorNum = " + sitPoorNum +
-                    " , duration = " + duration + " , accuracy = " + sitAccuracy;
+                    " , accuracy = " + sitAccuracy +  " , startTime = " + startTime +  " , endTime = " + endTime +  " , duration = " + duration ;
             Log.d(TAG, StoredRecord);
 
             result = db.insert(DB_NAME, null, values);
             db.close();
 
-
         if(result==-1){
-            Log.d(TAG, "-1");
+            Log.d(TAG, "new record insertion fails");
             //return false;
         }else{
-            Log.d(TAG, "1");
+            Log.d(TAG, "new record added");
            // return true;
         }
 
@@ -149,6 +154,8 @@ public class DBHandler extends SQLiteOpenHelper {
         sitPoorNum=0;
         duration=0;
         sitAccuracy =0;
+        startTime="";
+        endTime="";
         Log.d(TAG, "reset all values but record ID");
     }
 
@@ -238,5 +245,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void setSitAccuracy(float sitAccuracy) {
         this.sitAccuracy = sitAccuracy;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

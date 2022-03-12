@@ -39,7 +39,7 @@ public class ReportActivity extends AppCompatActivity {
 
         while(cursor.moveToNext())
         {   report_model obj=new report_model(cursor.getString(0),cursor.getInt(2),cursor.getInt(3), cursor.getInt(4),cursor.getInt(5),cursor.getInt(6),
-                cursor.getInt(7),cursor.getInt(8),cursor.getFloat(9),cursor.getFloat(10));
+                cursor.getInt(7),cursor.getInt(8),cursor.getFloat(9),cursor.getString(10),cursor.getString(11),cursor.getFloat(12));
             dataholder.add(obj);
         }
 

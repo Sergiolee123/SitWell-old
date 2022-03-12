@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 
 public class report_model {
 
-    private String recordID, duration, sitAccuracy;
+    private String recordID, duration, sitAccuracy, startTime, endTime;
     private int neckNum, backNum, SHLDRNum, leftArmNum, rightArmNum, sitWellNum, sitPoorNum;
 
 
-    public report_model(String recordID, int neckNum, int backNum, int SHLDRNum, int leftArmNum, int rightArmNum, int sitWellNum, int sitPoorNum, float duration, float sitAccuracy) {
+    public report_model(String recordID, int neckNum, int backNum, int SHLDRNum, int leftArmNum, int rightArmNum, int sitWellNum, int sitPoorNum, float sitAccuracy , String startTime, String endTime, float duration) {
         this.recordID = recordID;
         this.neckNum = neckNum;
         this.backNum = backNum;
@@ -19,6 +19,8 @@ public class report_model {
         this.sitPoorNum = sitPoorNum;
         this.duration = convertDurUnit(duration);
         this.sitAccuracy = String.valueOf(sitAccuracy*100)+" %";
+        this.startTime=startTime;
+        this.endTime=endTime;
     }
 
     public String convertDurUnit(float duration){
@@ -74,4 +76,10 @@ public class report_model {
     public String getSitAccuracy() {
         return sitAccuracy;
     }
+
+    public String getStartTime() {  return startTime;  }
+
+    public String getEndTime() {  return endTime;  }
+
+
 }
