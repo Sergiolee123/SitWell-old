@@ -22,4 +22,9 @@
         <br>A place to lie down Lie on one side, keeping your lower leg slightly bent on the ground.\n</br>
         <br>Engage your core by drawing your belly button in toward your spine.\n</br>
         <br>Raise your top leg without moving the rest of your body. Hold for 2 seconds at the top. Repeat 10 times.\n</br></string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_stats">Statistics</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Closed</string>
 </resources>

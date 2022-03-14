@@ -7,62 +7,61 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private CardView mSittingView, mRelaxView, mExerciseView;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigation_view;
     private Toolbar  mToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
-        checkFirstLogin();
-        mSittingView.setOnClickListener(new View.OnClickListener(){
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigation_view = (NavigationView) findViewById(R.id.nav_view);
+        mToolBar      = findViewById(R.id.toolbar);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                new MainFragment()).commit();
+        // init();
+        navigation_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                //Toast.makeText(MainActivity.this, "Sitting view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), HabitCorrectionActivity.class));
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                int id = item.getItemId();
+                if (id == R.id.nav_home) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                            new MainFragment()).commit();
+                    return true;
+                }
+                else if (id == R.id.nav_stats) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                            new StatsFragment()).commit();
+                    return true;
+                }
+                return false;
             }
         });
 
-        mRelaxView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(MainActivity.this, "Relax view clicked.", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), VideoSteamActivity.class));
-            }
-        });
-        mExerciseView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(MainActivity.this, "Exercise view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MuscleStrengthActivity.class));
-            }
-        });
         setSupportActionBar(mToolBar);
-        mToolBar.setTitle("");
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Menu clicked.",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, mToolBar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        checkFirstLogin();
     }
 
-    private void init(){
-        mSittingView  = findViewById(R.id.card_sitting);
-        mRelaxView    = findViewById(R.id.card_relax);
-        mExerciseView = findViewById(R.id.card_exercise);
-        mToolBar      = findViewById(R.id.toolbar_main);
-
-    }
     private void checkFirstLogin(){
         if(1==2){
 
