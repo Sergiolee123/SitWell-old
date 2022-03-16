@@ -49,10 +49,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false" />
-        <activity
             android:name=".ReportActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
