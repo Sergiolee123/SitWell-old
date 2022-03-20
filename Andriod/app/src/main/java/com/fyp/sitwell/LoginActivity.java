@@ -61,14 +61,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
         if(currentUser != null){
-            Toast.makeText(LoginActivity.this, "Have Current User.",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "Have Current User.",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
         }else {
-            Toast.makeText(LoginActivity.this, "Null User.",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "Null User.",Toast.LENGTH_SHORT).show();
         }
         //updateUI(currentUser);
     }
@@ -94,9 +92,14 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             // Snackbar.make(mLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            startActivity(intent);
-                            //updateUI(user);
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                            if(isNew){
+                                Toast.makeText(LoginActivity.this, "New user",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Intent intent = new Intent(getApplicationContext(),IntroductionActivity.class);
+                                startActivity(intent);
+                                //updateUI(user);
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_profile);
         dialog.getWindow().setLayout(width, height);
         dialog.show();
+        dialog.setCancelable(false);
         Button mConfirmBtn = dialog.findViewById(R.id.button_confirm);
         Button mCancelBtn  = dialog.findViewById(R.id.button_cancel);
         mConfirmBtn.setOnClickListener(new View.OnClickListener(){
