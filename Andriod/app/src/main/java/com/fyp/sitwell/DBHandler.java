@@ -156,12 +156,12 @@ public class DBHandler extends SQLiteOpenHelper {
             totalDur= oldRecDur+duration;
             newAur= sitAccuracy*duration/totalDur + oldRecAcc*oldRecDur/totalDur;
 
-            String finalred = "finalred : " + "recordID = " + cursor.getInt(0) + ", userID = " + cursor.getString(1) +  ", neckNum = " +neckNum + ", backCount = " + backNum+ ", SHLDRCount = " + SHLDRNum +
+            String finalrec = "finalred : " + "recordID = " + cursor.getInt(0) + ", userID = " + cursor.getString(1) +  ", neckNum = " +neckNum + ", backCount = " + backNum+ ", SHLDRCount = " + SHLDRNum +
                     " , leftArmNum = " + leftArmNum + ", rightArmNum = " +rightArmNum + ", sitWellNum = " + sitWellNum+ ", sitPoorNum = " + sitPoorNum +
                     " , accuracy = " + newAur + " , startTime = " + cursor.getString(10) + " , endTime = " + dateStr()  + " , duration = " + totalDur;
             Log.e(TAG, oldrec);
             Log.e(TAG, newrec);
-            Log.e(TAG, finalred);
+            Log.e(TAG, finalrec);
 
             this.updateOneRow(cursor.getInt(0),cursor.getString(1),neckNum, backNum, SHLDRNum,leftArmNum, rightArmNum, sitWellNum, sitPoorNum ,newAur,cursor.getString(10), dateStr(), totalDur);
         }
