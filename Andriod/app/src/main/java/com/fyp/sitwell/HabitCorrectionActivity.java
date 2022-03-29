@@ -322,7 +322,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         dbHandler.resetAllCol();
         dbHandler.printDetails();
 
-        Intent intent = new Intent( getApplicationContext(),ReportActivity.class);
+        Intent intent = new Intent( getApplicationContext(),GraphReportActivity.class);
         startActivity(intent);
 
         count++;
