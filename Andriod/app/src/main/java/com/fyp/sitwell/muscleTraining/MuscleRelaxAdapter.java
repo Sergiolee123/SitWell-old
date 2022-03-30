@@ -24,7 +24,6 @@ public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.
         this.trainingMethod = trainingMethod;
         this.trainingNames = new String[trainingMethod.keySet().size()];
         trainingMethod.keySet().toArray(trainingNames);
-        Log.e("abcdefg", Arrays.toString(trainingNames));
     }
 
     @NonNull
@@ -39,8 +38,6 @@ public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.
     @Override
     public void onBindViewHolder(@NonNull MuscleRelaxAdapter.ViewHolder holder, int position) {
         holder.title_exercise.setText(trainingNames[position]);
-        Log.e("abcdefg", position+"");
-        Log.e("abcdefg", trainingNames[position]);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), MuscleRelaxTrainingActivity.class);
             intent.putExtra("class",trainingMethod.get(trainingNames[position]));

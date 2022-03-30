@@ -124,7 +124,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
-        ExecutorService analysisExecutor = new ThreadPoolExecutor(1,1
+        ExecutorService analysisExecutor = new ThreadPoolExecutor(1,10
                 ,0, TimeUnit.SECONDS, new SynchronousQueue<>()
                 , Executors.defaultThreadFactory(),new ThreadPoolExecutor.CallerRunsPolicy());
         imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthenTrainingActivity.PoseAnalyzer());
