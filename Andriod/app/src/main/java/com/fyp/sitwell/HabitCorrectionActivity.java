@@ -46,7 +46,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private Button endBtn;
     private DBHandler dbHandler;
     long startTime, endTime;
-    int count = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,9 +324,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         Intent intent = new Intent( getApplicationContext(),GraphReportActivity.class);
         startActivity(intent);
-
-        count++;
-        Log.d("CheckCounts", "Btn count =" + count );
     }
 
     private String dateStr(){

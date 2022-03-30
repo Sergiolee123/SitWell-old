@@ -118,4 +118,10 @@ public class GluteStrengthen implements MuscleTrainingInterface {
 
         return false;
     }
+
+    public void changeSide(int count){
+        if(count >= 10){
+            side = "Left";
+        }
+    }
 }

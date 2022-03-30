@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_relax"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="18dp"
+    android:minHeight="120dp"
+    app:cardElevation="5dp"
+    app:cardBackgroundColor="#81C784"
+    app:cardCornerRadius="20dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/card_sitting"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_cardView_relax"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_margin="12dp">
+        <TextView
+            android:id="@+id/title_exercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Relax"
+            android:textColor="#FFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/text_desc_relax"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/layout_cardView_relax" />
+        <TextView
+            android:id="@+id/text_desc_relax"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingRight="12dp"
+            android:text="Teach you how to relax your muscles"
+            android:textSize="16sp"
+            android:textColor="#EDFFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/image_relax"
+            app:layout_constraintTop_toBottomOf="@id/text_title_relax" />
+        <ImageView
+            android:id="@+id/image_relax"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:background="#81C784"
+            app:layout_constraintTop_toTopOf="@+id/layout_cardView_relax"
+            app:layout_constraintBottom_toBottomOf="@id/layout_cardView_relax"
+            app:layout_constraintRight_toRightOf="@+id/layout_cardView_relax"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -8,10 +8,9 @@ import android.os.Bundle;
 
 import com.fyp.sitwell.R;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
-public class MuscleStrengthenActivity extends AppCompatActivity {
+public class MuscleRelaxActivity extends AppCompatActivity {
 
     private static HashMap<String, Class<?extends MuscleTrainingInterface>> trainingMethod;
 
@@ -19,12 +18,12 @@ public class MuscleStrengthenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_muscle_strengthen);
+        setContentView(R.layout.activity_muscle_relax);
         setTrainingMethod();
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_strengthen);
+        RecyclerView recyclerView = findViewById(R.id.recycler_relax);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MuscleStrengthenAdapter(trainingMethod));
+        recyclerView.setAdapter(new MuscleRelaxAdapter(trainingMethod));
 
 
 
@@ -32,8 +31,7 @@ public class MuscleStrengthenActivity extends AppCompatActivity {
 
     private void setTrainingMethod(){
         trainingMethod = new HashMap<>();
-        trainingMethod.put("lying lateral leg lift", GluteStrengthen.class);
-        trainingMethod.put("a", GluteStrengthen.class);
+        trainingMethod.put("Neck Muscle relax", NeckMuscleRelax.class);
+        trainingMethod.put("Wrist relax", WristMuscleRelax.class);
     }
-
 }

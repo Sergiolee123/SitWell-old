@@ -37,7 +37,6 @@ import java.util.concurrent.Executors;
 
 public class VideoSteamActivity extends AppCompatActivity {
 
-    private Executor executor = Executors.newSingleThreadExecutor();
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     PoseDetector poseDetector;

@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";

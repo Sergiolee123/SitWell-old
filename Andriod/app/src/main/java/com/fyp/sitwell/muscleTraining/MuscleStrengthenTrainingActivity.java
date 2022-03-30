@@ -39,7 +39,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MuscleTrainingActivity extends AppCompatActivity {
+public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
 
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
@@ -51,7 +51,7 @@ public class MuscleTrainingActivity extends AppCompatActivity {
     RepeatCounter repeatCounter;
     TextToSpeech textToSpeech;
     Boolean started;
-    Class<?extends MuscleTrainingInterface> mClass;
+    static Class<?> mClass;
     TextView textView;
 
     @Override
@@ -60,7 +60,7 @@ public class MuscleTrainingActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_muscle_training);
 
-        mClass = (Class<? extends MuscleTrainingInterface>) getIntent().getSerializableExtra("class");
+        mClass = (Class<?>) getIntent().getSerializableExtra("class");
 
         previewView = findViewById(R.id.viewBinder);
         textView = findViewById(R.id.text_instr_content);
@@ -124,10 +124,10 @@ public class MuscleTrainingActivity extends AppCompatActivity {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
-        ExecutorService analysisExecutor = new ThreadPoolExecutor(1,1
+        ExecutorService analysisExecutor = new ThreadPoolExecutor(1,10
                 ,0, TimeUnit.SECONDS, new SynchronousQueue<>()
                 , Executors.defaultThreadFactory(),new ThreadPoolExecutor.CallerRunsPolicy());
-        imageAnalysis.setAnalyzer(analysisExecutor, new MuscleTrainingActivity.PoseAnalyzer());
+        imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthenTrainingActivity.PoseAnalyzer());
 
         preview.setSurfaceProvider(previewView.createSurfaceProvider());
         cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
@@ -141,13 +141,15 @@ public class MuscleTrainingActivity extends AppCompatActivity {
 
     }
 
-
     protected void getPose(Pose pose){
 
-
-
         String message = null;
-        GluteStrengthen t = (GluteStrengthen) MuscleTrainingFactory.getMuscleTraining(mClass, pose);
+        MuscleTrainingInterface t = MuscleTrainingFactory.getMuscleTraining(mClass, pose);;
+
+        if(t == null){
+            throw new NullPointerException();
+        }
+
         if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
@@ -178,6 +180,7 @@ public class MuscleTrainingActivity extends AppCompatActivity {
         }
 
         //textView.setText(t.debug());
+
 
 
     }

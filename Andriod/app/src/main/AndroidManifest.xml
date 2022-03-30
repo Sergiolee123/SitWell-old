@@ -25,6 +25,17 @@
             android:name=".GraphReportActivity"
             android:exported="false" />
         <activity
+            android:name=".muscleTraining.MuscleRelaxTrainingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".muscleTraining.MuscleRelaxActivity"
+            android:exported="false" />
+        <activity
+            android:name=".muscleTraining.MuscleStrengthenTrainingActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+        <activity
             android:name=".IntroductionActivity"
             android:exported="false" />
         <activity
