@@ -1,6 +1,5 @@
 package com.fyp.sitwell;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +10,6 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class DBHandler extends SQLiteOpenHelper {
     // creating a constant variables for our database.
@@ -38,12 +36,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 1;
     private static final String TAG = "CheckCounts";
+    private static final String TAG2 = "FKDate";
 
     private String userID ="", startTime="", endTime="";
     private int recordID =0 ,neckNum=0, backNum=0, SHLDRNum=0,  leftArmNum=0, rightArmNum=0, sitWellNum=0, sitPoorNum=0,  ProgramRepeatedTimes=0;
     private float duration=0, sitAccuracy =0;
-    private int default_days=3;
-    private HashSet<String> set=new HashSet();
+    private static int default_days=3;
+    //private static ArrayList<String> arrayList =new ArrayList<>();
+    private static HashSet<String> set = new HashSet<>();
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -152,7 +152,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         }else if(cursorCount==1){ //found the same rec
             cursor.moveToNext();
-            float oldRecAcc=0, oldRecDur=0,newAur=0, totalDur=0;
+            float oldRecAcc, oldRecDur,newAur, totalDur;
 
             String oldrec ="oldrec : " +  "recordID = " + cursor.getInt(0) + ", userID = " + cursor.getString(1) +  ", neckNum = " + cursor.getInt(2) + ", backCount = " + cursor.getInt(3) + ", SHLDRCount = " + cursor.getInt(4) +
                     " , leftArmNum = " + cursor.getInt(5) + ", rightArmNum = " + cursor.getInt(6) + ", sitWellNum = " + cursor.getInt(7) + ", sitPoorNum = " + cursor.getInt(8) +
@@ -195,8 +195,13 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(userID_col, userID);
             values.put(progDaysLeft_col, default_days-1);//****
-            if(!set.contains(getDateOnly()))
-            set.add(getDateOnly());
+            String date = getDateOnly();
+            set.clear(); //有機會有問題
+            set.add(date);
+            Log.e(TAG2,"set.size() = "+ set.size()+ " set.isEmpty() = "+ set.isEmpty());
+            for (String s : set) {
+                Log.e(TAG2, "new one , DATE ONLY " + s);
+            }
             Log.e(TAG,"calProgStatus :" + calProgStatus(default_days-1) );
             values.put(progStatus_col, calProgStatus(default_days-1));
             values.put(ProgramRepeatedTimes_col,ProgramRepeatedTimes );
@@ -218,27 +223,45 @@ public class DBHandler extends SQLiteOpenHelper {
 
             //reset the progDaysLeft column to default 63
             if(cursor.getInt(1)==0){ //check if progDaysLeft ==0
-                if(!set.contains(getDateOnly())){
+                set.clear();
+                String date = getDateOnly();
+                if(!set.contains(date)){
                     set.add(getDateOnly());
                 }
-                values.put(progDaysLeft_col, default_days-1);//fk2
+                values.put(progDaysLeft_col, default_days-1);
                 values.put(ProgramRepeatedTimes_col, cursor.getInt(3)+1);
-                values.put(progStatus_col,  calProgStatus(2));   //***
-                if(set.size()==default_days)
-                    set.clear();
+                values.put(progStatus_col,  calProgStatus(default_days-1));
 
+                for (String s : set) {
+                    Log.e(TAG, "progDaysLeft ==0 REMOVED and added the new one, DATE ONLY" + s);
+                }
             }else if(cursor.getInt(1)>0){
-                if(!set.contains(getDateOnly())){
-                    values.put(progDaysLeft_col, cursor.getInt(1)-1); //***
-                }else{
+                String date = getDateOnly();
+                Log.e(TAG2, ""+date);
+                Log.e(TAG2, "SET CONTAINS DATE "+ set.contains(date) + " DATE: " + date);
+                //SET 冇 element 但之前有加入去
+                Log.e(TAG2,"set.size() = "+ set.size()+ " set.isEmpty() = "+ set.isEmpty());
+                for(String s: set)
+                Log.e(TAG2, "set elements:"+s);
+
+                if (!set.contains(date)) {
+                    Log.e(TAG2, "set does not contain the repeated element");
+                    values.put(progDaysLeft_col, cursor.getInt(1)-1);
+                    float a = (float)(cursor.getInt(1));
+                    values.put(progStatus_col,  calProgStatus(a-1) ); //***要等到4/20/2022
+                    set.add(date);
+                } else {
+                    Log.e(TAG2, "set contains the repeated element");
                     values.put(progDaysLeft_col, cursor.getInt(1));
-                    set.add(getDateOnly());
+                    float a = (float)(cursor.getInt(1));
+                    values.put(progStatus_col,  calProgStatus(a) );//***要等到4/20/2022 測試
                 }
                 values.put(ProgramRepeatedTimes_col, cursor.getInt(3));
-                float a = (float)(cursor.getInt(1));
-                Log.e(TAG, "a = "+a );//***
-                values.put(progStatus_col,  calProgStatus(a-1) ); //***
-                Log.e(TAG,"(float)cursor.getInt(1)-1) = " + a );
+                //float a = (float)(cursor.getInt(1));
+                //values.put(progStatus_col,  calProgStatus(a-1) );
+                for (String s : set) {
+                    Log.e(TAG, "DATE ONLY" + s);
+                }
             }
             db.update(DB2_NAME, values, userID_col+"=?", new String[]{userID});   //但當programcheck=0 要點樣RESET 做63  //this line has problems
             db.close();
@@ -251,7 +274,10 @@ public class DBHandler extends SQLiteOpenHelper {
         }catch (Exception e){ Log.e(TAG, e.getMessage()); }
     }
 
+    private void insertRandomRecord(){
+            String s=getDateOnly();
 
+    }
 
     private float calProgStatus(float progDaysLeft) {
         Log.e(TAG, "numerator = " + (float)default_days+" - "+progDaysLeft);
