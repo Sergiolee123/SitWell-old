@@ -184,7 +184,6 @@ public class DBHandler extends SQLiteOpenHelper {
         this.updateUserProgress();
     }
 
-    //尼個FUNCTION有問題  //什麼時候 RESET 如果完成了一次 progDaysLeft, status, repeatedtime
     private void updateUserProgress(){
         try{
             Log.e(TAG," check user :" + userID);
