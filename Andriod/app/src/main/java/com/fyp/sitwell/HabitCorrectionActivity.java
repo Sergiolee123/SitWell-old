@@ -249,7 +249,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         Request request = new Request.Builder().url(SERVER_PATH).build();
         webSocket = client.newWebSocket(request, new SocketListener());
          */
-        String uid = null;
+        String uid;
         try {
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }catch (Exception e){
@@ -335,7 +335,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
         Log.d("Time", nowDate);
         return nowDate;
     }
-
 
     @Override
     public void onStop() {
