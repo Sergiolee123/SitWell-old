@@ -60,7 +60,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 .add(R.id.habit_fragment, connectWebcamFragment, "ConnectWebcam")
                 .commit();
 
-        //scheduler = Executors.newScheduledThreadPool(1);
         setup = false;
         connected = false;
 
@@ -135,6 +134,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight@";
             dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
+
         }
         if(s.isBackUpStraight()) {
             message += "Your Back is not straight@";
@@ -152,7 +152,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
             message += "Your right arm is in bad position@";
             dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
         }
-
         if(message.equals("")){
             habitCorrectionFragment.clearAll();
             dbHandler.setSitWellNum(dbHandler.getSitWellNum()+1);
@@ -225,6 +224,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                                 endBtn.setVisibility(View.VISIBLE);
                                 startTime = System.currentTimeMillis();
                                 dbHandler.setStartTime(dateStr());
+
                                 Log.d("calTime", "startTime = " + startTime);
 
                             }else{
