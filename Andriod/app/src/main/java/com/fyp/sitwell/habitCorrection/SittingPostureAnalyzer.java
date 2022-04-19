@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.habitCorrection;
 
 import android.content.Context;
 import android.graphics.Point;

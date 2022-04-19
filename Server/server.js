@@ -3,6 +3,7 @@ const http = require('http');
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.json({limit: '5mb'}));
+app.use(express.static(__dirname + '/views'));
 
 const server = http.createServer(app);
 const { Server } = require("socket.io");
@@ -37,6 +38,11 @@ app.get("/", (req, res) => {
     socket.on("send", (roomName, message) => {
       socket.to(roomName).emit('pm', message);
     })
+    
+    socket.on("notification", (roomName, message) => {
+      socket.to(roomName).emit('getNotification', message);
+    })
+
   });
 
   server.listen(process.env.PORT || 8099);

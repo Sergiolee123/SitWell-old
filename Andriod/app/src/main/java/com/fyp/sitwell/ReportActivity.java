@@ -26,14 +26,14 @@ public class ReportActivity extends AppCompatActivity {
 
         Cursor cursor=new DBHandler(this).getALLDataDESC();
 
-        String msg="";
+        StringBuilder msg= new StringBuilder();
         String [] colNames = cursor.getColumnNames();
         for(int i = 0;i< colNames.length;i++){
             if(i==colNames.length-1)break;
-            msg+= colNames[i]+ ", ";
+            msg.append(colNames[i]).append(", ");
         }
 
-        Log.d("CheckCol",msg);
+        Log.d("CheckCol", msg.toString());
 
         dataholder=new ArrayList<>();
 

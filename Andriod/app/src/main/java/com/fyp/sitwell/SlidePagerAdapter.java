@@ -13,12 +13,11 @@ public class SlidePagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position){
-            case 0:
-                return new IntroPageFragment();
             case 1:
                 return new ProfilePageFragment();
             case 2:
                 return new SettingPageFragment();
+            case 0:
             default:
                 return new IntroPageFragment();
         }

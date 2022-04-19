@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HabitCorrectionActivity">
+    tools:context=".habitCorrection.HabitCorrectionActivity">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,6 +28,7 @@
         android:fontFamily="sans-serif"
         android:elegantTextHeight="true"
         android:text="@string/instruction_content_habit_setUp"/>
+
     <ImageView
         android:id="@+id/image_webcam"
         android:layout_width="wrap_content"

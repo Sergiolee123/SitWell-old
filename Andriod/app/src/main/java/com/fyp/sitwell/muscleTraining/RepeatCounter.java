@@ -27,4 +27,8 @@ public class RepeatCounter {
     public void finishedHalf(){
         half = true;
     }
+
+    public void setZero(){
+        counter = 0;
+    }
 }

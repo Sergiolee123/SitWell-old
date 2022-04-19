@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.habitCorrection;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fyp.sitwell.R;
 
 public class SetupPostureFragment extends Fragment {
 
@@ -28,9 +31,14 @@ public class SetupPostureFragment extends Fragment {
     }
 
     public void setImage(Bitmap bitmap){
-        ImageView imageView = (ImageView) this.getActivity().findViewById(R.id.image_webcam);
+        ImageView imageView = this.getActivity().findViewById(R.id.image_webcam);
         this.bitmap = bitmap;
         imageView.setImageBitmap(bitmap);
+    }
+
+    public void setText(String s){
+        TextView textView = this.getActivity().findViewById(R.id.text_instr_content);
+        textView.setText(s);
     }
 
     public Bitmap getImage(){

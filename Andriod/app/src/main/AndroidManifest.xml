@@ -38,10 +38,7 @@
         <activity
             android:name=".IntroductionActivity"
             android:exported="false" />
-        <activity
-            android:name=".MuscleStrengthActivity"
-            android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+
         <activity
             android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -53,15 +50,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HabitCorrectionActivity"
+            android:name=".habitCorrection.HabitCorrectionActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegisterActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:name=".muscleTraining.MuscleStrengthenActivity"
             android:exported="false" />
         <activity
-            android:name=".VideoSteamActivity"
+            android:name=".RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity

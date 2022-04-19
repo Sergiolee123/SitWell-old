@@ -62,6 +62,10 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
 
         mClass = (Class<?>) getIntent().getSerializableExtra("class");
 
+        if(mClass == null){
+            this.finish();
+        }
+
         previewView = findViewById(R.id.viewBinder);
         textView = findViewById(R.id.text_instr_content);
 
@@ -102,8 +106,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
                     bindPreview(cameraProvider);
 
                 } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
+                    //
                 }
             }
         }, ContextCompat.getMainExecutor(this));
@@ -173,10 +176,21 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
                         ,TextToSpeech.QUEUE_ADD,null,null);
             }
         }
+        if(t.isNextSide(repeatCounter.getCounter())){
+            textToSpeech.speak("You have finished one side Please change to another side",
+                     TextToSpeech.QUEUE_ADD, null, null);
+            repeatCounter.setZero();
+        }
+
+        if(t.isEnd()){
+            textToSpeech.speak(("Good job You have finished this training")
+                    ,TextToSpeech.QUEUE_FLUSH, null, null);
+            this.finish();
+        }
 
         if(!textToSpeech.isSpeaking() && message != null){
             textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
-            textView.setText(R.string.lying_lateral_leg_lift_instruction);
+            textView.setText(t.getInstruction());
         }
 
         //textView.setText(t.debug());

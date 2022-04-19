@@ -27,4 +27,20 @@ public class WristMuscleRelax implements MuscleTrainingInterface{
     public Boolean isFinished() {
         return null;
     }
+
+    @Override
+    public Boolean isNextSide(int count) {
+        return null;
+    }
+
+    @Override
+    public Boolean isEnd() {
+        return null;
+    }
+
+    @Override
+    public String getInstruction() {
+        return null;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.habitCorrection;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +15,9 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.fyp.sitwell.DBHandler;
+import com.fyp.sitwell.GraphReportActivity;
+import com.fyp.sitwell.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.PoseDetection;
@@ -34,9 +37,7 @@ import io.socket.client.Socket;
 
 public class HabitCorrectionActivity extends FragmentActivity{
 
-    private TextToSpeech textToSpeech;
     private PoseDetector poseDetector;
-    private AccuratePoseDetectorOptions options;
     private Boolean setup, connected;
     private FragmentManager fragmentManager;
     private ConnectWebcamFragment connectWebcamFragment;
@@ -45,6 +46,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private Socket socket;
     private Button endBtn;
     private DBHandler dbHandler;
+    private String uid;
     long startTime, endTime;
 
 
@@ -64,23 +66,23 @@ public class HabitCorrectionActivity extends FragmentActivity{
         setup = false;
         connected = false;
 
-        textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
-            if(i!=TextToSpeech.ERROR){
-                textToSpeech.setLanguage(Locale.UK);
-            }
-        });
+        try {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (Exception e){
+            e.printStackTrace();
+            this.finish();
+        }
 
-        options =
-                new AccuratePoseDetectorOptions.Builder()
-                        .setDetectorMode(AccuratePoseDetectorOptions.SINGLE_IMAGE_MODE)
-                        .build();
+        AccuratePoseDetectorOptions options = new AccuratePoseDetectorOptions.Builder()
+                .setDetectorMode(AccuratePoseDetectorOptions.SINGLE_IMAGE_MODE)
+                .build();
 
         poseDetector = PoseDetection.getClient(options);
 
         URI uri = URI.create("https://nodesitwell.herokuapp.com");
         socket = IO.socket(uri);
 
-        initiateSocketConnection("onCreate");
+        initiateSocketConnection();
         dbHandler = new DBHandler(this);
 
         endBtn.setOnClickListener((view -> {
@@ -95,26 +97,26 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         if(!s.isPrepare()) {
             Log.e("isPrepare", s.isPrepare()+"");
-            textToSpeech.speak("Your body are not captured by the Webcam",TextToSpeech.QUEUE_FLUSH,null,null);
+            setupPostureFragment.setText("Your body are not captured by the Webcam");
             return false;
         }
 
         if(s.isNeckLateralBend()) {
-            message += "Your Neck is not straight ";
+            message += "Your Neck is not straight\n";
         }
         if(s.isShoulderAlignment()) {
-            message += "Your shoulder is not align ";
+            message += "Your shoulder is not align\n";
         }
         if(s.isLeftArmCorrect()) {
-            message += "Your left arm is in bad position ";
+            message += "Your left arm is in bad position\n";
         }
         if(s.isRightArmCorrect()) {
-            message += "Your right arm is in bad position ";
+            message += "Your right arm is in bad position\n";
         }
 
         if(!message.equals("")){
             message += "Please make sure you are in a correct posture";
-            textToSpeech.speak(message,TextToSpeech.QUEUE_FLUSH,null,null);
+            setupPostureFragment.setText(message);
             return false;
         }
 
@@ -133,23 +135,23 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }
 
         if(s.isNeckLateralBend()) {
-            message += "Your Neck is not straight@";
+            message += "Your Neck is not straight\n";
             dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
         }
         if(s.isBackUpStraight()) {
-            message += "Your Back is not straight@";
+            message += "Your Back is not straight\n";
             dbHandler.setBackNum(dbHandler.getBackNum()+1);
         }
         if(s.isShoulderAlignment()) {
-            message += "Your shoulder is not align@";
+            message += "Your shoulder is not align\n";
             dbHandler.setSHLDRNum(dbHandler.getSHLDRNum()+1);
         }
         if(s.isLeftArmCorrect()) {
-            message += "Your left arm is in bad position@";
+            message += "Your left arm is in bad position\n";
             dbHandler.setLeftArmNum(dbHandler.getLeftArmNum()+1);
         }
         if(s.isRightArmCorrect()) {
-            message += "Your right arm is in bad position@";
+            message += "Your right arm is in bad position\n";
             dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
         }
 
@@ -157,11 +159,9 @@ public class HabitCorrectionActivity extends FragmentActivity{
             habitCorrectionFragment.clearAll();
             dbHandler.setSitWellNum(dbHandler.getSitWellNum()+1);
         }else{
-            habitCorrectionFragment.setTextView(message.replace("@", "\n"));
+            habitCorrectionFragment.setTextView(message);
             habitCorrectionFragment.showCorrectPose();
-            textToSpeech.speak(message.replace("@", ",")
-                            + " Please refer to your correct posture" ,
-                    TextToSpeech.QUEUE_FLUSH,null,null);
+            socket.emit("notification", uid, message + " Please refer to your correct posture");
             dbHandler.setSitPoorNum(dbHandler.getSitPoorNum()+1);
         }
 
@@ -242,21 +242,13 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
 
 
-    private void initiateSocketConnection(String text) {
+    private void initiateSocketConnection() {
 
-        Log.e("Init", "The initiateSocketConnection " + text);
+        Log.e("Init", "The initiateSocketConnection");
         /*OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
         webSocket = client.newWebSocket(request, new SocketListener());
          */
-        String uid = null;
-        try {
-            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }catch (Exception e){
-            Toast.makeText(this, "Error",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         socket.on("full", (args) -> {
             runOnUiThread(() -> {
@@ -269,7 +261,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
         socket.on("pm", (args) -> {
             String text1 = (String) args[0];
             //Log.e("", (String) args[0]);
-
             if(!connected){
                 connected = isConnected(text1);
                 if(connected){
@@ -301,18 +292,11 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         socket.connect();
 
-        Log.e("id: ", uid);
-
         socket.emit("join", uid);
     }
 
     private void EndBtnClick() {
 
-        String uid = null;
-        try {
-            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }catch (Exception e){
-        }
         dbHandler.setUserID(uid);
         dbHandler.setEndTime(dateStr());
         endTime = System.currentTimeMillis();
@@ -322,7 +306,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         dbHandler.resetAllCol();
         dbHandler.printDetails();
 
-        Intent intent = new Intent( getApplicationContext(),GraphReportActivity.class);
+        Intent intent = new Intent( getApplicationContext(), GraphReportActivity.class);
         startActivity(intent);
     }
 
@@ -344,7 +328,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
         webSocket.cancel();
 
          */
-        textToSpeech.shutdown();
         this.finish();
     }
 
