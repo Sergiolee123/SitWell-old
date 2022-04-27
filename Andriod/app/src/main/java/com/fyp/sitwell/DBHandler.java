@@ -350,6 +350,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getUserProgress(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select "+DBConstant.progStatus_col+" from "+ DBConstant.DB2_NAME + " WHERE userID ="+ "'"+ userId+"'", null) ;
+        return cursor;
+    }
+
     private float calProgStatus(float progDaysLeft) {
         Log.e(TAG, "numerator = " + (float)default_days+" - "+progDaysLeft);
             float numerator =(float)default_days-progDaysLeft;
@@ -439,7 +445,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 " , duration = " + userSittingRec.getDuration() + " , accuracy = " + userSittingRec.getSitAccuracy() + " , startTime = " + userSittingRec.getStartTime() +" , endTime = " + userSittingRec.getEndTime() ;
         Log.d(TAG,str );
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -22,45 +23,27 @@ public class PieChartReportActivity extends AppCompatActivity {
     private PieChart pieChart;
     private DBHandler dbHandler;
     private static Cursor cursor;
+    private Button homeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pie_chart_report);
         pieChart=findViewById(R.id.pieChart);
+        homeBtn=findViewById(R.id.HomeBtn);
         dbHandler=new DBHandler(this);
-        cursor = dbHandler.getLatestRec();
+        cursor = dbHandler.getUserProgress();
         setupPieChart();
         loadPieChartData();
     }
 
     private void loadPieChartData(){
         ArrayList<PieEntry> entries = new ArrayList<>();
-        /*entries.add(new PieEntry(0.0f, "Food & Dining"));
-        entries.add(new PieEntry(0.0f, "Medical"));
-        entries.add(new PieEntry(0.0f, "Entertainment"));
-        entries.add(new PieEntry(0.0f, "Electricity and Gas"));
-        entries.add(new PieEntry(0.0f, "Housing"));*/
 
         cursor.moveToFirst();
-        Log.e("cursor", ""+cursor.getFloat(7)+" ,"+cursor.getColumnName(7));
-        if(cursor.getCount()==1 && (int)(cursor.getFloat(7))==100){
-            entries.add(new PieEntry(1.0f, cursor.getColumnName(7)));
-            //Log.e("cursor fk", ""+cursor.getFloat(7)+" ,"+cursor.getColumnName(7));
-           /* entries.add(new PieEntry(0f, cursor.getColumnName(0)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(1)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(2)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(3)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(4)));
-            entries.add(new PieEntry(1.0f, cursor.getColumnName(7)));*/
-        }
-        if(cursor.getCount()==1 && ((int)(cursor.getFloat(7)))<100){
-            entries.add(new PieEntry(0f, cursor.getColumnName(1)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(2)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(3)));
-            entries.add(new PieEntry(0f, cursor.getColumnName(4)));
-        }
-
+        float progStats = cursor.getFloat(0)*100;
+        entries.add(new PieEntry(progStats, "Finished"));
+        entries.add(new PieEntry((100-progStats), "undone"));
 
         ArrayList<Integer> colors = new ArrayList<>();
         for(int color: ColorTemplate.MATERIAL_COLORS){
@@ -70,7 +53,7 @@ public class PieChartReportActivity extends AppCompatActivity {
             colors.add(color);
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, "Expense Category");
+        PieDataSet dataSet = new PieDataSet(entries, "UserProgress");
         dataSet.setColors(colors);
 
         PieData data = new PieData(dataSet);
@@ -90,7 +73,7 @@ public class PieChartReportActivity extends AppCompatActivity {
         pieChart.setUsePercentValues(true);
         pieChart.setEntryLabelTextSize(12);
         pieChart.setEntryLabelColor(Color.BLACK);
-        //pieChart.setCenterText("Category");
+        //pieChart.setCenterText("UserProgress");
         pieChart.setCenterTextSize(24);
         pieChart.getDescription().setEnabled(false);
 
@@ -102,5 +85,5 @@ public class PieChartReportActivity extends AppCompatActivity {
         legend.setEnabled(true);
     }
 
-    //retrieve the count
+
 }

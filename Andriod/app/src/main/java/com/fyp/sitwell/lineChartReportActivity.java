@@ -342,7 +342,6 @@ public class lineChartReportActivity extends AppCompatActivity implements OnChar
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
             }
-
             if(cursorCount==21 && pos.equals("Last 14 days")){
                 LineDataSet set1 = new LineDataSet(weekTwoRec, "Days "+(init_days+7)+"-"+(init_days+7+6));
                 set1.setFillAlpha(50);
@@ -360,7 +359,6 @@ public class lineChartReportActivity extends AppCompatActivity implements OnChar
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
             }
-
             if(cursorCount==21 && pos.equals("Last 21 days")){
                 LineDataSet set2 = new LineDataSet(weekOneRec, "Days "+(init_days)+"-"+(init_days+6));
                 set2.setFillAlpha(50);
