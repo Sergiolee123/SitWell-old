@@ -22,4 +22,5 @@ class DBConstant {
     static final String progDaysLeft_col = "progDaysLeft";
     static final String progStatus_col = "progStatus";
     static final String ProgramRepeatedTimes_col = "ProgramRepeatedTimes";
+    static final String datesString_col = "datesString";
 }

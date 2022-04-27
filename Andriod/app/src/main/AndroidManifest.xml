@@ -22,7 +22,10 @@
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
         <activity
-            android:name=".GraphReportActivity"
+            android:name=".PieChartReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".lineChartReportActivity"
             android:exported="false" />
         <activity
             android:name=".IntroductionActivity"

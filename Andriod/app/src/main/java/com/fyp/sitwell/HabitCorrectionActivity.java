@@ -133,35 +133,34 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight@";
-            dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
-
+            dbHandler.getUserSittingRec().setNeckNum(dbHandler.getUserSittingRec().getNeckNum()+1);
         }
         if(s.isBackUpStraight()) {
             message += "Your Back is not straight@";
-            dbHandler.setBackNum(dbHandler.getBackNum()+1);
+            dbHandler.getUserSittingRec().setBackNum(dbHandler.getUserSittingRec().getBackNum()+1);
         }
         if(s.isShoulderAlignment()) {
             message += "Your shoulder is not align@";
-            dbHandler.setSHLDRNum(dbHandler.getSHLDRNum()+1);
+            dbHandler.getUserSittingRec().setSHLDRNum(dbHandler.getUserSittingRec().getSHLDRNum()+1);
         }
         if(s.isLeftArmCorrect()) {
             message += "Your left arm is in bad position@";
-            dbHandler.setLeftArmNum(dbHandler.getLeftArmNum()+1);
+            dbHandler.getUserSittingRec().setLeftArmNum(dbHandler.getUserSittingRec().getLeftArmNum()+1);
         }
         if(s.isRightArmCorrect()) {
             message += "Your right arm is in bad position@";
-            dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
+            dbHandler.getUserSittingRec().setRightArmNum(dbHandler.getUserSittingRec().getRightArmNum()+1);
         }
         if(message.equals("")){
             habitCorrectionFragment.clearAll();
-            dbHandler.setSitWellNum(dbHandler.getSitWellNum()+1);
+            dbHandler.getUserSittingRec().setSitWellNum(dbHandler.getUserSittingRec().getSitWellNum()+1);
         }else{
             habitCorrectionFragment.setTextView(message.replace("@", "\n"));
             habitCorrectionFragment.showCorrectPose();
             textToSpeech.speak(message.replace("@", ",")
                             + " Please refer to your correct posture" ,
                     TextToSpeech.QUEUE_FLUSH,null,null);
-            dbHandler.setSitPoorNum(dbHandler.getSitPoorNum()+1);
+            dbHandler.getUserSittingRec().setSitPoorNum(dbHandler.getUserSittingRec().getSitPoorNum()+1);
         }
 
     }
@@ -223,7 +222,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                                         .commit();
                                 endBtn.setVisibility(View.VISIBLE);
                                 startTime = System.currentTimeMillis();
-                                dbHandler.setStartTime(dateStr());
+                                dbHandler.getUserSittingRec().setStartTime(dateStr());//***
 
                                 Log.d("calTime", "startTime = " + startTime);
 
@@ -313,16 +312,19 @@ public class HabitCorrectionActivity extends FragmentActivity{
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }catch (Exception e){
         }
-        dbHandler.setUserID(uid);
-        dbHandler.setEndTime(dateStr());
+
+        dbHandler.userId=uid;
+        dbHandler.getUserSittingRec().setUserID(uid);
+        dbHandler.getUserSittingRec().setEndTime(dateStr());
         endTime = System.currentTimeMillis();
-        dbHandler.setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime))); //min unit
+        dbHandler.getUserSittingRec().setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime)));
         dbHandler.calAccuracy();
         dbHandler.addNewRecord();
-        dbHandler.resetAllCol();
+        dbHandler.getUserSittingRec().resetAllCol();
+        dbHandler.insertRandomRecord();
         dbHandler.printDetails();
 
-        Intent intent = new Intent( getApplicationContext(),GraphReportActivity.class);
+        Intent intent = new Intent( getApplicationContext(), lineChartReportActivity.class);
         startActivity(intent);
 
         count++;
