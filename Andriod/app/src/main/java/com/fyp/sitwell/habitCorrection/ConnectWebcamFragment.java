@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.habitCorrection;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.fyp.sitwell.R;
 
 public class ConnectWebcamFragment extends Fragment {
 

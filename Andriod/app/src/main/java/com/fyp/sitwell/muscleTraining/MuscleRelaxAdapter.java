@@ -1,6 +1,7 @@
 package com.fyp.sitwell.muscleTraining;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.sitwell.R;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
-public class MuscleStrengthenAdapter extends RecyclerView.Adapter<MuscleStrengthenAdapter.ViewHolder> {
+public class MuscleRelaxAdapter extends RecyclerView.Adapter<MuscleRelaxAdapter.ViewHolder>{
+
     private HashMap<String, Class<?extends MuscleTrainingInterface>> trainingMethod;
     private String[] trainingNames;
 
-    public MuscleStrengthenAdapter(HashMap<String, Class<?extends MuscleTrainingInterface>> trainingMethod){
+    public MuscleRelaxAdapter(HashMap<String, Class<?extends MuscleTrainingInterface>> trainingMethod){
         this.trainingMethod = trainingMethod;
         this.trainingNames = new String[trainingMethod.keySet().size()];
         trainingMethod.keySet().toArray(trainingNames);
@@ -25,21 +28,20 @@ public class MuscleStrengthenAdapter extends RecyclerView.Adapter<MuscleStrength
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MuscleRelaxAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.muscle_strengthen_cardview, parent, false);
-        return new MuscleStrengthenAdapter.ViewHolder(view);
+                .inflate(R.layout.muscle_relax_cardview, parent, false);
+        return new MuscleRelaxAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MuscleRelaxAdapter.ViewHolder holder, int position) {
         holder.title_exercise.setText(trainingNames[position]);
-
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), MuscleStrengthenTrainingActivity.class);
+            Intent intent = new Intent(holder.itemView.getContext(), MuscleRelaxTrainingActivity.class);
             intent.putExtra("class",trainingMethod.get(trainingNames[position]));
-           holder.itemView.getContext().startActivity(intent);
+            holder.itemView.getContext().startActivity(intent);
         });
     }
 

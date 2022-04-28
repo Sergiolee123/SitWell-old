@@ -1,10 +1,13 @@
 package com.fyp.sitwell.muscleTraining;
 
 public interface MuscleTrainingInterface {
-    public Boolean isPrepare();
-    public Boolean isReady();
-    public Boolean isHalf();
-    public Boolean isFinished();
+    Boolean isPrepare();
+    Boolean isReady();
+    Boolean isHalf();
+    Boolean isFinished();
+    Boolean isNextSide(int count);
+    Boolean isEnd();
+    String getInstruction();
 
 
 }

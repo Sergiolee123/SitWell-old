@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.muscleTraining;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +21,7 @@ import android.util.Size;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fyp.sitwell.mucleTraining.RepeatCounter;
-import com.fyp.sitwell.mucleTraining.TrainingPostureAnalyzer;
+import com.fyp.sitwell.R;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
@@ -36,8 +35,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class MuscleStrengthActivity extends AppCompatActivity {
+public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
+
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
@@ -48,14 +51,20 @@ public class MuscleStrengthActivity extends AppCompatActivity {
     RepeatCounter repeatCounter;
     TextToSpeech textToSpeech;
     Boolean started;
-
+    static Class<?> mClass;
     TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_muscle_strength);
+        setContentView(R.layout.activity_muscle_training);
+
+        mClass = (Class<?>) getIntent().getSerializableExtra("class");
+
+        if(mClass == null){
+            this.finish();
+        }
 
         previewView = findViewById(R.id.viewBinder);
         textView = findViewById(R.id.text_instr_content);
@@ -97,8 +106,7 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                     bindPreview(cameraProvider);
 
                 } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
+                    //
                 }
             }
         }, ContextCompat.getMainExecutor(this));
@@ -119,8 +127,10 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
-        ExecutorService analysisExecutor = Executors.newSingleThreadExecutor();;
-        imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthActivity.PoseAnalyzer());
+        ExecutorService analysisExecutor = new ThreadPoolExecutor(1,10
+                ,0, TimeUnit.SECONDS, new SynchronousQueue<>()
+                , Executors.defaultThreadFactory(),new ThreadPoolExecutor.CallerRunsPolicy());
+        imageAnalysis.setAnalyzer(analysisExecutor, new MuscleStrengthenTrainingActivity.PoseAnalyzer());
 
         preview.setSurfaceProvider(previewView.createSurfaceProvider());
         cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
@@ -134,13 +144,15 @@ public class MuscleStrengthActivity extends AppCompatActivity {
 
     }
 
-
     protected void getPose(Pose pose){
 
-
-
         String message = null;
-        TrainingPostureAnalyzer t = new TrainingPostureAnalyzer(pose, "leftFoot");
+        MuscleTrainingInterface t = MuscleTrainingFactory.getMuscleTraining(mClass, pose);;
+
+        if(t == null){
+            throw new NullPointerException();
+        }
+
         if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
@@ -164,13 +176,25 @@ public class MuscleStrengthActivity extends AppCompatActivity {
                         ,TextToSpeech.QUEUE_ADD,null,null);
             }
         }
+        if(t.isNextSide(repeatCounter.getCounter())){
+            textToSpeech.speak("You have finished one side Please change to another side",
+                     TextToSpeech.QUEUE_ADD, null, null);
+            repeatCounter.setZero();
+        }
+
+        if(t.isEnd()){
+            textToSpeech.speak(("Good job You have finished this training")
+                    ,TextToSpeech.QUEUE_FLUSH, null, null);
+            this.finish();
+        }
 
         if(!textToSpeech.isSpeaking() && message != null){
             textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
-            textView.setText(R.string.lying_lateral_leg_lift_instruction);
+            textView.setText(t.getInstruction());
         }
 
         //textView.setText(t.debug());
+
 
 
     }

@@ -1,0 +1,59 @@
+#video {
+    border: 1px solid black;
+    width: 450px;
+    height: 350px;
+    display: block;
+}
+
+#photo {
+    border: 1px solid black;
+    width: 450px;
+    height: 350px;
+    display: block;
+}
+
+#canvas {
+    display: none;
+}
+
+.camera {
+    width: 450px;
+    display: inline-block;
+}
+
+.output {
+    width: 450px;
+    display: inline-block;
+}
+
+.buttonarea {
+    padding-bottom: 20px;
+
+}
+
+.contentarea {
+    font-size: 16px;
+    font-family: Arial;
+    text-align: center;
+}
+
+#auth-button {
+    background-color: #4285f4;
+    border: 1px solid #4285f4;
+    border-radius: 2px;
+    cursor: pointer;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+#auth-button-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 40px;
+    text-decoration: none;
+}
+
+#error {
+    color: red;
+}

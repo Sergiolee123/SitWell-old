@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.habitCorrection;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -182,8 +182,8 @@ public class SittingPostureAnalyzer {
             Log.e("PA",message1);
             Log.e("PA","OLeft" + leftShoulderZ + "    ORight" + rightShoulderZ);
 
-            if((leftShoulder > leftShoulderZ+150 || leftShoulder < leftShoulderZ-150)
-                    || (rightShoulder > rightShoulderZ+150 || rightShoulder < rightShoulderZ-150)){
+            if((leftShoulder > leftShoulderZ+100 || leftShoulder < leftShoulderZ-150)
+                    || (rightShoulder > rightShoulderZ+100 || rightShoulder < rightShoulderZ-150)){
                 return true;
             }
         } catch (NullPointerException p){

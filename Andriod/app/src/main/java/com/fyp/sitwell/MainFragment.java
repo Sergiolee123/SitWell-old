@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.fyp.sitwell.habitCorrection.HabitCorrectionActivity;
+import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
+import com.fyp.sitwell.muscleTraining.MuscleStrengthenActivity;
+
 public class MainFragment  extends Fragment {
     private CardView mSittingView, mRelaxView, mExerciseView;
 
@@ -35,14 +39,15 @@ public class MainFragment  extends Fragment {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Relax view clicked.", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), VideoSteamActivity.class));
+                startActivity(new Intent(getActivity(), MuscleRelaxActivity.class));
             }
         });
+
         mExerciseView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "Exercise view clicked.",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), MuscleStrengthActivity.class));
+                startActivity(new Intent(getActivity(), MuscleStrengthenActivity.class));
             }
         });
         return view;
