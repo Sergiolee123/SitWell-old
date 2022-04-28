@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.fyp.sitwell.DBHandler;
-import com.fyp.sitwell.GraphReportActivity;
 import com.fyp.sitwell.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
@@ -154,6 +153,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
             dbHandler.getUserSittingRec().setRightArmNum(dbHandler.getUserSittingRec().getRightArmNum()+1);
         }
         if(message.equals("")){
+
             habitCorrectionFragment.clearAll();
             dbHandler.getUserSittingRec().setSitWellNum(dbHandler.getUserSittingRec().getSitWellNum()+1);
         }else{
