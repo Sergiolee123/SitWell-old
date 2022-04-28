@@ -6,41 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/linechart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </com.github.mikephil.charting.charts.LineChart>
+        android:layout_height="match_parent"></com.github.mikephil.charting.charts.LineChart>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/topic"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="Topic"
+        android:textColor="@color/black"></TextView>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:id="@+id/topic"></TextView>
+        android:layout_marginLeft="60dp"
+        android:background="@color/teal_200"
+        android:backgroundTint="@color/headercolor"
+        android:layout_toEndOf="@id/topic"
+        android:layout_alignParentRight="true"
+       ></Spinner>
 
     <TextView
+        android:id="@+id/XAxisLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_alignBottom="@id/linechart"
-        android:text="Days"
-        android:textColor="@color/black"
-        android:id="@+id/XAxisLabel"></TextView>
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/black"></TextView>
 
     <TextView
-        android:transformPivotX="20dp"
-        android:transformPivotY="23dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="1.9in"
         android:rotation="270"
-        android:text="Y-axis"
+        android:text="Accuracy"
         android:textColor="@android:color/black"
+        android:transformPivotX="20dp"
+        android:transformPivotY="23dp" />
+
+    <Button
+        android:id="@+id/BtnPieChart"
+        android:layout_width="55dp"
+        android:layout_height="38dp"
+        android:text="Next"
+        android:textSize="14sp"
+        android:padding="0dp"
+        android:layout_marginRight="14sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         />
 
 </RelativeLayout>

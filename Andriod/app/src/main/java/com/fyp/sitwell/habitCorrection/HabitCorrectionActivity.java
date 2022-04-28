@@ -62,7 +62,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 .add(R.id.habit_fragment, connectWebcamFragment, "ConnectWebcam")
                 .commit();
 
-        //scheduler = Executors.newScheduledThreadPool(1);
         setup = false;
         connected = false;
 
@@ -135,34 +134,35 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }
 
         if(s.isNeckLateralBend()) {
-            message += "Your Neck is not straight\n";
-            dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
+            message += "Your Neck is not straight@";
+            dbHandler.getUserSittingRec().setNeckNum(dbHandler.getUserSittingRec().getNeckNum()+1);
         }
         if(s.isBackUpStraight()) {
-            message += "Your Back is not straight\n";
-            dbHandler.setBackNum(dbHandler.getBackNum()+1);
+            message += "Your Back is not straight@";
+            dbHandler.getUserSittingRec().setBackNum(dbHandler.getUserSittingRec().getBackNum()+1);
         }
         if(s.isShoulderAlignment()) {
-            message += "Your shoulder is not align\n";
-            dbHandler.setSHLDRNum(dbHandler.getSHLDRNum()+1);
+            message += "Your shoulder is not align@";
+            dbHandler.getUserSittingRec().setSHLDRNum(dbHandler.getUserSittingRec().getSHLDRNum()+1);
         }
         if(s.isLeftArmCorrect()) {
-            message += "Your left arm is in bad position\n";
-            dbHandler.setLeftArmNum(dbHandler.getLeftArmNum()+1);
+            message += "Your left arm is in bad position@";
+            dbHandler.getUserSittingRec().setLeftArmNum(dbHandler.getUserSittingRec().getLeftArmNum()+1);
         }
         if(s.isRightArmCorrect()) {
-            message += "Your right arm is in bad position\n";
-            dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
+            message += "Your right arm is in bad position@";
+            dbHandler.getUserSittingRec().setRightArmNum(dbHandler.getUserSittingRec().getRightArmNum()+1);
         }
-
         if(message.equals("")){
             habitCorrectionFragment.clearAll();
-            dbHandler.setSitWellNum(dbHandler.getSitWellNum()+1);
+            dbHandler.getUserSittingRec().setSitWellNum(dbHandler.getUserSittingRec().getSitWellNum()+1);
         }else{
             habitCorrectionFragment.setTextView(message);
             habitCorrectionFragment.showCorrectPose();
-            socket.emit("notification", uid, message + " Please refer to your correct posture");
-            dbHandler.setSitPoorNum(dbHandler.getSitPoorNum()+1);
+            textToSpeech.speak(message.replace("@", ",")
+                            + " Please refer to your correct posture" ,
+                    TextToSpeech.QUEUE_FLUSH,null,null);
+            dbHandler.getUserSittingRec().setSitPoorNum(dbHandler.getUserSittingRec().getSitPoorNum()+1);
         }
 
     }
@@ -224,7 +224,8 @@ public class HabitCorrectionActivity extends FragmentActivity{
                                         .commit();
                                 endBtn.setVisibility(View.VISIBLE);
                                 startTime = System.currentTimeMillis();
-                                dbHandler.setStartTime(dateStr());
+                                dbHandler.getUserSittingRec().setStartTime(dateStr());//***
+
                                 Log.d("calTime", "startTime = " + startTime);
 
                             }else{
@@ -243,12 +244,21 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
 
     private void initiateSocketConnection() {
-
         Log.e("Init", "The initiateSocketConnection");
         /*OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_PATH).build();
         webSocket = client.newWebSocket(request, new SocketListener());
          */
+
+        String uid;
+        try {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (Exception e){
+            Toast.makeText(this, "Error",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         socket.on("full", (args) -> {
             runOnUiThread(() -> {
@@ -297,16 +307,25 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
     private void EndBtnClick() {
 
-        dbHandler.setUserID(uid);
-        dbHandler.setEndTime(dateStr());
+        String uid = null;
+        try {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }catch (Exception e){
+        }
+
+        dbHandler.userId=uid;
+        dbHandler.getUserSittingRec().setUserID(uid);
+        dbHandler.getUserSittingRec().setEndTime(dateStr());
         endTime = System.currentTimeMillis();
-        dbHandler.setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime))); //min unit
+        dbHandler.getUserSittingRec().setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime)));
         dbHandler.calAccuracy();
         dbHandler.addNewRecord();
-        dbHandler.resetAllCol();
+        dbHandler.getUserSittingRec().resetAllCol();
+        dbHandler.insertRandomRecord();
         dbHandler.printDetails();
 
-        Intent intent = new Intent( getApplicationContext(), GraphReportActivity.class);
+
+        Intent intent = new Intent( getApplicationContext(), lineChartReportActivity.class);
         startActivity(intent);
     }
 
@@ -316,7 +335,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
         Log.d("Time", nowDate);
         return nowDate;
     }
-
 
     @Override
     public void onStop() {
