@@ -239,8 +239,6 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 );
     }
 
-
-
     private void initiateSocketConnection(String text) {
 
         Log.e("Init", "The initiateSocketConnection " + text);
