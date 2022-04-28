@@ -32,7 +32,10 @@
     </receiver>
 
         <activity
-            android:name=".GraphReportActivity"
+            android:name=".PieChartReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LineChartReportActivity"
             android:exported="false" />
         <activity
             android:name=".alarm.MuscleRelaxSetting"

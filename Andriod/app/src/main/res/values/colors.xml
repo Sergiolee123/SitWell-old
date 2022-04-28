@@ -10,4 +10,5 @@
     <color name="btnbg">#2196F3</color>
     <color name="headercolor">#1C94F3</color>
     <color name="cardbg">#E8EEF3</color>
+    <color name="ViewDataBtn">#1111CF</color>
 </resources>
