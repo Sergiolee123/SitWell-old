@@ -13,13 +13,13 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SittingPostureAnalyzer {
+public class SittingPostureClassification {
 
     private Pose pose;
     private Context context;
     private static double leftShoulderZ, rightShoulderZ;
 
-    public SittingPostureAnalyzer(Pose pose, Context context){
+    public SittingPostureClassification(Pose pose, Context context){
         this.pose = pose;
         this.context = context;
     }
@@ -82,7 +82,7 @@ public class SittingPostureAnalyzer {
         return true;
     }
 
-    protected Boolean isShoulderAlignment(){
+    protected Boolean isNotShoulderAlignment(){
         PoseLandmark leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
         PoseLandmark rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER);
         try {
@@ -101,7 +101,7 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    protected Boolean isRightArmCorrect(){
+    protected Boolean isNotRightArmCorrect(){
         PoseLandmark rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER);
         PoseLandmark rightElbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW);
         try {
@@ -120,7 +120,7 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    protected Boolean isLeftArmCorrect(){
+    protected Boolean isNotLeftArmCorrect(){
         PoseLandmark leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
         PoseLandmark leftElbow = pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW);
         try {
@@ -170,7 +170,7 @@ public class SittingPostureAnalyzer {
         return false;
     }
 
-    protected Boolean isBackUpStraight(){
+    protected Boolean isNotBackUpStraight(){
 
         try {
             float leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER).getPosition3D().getZ();

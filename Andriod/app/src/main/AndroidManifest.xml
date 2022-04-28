@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fyp.sitwell">
+    package="com.fyp.sitwell"
+    android:installLocation="internalOnly">
 
     <queries>
         <intent>
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,9 +23,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
+
+    <receiver android:name=".alarm.AlarmReceiver"
+        android:exported="false">
+    <intent-filter>
+        <action android:name="repeat_relax" />
+    </intent-filter>
+    </receiver>
+
         <activity
             android:name=".GraphReportActivity"
             android:exported="false" />
+        <activity
+            android:name=".alarm.MuscleRelaxSetting"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".muscleTraining.MuscleRelaxTrainingActivity"
             android:exported="false"

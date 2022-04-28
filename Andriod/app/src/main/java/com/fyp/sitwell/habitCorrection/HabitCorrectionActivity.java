@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
@@ -91,7 +89,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     }
     //need to add End detection button
 
-    protected boolean isSetup(SittingPostureAnalyzer s){
+    protected boolean isSetup(SittingPostureClassification s){
 
         String message = "";
 
@@ -104,13 +102,13 @@ public class HabitCorrectionActivity extends FragmentActivity{
         if(s.isNeckLateralBend()) {
             message += "Your Neck is not straight\n";
         }
-        if(s.isShoulderAlignment()) {
+        if(s.isNotShoulderAlignment()) {
             message += "Your shoulder is not align\n";
         }
-        if(s.isLeftArmCorrect()) {
+        if(s.isNotLeftArmCorrect()) {
             message += "Your left arm is in bad position\n";
         }
-        if(s.isRightArmCorrect()) {
+        if(s.isNotRightArmCorrect()) {
             message += "Your right arm is in bad position\n";
         }
 
@@ -124,7 +122,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
     }
 
-    protected void analyzePose(SittingPostureAnalyzer s){
+    protected void analyzePose(SittingPostureClassification s){
 
         String message = "";
 
@@ -138,19 +136,19 @@ public class HabitCorrectionActivity extends FragmentActivity{
             message += "Your Neck is not straight\n";
             dbHandler.setNeckNum(dbHandler.getNeckNum()+1);
         }
-        if(s.isBackUpStraight()) {
+        if(s.isNotBackUpStraight()) {
             message += "Your Back is not straight\n";
             dbHandler.setBackNum(dbHandler.getBackNum()+1);
         }
-        if(s.isShoulderAlignment()) {
+        if(s.isNotShoulderAlignment()) {
             message += "Your shoulder is not align\n";
             dbHandler.setSHLDRNum(dbHandler.getSHLDRNum()+1);
         }
-        if(s.isLeftArmCorrect()) {
+        if(s.isNotLeftArmCorrect()) {
             message += "Your left arm is in bad position\n";
             dbHandler.setLeftArmNum(dbHandler.getLeftArmNum()+1);
         }
-        if(s.isRightArmCorrect()) {
+        if(s.isNotRightArmCorrect()) {
             message += "Your right arm is in bad position\n";
             dbHandler.setRightArmNum(dbHandler.getRightArmNum()+1);
         }
@@ -197,7 +195,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 .addOnSuccessListener(
                         (pose) -> {
                             Log.e("post","posta");
-                            SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose,this);
+                            SittingPostureClassification s = new SittingPostureClassification(pose,this);
                             analyzePose(s);
 
                         })
@@ -215,7 +213,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
                 .addOnSuccessListener(
                         (pose) -> {
                             Log.e("post","posts");
-                            SittingPostureAnalyzer s = new SittingPostureAnalyzer(pose,this);
+                            SittingPostureClassification s = new SittingPostureClassification(pose,this);
                             setup = isSetup(s);
                             if(setup){
                                 habitCorrectionFragment = new HabitCorrectionFragment(bitmap);

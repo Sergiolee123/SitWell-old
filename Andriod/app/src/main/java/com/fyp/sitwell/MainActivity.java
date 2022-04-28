@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.fyp.sitwell.alarm.MuscleRelaxSetting;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
@@ -56,7 +57,12 @@ public class MainActivity extends AppCompatActivity {
                 else if (id == R.id.nav_profile) {
                     showCustomDialog();
                     return false;
-                }else if (id == R.id.nav_logout){
+                }
+                else if(id == R.id.nav_setting){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                            new SettingPageFragment()).commit();
+                }
+                else if (id == R.id.nav_logout){
                     mFirebaseAuth.signOut();
                     finish();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -73,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 this, drawerLayout, mToolBar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    public void startMuscleRelaxSetting(View view){
+        startActivity(new Intent(this, MuscleRelaxSetting.class));
     }
 
     private void isFirstLogin(){
