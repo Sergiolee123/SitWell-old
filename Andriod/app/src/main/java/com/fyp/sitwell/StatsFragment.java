@@ -24,7 +24,7 @@ public class StatsFragment  extends Fragment {
         lineChartBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), LineChartInSitDetectionActivity.class));
+                startActivity(new Intent(getActivity(), LineChartInStatsActivity.class));
             }
         });
 

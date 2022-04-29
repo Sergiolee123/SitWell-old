@@ -68,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //sth incomplete here only insert the record in Usersitting Record table, but does not update User Progress Table
     public void insertRandomRecord(){
         long result;
-        int insertRecNum= 5;
+        int insertRecNum= 3;
         while(insertRecNum-->0) {
             try (SQLiteDatabase db = getWritableDatabase()) {
                 ContentValues values = new ContentValues();
@@ -340,6 +340,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    public Cursor getAllDates(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select "+ DBConstant.datesString_col + " from " + DBConstant.DB2_NAME + " WHERE userID =" + "'"+userId + "'", null);
+        return c;
+    }
+
     //Piechart   this is useless
     public Cursor getLatestRec(){
         String date = getDateOnly();
@@ -422,7 +428,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return nowDate;
     }
 
-    private String getDateOnly(){
+    public String getDateOnly(){
         String nowDate= getFullDateTime();
         String [] arr = nowDate.split(" ");
         Log.e(TAG,"getDateOnly() = "+ arr[0]);

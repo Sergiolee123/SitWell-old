@@ -76,13 +76,13 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
             spinnerItemsList.add("Last 7 days");
         }
         if(cursorCount==14){
-            spinnerItemsList.add("Last 7 days");
             spinnerItemsList.add("Last 14 days");
+            spinnerItemsList.add("Last 7 days");
         }
         if(cursorCount==21){
-            spinnerItemsList.add("Last 7 days");
-            spinnerItemsList.add("Last 14 days");
             spinnerItemsList.add("Last 21 days");
+            spinnerItemsList.add("Last 14 days");
+            spinnerItemsList.add("Last 7 days");
         }
         String [] arr  = new String[spinnerItemsList.size()];
         for (int i=0;i<arr.length;i++) {
@@ -295,6 +295,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Recent Days Sitting performance");
             }
 
             if(cursorCount==7 && pos.equals("Last 7 days")){
@@ -305,6 +306,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days Sitting performance");
             }
 
             if(cursorCount==14 && pos.equals("Last 7 days")){
@@ -315,6 +317,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days Sitting performance");
             }
             if(cursorCount==14 && pos.equals("Last 14 days")){
                 LineDataSet set = new LineDataSet(weekOneRec, "Days "+init_days+"-"+(init_days+6));
@@ -332,6 +335,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set1.setValueTextSize(12f);
                 set1.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set1);
+                topicTextView.setText("Last 14 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 7 days")){
                 LineDataSet set = new LineDataSet(weekThreeRec, "Days "+(init_days+7*2)+"-"+(init_days+7*2+6));
@@ -341,6 +345,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 14 days")){
                 LineDataSet set1 = new LineDataSet(weekTwoRec, "Days "+(init_days+7)+"-"+(init_days+7+6));
@@ -358,6 +363,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 14 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 21 days")){
                 LineDataSet set2 = new LineDataSet(weekOneRec, "Days "+(init_days)+"-"+(init_days+6));
@@ -383,6 +389,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 21 days Sitting performance");
             }
 
             LineData data = new LineData(lineDataSets);

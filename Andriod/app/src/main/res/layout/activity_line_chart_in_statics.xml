@@ -4,30 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LineChartInStatsActivity">
 
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/linechart"
+        android:id="@+id/linechart1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></com.github.mikephil.charting.charts.LineChart>
 
     <TextView
-        android:id="@+id/topic"
+        android:id="@+id/topic1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Topic"
+        android:text="Topic2"
         android:textColor="@color/black"></TextView>
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:layout_marginLeft="60dp"
         android:background="@color/teal_200"
         android:backgroundTint="@color/headercolor"
-        android:layout_toEndOf="@id/topic"
+        android:layout_toEndOf="@id/topic1"
         android:layout_alignParentRight="true"
         ></Spinner>
 
@@ -35,7 +35,7 @@
         android:id="@+id/XAxisLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/linechart"
+        android:layout_alignBottom="@id/linechart1"
         android:gravity="center"
         android:text=""
         android:textColor="@color/black"></TextView>

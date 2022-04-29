@@ -1,23 +1,27 @@
 package com.fyp.sitwell;
 
+import static java.time.LocalDate.parse;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -31,8 +35,13 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.time.*;
+import java.util.Date;
 
 public class LineChartInStatsActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
@@ -40,9 +49,8 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private LineChart mpLineChart;
     private Legend legend;
     private DBHandler dbHandler;
-    private static Cursor cursor;
+    private Cursor cursor;
     private int cursorCount;
-    private Button PieChartbutton;
     private TextView topicTextView;
     private Spinner spinner;
     private static ArrayList<String> spinnerItemsList;
@@ -50,22 +58,52 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private static ArrayList<Entry> weekTwoRec;
     private static ArrayList<Entry> weekThreeRec;
 
+    private ArrayList<String> xAxisLabel = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_chart_in_statics);
-        PieChartbutton= findViewById(R.id.BtnPieChart);
-        topicTextView = findViewById(R.id.topic);
-        spinner = findViewById(R.id.spinner);
-        PieChartbutton.setOnClickListener(this);
+        topicTextView = findViewById(R.id.topic1);
+        spinner = findViewById(R.id.spinner1);
         dbHandler = new DBHandler(this);
         spinnerItemsList = new ArrayList<>();
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
 
+        //handle xAxisLabel
+        xAxisLabel.add("Mon");
+        xAxisLabel.add("Tue");
+        xAxisLabel.add("Wed");
+        xAxisLabel.add("Thu");
+        xAxisLabel.add("Fri");
+        xAxisLabel.add("Sat");
+        xAxisLabel.add("Sun");
+
         setupSpinnerSelection();
         LineChartSetup();
         loadLineChartData();
+    }
+
+    //demo purpose
+    private void setupXAxisLabels(){
+        Cursor cursor =dbHandler.getAllDates();
+        String dateStr = cursor.getString(0);
+        String [] datesArr = dateStr.split(",");
+        String lastDate = datesArr[datesArr.length-1];
+        /*int datesLength = datesArr.length;
+        while(cursorCount--<0){
+            datesLength--;
+            String date = datesArr[datesLength];
+            String [] dateArr= date.split("-");
+            int year = Integer.parseInt(dateArr[0]);
+            int month = Integer.parseInt(dateArr[1]);
+            int day = Integer.parseInt(dateArr[2]);
+            //Date localDate = Date(year,month,day);
+        }
+        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");*/
+
+
     }
 
     private void setupSpinnerSelection(){
@@ -98,7 +136,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     }
 
     private void LineChartSetup() {
-        mpLineChart = findViewById(R.id.linechart);
+        mpLineChart = findViewById(R.id.linechart1);
         mpLineChart.setOnChartGestureListener(LineChartInStatsActivity.this);
         mpLineChart.setOnChartValueSelectedListener(LineChartInStatsActivity.this);
         mpLineChart.setDragEnabled(true);
@@ -122,7 +160,8 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         YAxis yAxis1 = mpLineChart.getAxisRight();
         yAxis1.setEnabled(false);
 
-        ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter(mpLineChart);
+        //ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter(mpLineChart);
+        ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter2(mpLineChart);
         XAxis xAxis = mpLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(xAxisFormatter);
@@ -171,38 +210,39 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         weekTwoRec= new ArrayList<Entry>();
         weekThreeRec= new ArrayList<Entry>();
         topicTextView.setText("sth wrong here");
+       // Log.e("y_label",""+getInitialLabelDay());
 
         try {
-            int y = 0;
+            int y_label = 0;
             if(arr.size()<=7){
                 for (int i = 0; i < arr.size(); i++) {
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
             }else if(arr.size() == 14) {
-                y = 0;
+                y_label = 0;
                 Log.e("condition 2","condition 2");
-                y = 0;
+                y_label = 0;
                 for(int i=0;i<arr.size()/2;i++){
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for(int i=arr.size()/2;i<arr.size();i++){
-                    weekTwoRec.add(new Entry(y++, arr.get(i)));
+                    weekTwoRec.add(new Entry(y_label++, arr.get(i)));
                 }
                 Log.e("weekTwoRec", ""+weekTwoRec.size());
             }else if (arr.size() == 21) {
                 Log.e("condition 3","condition 3");
-                y = 0;
+                y_label = 0;
                 for (int i = 0; i < arr.size()/3; i++) {
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for (int i = arr.size()/3; i < arr.size()/3*2; i++) {
-                    weekTwoRec.add(new Entry(y++, arr.get(i)));
+                    weekTwoRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for (int i = arr.size()/3*2; i < arr.size(); i++) {
-                    weekThreeRec.add(new Entry(y++, arr.get(i)));
+                    weekThreeRec.add(new Entry(y_label++, arr.get(i)));
                 }
             }
             int initial_day = getInitialLabelDay();
@@ -272,19 +312,19 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        if (parent.getId() == R.id.spinner) {
+        if (parent.getId() == R.id.spinner1) {
             String valueFromSpinner = parent.getItemAtPosition(pos).toString();
             Toast toast = Toast.makeText(this, valueFromSpinner, Toast.LENGTH_SHORT);
             toast.show();
         }
 
         updateSpinnerSelection(parent.getItemAtPosition(pos).toString());
+
     }
 
-    //sth wrong here ****
+
     private void updateSpinnerSelection(String pos){
         mpLineChart.clear();
-        topicTextView.setText("");
         if(spinnerItemsList.size()>0){
             ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
             int init_days=getInitialLabelDay();
@@ -296,6 +336,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Recent Days Sitting performance");
             }
 
             if(cursorCount==7 && pos.equals("Last 7 days")){
@@ -306,7 +347,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
-                topicTextView.setText("Last 7 days"+" Days Sitting performance");
+                topicTextView.setText("Last 7 days Sitting performance");
             }
 
             if(cursorCount==14 && pos.equals("Last 7 days")){
@@ -317,7 +358,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
-                topicTextView.setText("Last 7 days"+" Days Sitting performance");
+                topicTextView.setText("Last 7 days Sitting performance");
             }
             if(cursorCount==14 && pos.equals("Last 14 days")){
                 LineDataSet set = new LineDataSet(weekOneRec, "Days "+init_days+"-"+(init_days+6));
@@ -335,7 +376,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set1.setValueTextSize(12f);
                 set1.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set1);
-                topicTextView.setText("Last 14 days"+" Days Sitting performance");
+                topicTextView.setText("Last 14 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 7 days")){
                 LineDataSet set = new LineDataSet(weekThreeRec, "Days "+(init_days+7*2)+"-"+(init_days+7*2+6));
@@ -345,7 +386,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
-                topicTextView.setText("Last 7 days"+" Days Sitting performance");
+                topicTextView.setText("Last 7 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 14 days")){
                 LineDataSet set1 = new LineDataSet(weekTwoRec, "Days "+(init_days+7)+"-"+(init_days+7+6));
@@ -363,10 +404,9 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
-                topicTextView.setText("Last 14 days"+" Days Sitting performance");
+                topicTextView.setText("Last 14 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 21 days")){
-                topicTextView.setText("Last 21 days"+" Days Sitting performance");
 
                 LineDataSet set2 = new LineDataSet(weekOneRec, "Days "+(init_days)+"-"+(init_days+6));
                 set2.setFillAlpha(50);
@@ -392,6 +432,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
 
+                topicTextView.setText("Last 21 days Sitting performance");
             }
 
             LineData data = new LineData(lineDataSets);
@@ -416,6 +457,20 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         @Override
         public String getFormattedValue(float value) {
             return "Day " + (int) (value+1);
+        }
+    }
+
+    //sth wrong need to do the checking
+    public class DayAxisValueFormatter2 extends ValueFormatter{
+        private final BarLineChartBase<?> chart;
+
+        public DayAxisValueFormatter2(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            return xAxisLabel.get((int) value);
         }
     }
 
