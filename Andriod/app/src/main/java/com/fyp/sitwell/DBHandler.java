@@ -18,12 +18,14 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TAG2 = "Date";
 
     private static UserSittingRecModel userSittingRec= new UserSittingRecModel();
+    private static UserExerciseRecModel userExerciseRec = new UserExerciseRecModel();
 
     private int ProgramRepeatedTimes=0;
     private static int default_days=63;
     private static HashSet<String> dateSet = new HashSet<>(); //check Date
 
     public static String userId;
+
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -59,10 +61,17 @@ public class DBHandler extends SQLiteOpenHelper {
                 DBConstant.datesString_col + " TEXT NOT NULL"
                 + ")";
 
-        //String DB3_query = "CREATE TABLE " + DBConstant.DB3_NAME + " (" + DBConstant.
+        /*String DB3_query = "CREATE TABLE " + DBConstant.DB3_NAME + " (" +
+                DBConstant.userID_col + " TEXT PRIMARY KEY," +
+                DBConstant.exericseTypes_col + " TEXT NOT NULL CHECK ("+DBConstant.exericseTypes_col+"="+"'"+"RELAX" +"'" +" OR " +
+                DBConstant.exericseTypes_col+"="+"'"+"STRENGTH" +"'" +" )," +
+                DBConstant.exerciseDate_col + " TEXT NOT NULL," +
+                DBConstant.exerciseCount_col + " INTEGER "+
+                ")";*/
 
         db.execSQL(DB1_query);
         db.execSQL(DB2_query);
+        //db.execSQL(DB3_query);
     }
 
     //sth incomplete here only insert the record in Usersitting Record table, but does not update User Progress Table
@@ -510,5 +519,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static UserSittingRecModel getUserSittingRec() {
         return userSittingRec;
+    }
+
+    public static UserExerciseRecModel getUserExerciseRec() {
+        return userExerciseRec;
     }
 }

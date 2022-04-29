@@ -2,26 +2,25 @@ package com.fyp.sitwell;
 
 import static java.time.LocalDate.parse;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -35,13 +34,8 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.time.*;
-import java.util.Date;
 
 public class LineChartInStatsActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
@@ -57,6 +51,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private static ArrayList<Entry> weekOneRec;
     private static ArrayList<Entry> weekTwoRec;
     private static ArrayList<Entry> weekThreeRec;
+    private Button BtnPieChart;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
 
@@ -66,6 +61,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         setContentView(R.layout.activity_line_chart_in_statics);
         topicTextView = findViewById(R.id.topic1);
         spinner = findViewById(R.id.spinner1);
+        BtnPieChart=findViewById(R.id.BtnPieChart);
         dbHandler = new DBHandler(this);
         spinnerItemsList = new ArrayList<>();
         cursor =dbHandler.getSelectedQuerySitAccuray();
@@ -83,6 +79,15 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         setupSpinnerSelection();
         LineChartSetup();
         loadLineChartData();
+
+        BtnPieChart = findViewById(R.id.BtnPieChart);
+        BtnPieChart.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
     }
 
     //demo purpose
@@ -479,7 +484,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     @Override
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, PieChartReportActivity.class);
+        Intent intent = new Intent(this, PieChartSittingReportActivity.class);
         startActivity(intent);
     }
 

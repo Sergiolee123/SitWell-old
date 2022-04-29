@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".PieChartExerciseReportActivity">
+
+<TextView
+    android:id="@+id/topic"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="UserProgress"
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="10dp"
+    android:textSize="11pt"
+    android:textColor="@color/black"
+    android:gravity="center"
+    >
+</TextView>
+<TextView
+    android:id="@+id/userProgText"
+    android:text="%"
+    android:textSize="10pt"
+    android:layout_marginLeft="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/topic"
+    android:textColor="#DF2B2A2A"
+    android:gravity="center">
+</TextView>
+<TextView
+    android:id="@+id/pieChartText"
+    android:text="Incorrect Sitting PieChart"
+    android:layout_marginTop="25dp"
+    android:textSize="11pt"
+    android:gravity="center"
+    android:layout_centerInParent="true"
+    android:textColor="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/userProgText">
+</TextView>
+<TextView
+    android:id="@+id/PerfectMessage"
+    android:text=""
+    android:textSize="10pt"
+    android:gravity="center"
+    android:layout_centerInParent="true"
+    android:textColor="#DF2B2A2A"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/pieChartText">
+
+</TextView>
+
+<com.github.mikephil.charting.charts.PieChart
+    android:id="@+id/pieChart"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>
+
+<Button
+    android:id="@+id/HomeBtn"
+    android:text="Home page"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_alignParentBottom="true">
+</Button>
+</RelativeLayout>

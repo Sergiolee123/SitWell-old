@@ -422,7 +422,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     @Override
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, PieChartReportActivity.class);
+        Intent intent = new Intent(this, PieChartSittingReportActivity.class);
         startActivity(intent);
     }
 

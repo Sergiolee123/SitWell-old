@@ -25,16 +25,31 @@ public class StatsFragment  extends Fragment {
         pieChartBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PieChartReportActivity.class));
+                //startActivity(new Intent(getActivity(), PieChartSittingReportActivity.class));
+                getActivity().startActivityForResult(new Intent(getActivity(), PieChartSittingReportActivity.class),222);
             }
         });
 
         lineChartBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), LineChartInStatsActivity.class));
+                //startActivity(new Intent(getActivity(), LineChartInStatsActivity.class));
+                getActivity().startActivityForResult(new Intent(getActivity(), LineChartInStatsActivity.class),111);
             }
         });
+
+        /*
+        *    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == 111) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                    new MainFragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_home);
+        }
+    }
+*/
+
 
         return view;
     }

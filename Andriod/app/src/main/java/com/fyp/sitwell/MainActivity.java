@@ -1,5 +1,6 @@
 package com.fyp.sitwell;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -86,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 this, drawerLayout, mToolBar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+
+
     }
 
     public void startMuscleRelaxSetting(View view){
@@ -119,6 +123,23 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == 111) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                    new MainFragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_home);
+        }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == 222) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                    new MainFragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_home);
+        }
+
     }
 
 

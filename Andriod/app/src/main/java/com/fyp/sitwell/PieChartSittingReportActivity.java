@@ -2,10 +2,12 @@ package com.fyp.sitwell;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,7 +23,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class PieChartReportActivity extends AppCompatActivity {
+public class PieChartSittingReportActivity extends AppCompatActivity {
     private PieChart pieChart;
     private DBHandler dbHandler;
     private static Cursor cursor, cursor2;
@@ -31,7 +33,7 @@ public class PieChartReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pie_chart_report);
+        setContentView(R.layout.activity_pie_chart_sitting_report);
         pieChart=findViewById(R.id.pieChart);
         homeBtn=findViewById(R.id.HomeBtn);
         userProgTextView=findViewById(R.id.userProgText);
@@ -40,15 +42,31 @@ public class PieChartReportActivity extends AppCompatActivity {
         dbHandler=new DBHandler(this);
         cursor = dbHandler.getUserProgress();
         cursor2 = dbHandler.getLatestRec();
-        cursor2.moveToNext();
 
-        if(cursor2.getInt(0)==0 &&cursor2.getInt(1) ==0 && cursor2.getInt(2)==0 && cursor2.getInt(3)==0 && cursor2.getInt(4)==0){
-            setUpPerfectMsg();
+        if(cursor2.getCount()==1){
+            cursor2.moveToNext();
+            if(cursor2.getInt(0)==0 &&cursor2.getInt(1) ==0 && cursor2.getInt(2)==0 && cursor2.getInt(3)==0 && cursor2.getInt(4)==0){
+                setUpPerfectMsg();
+            }else{
+                setupPieChart();
+                loadPieChartData();
+            }
         }else{
-            setupPieChart();
-            loadPieChartData();
+            setUpNoRecMsg();
         }
 
+        homeBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
+    }
+
+    private void setUpNoRecMsg(){
+        pieChartTextView.setText("No Sitting record is found");
+        PerfectMsgTextView.setText("");
     }
 
     private void setUpPerfectMsg(){
@@ -138,6 +156,5 @@ public class PieChartReportActivity extends AppCompatActivity {
         legend.setDrawInside(false);
         legend.setEnabled(true);
     }
-
 
 }

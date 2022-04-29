@@ -21,9 +21,11 @@ import android.util.Size;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fyp.sitwell.DBHandler;
 import com.fyp.sitwell.R;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseDetection;
@@ -44,6 +46,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
+    private DBHandler dbHandler;
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
     PreviewView previewView;
@@ -54,12 +57,15 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
     static Class<?> mClass;
     TextView textView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_muscle_training);
-
+        dbHandler=new DBHandler(this);
+        dbHandler.userId= FirebaseAuth.getInstance().getUid();
+        dbHandler.getUserExerciseRec().setUserID(dbHandler.userId);
         mClass = (Class<?>) getIntent().getSerializableExtra("class");
 
         if(mClass == null){
@@ -183,6 +189,9 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
         }
 
         if(t.isEnd()){
+            dbHandler.getUserExerciseRec().setExerciseCount(dbHandler.getUserExerciseRec().getExerciseCount()+1);
+            dbHandler.getUserExerciseRec().setExerciseDate(dbHandler.getDateOnly());
+            dbHandler.getUserExerciseRec().setExerciseType("STRENGTH");
             textToSpeech.speak(("Good job You have finished this training")
                     ,TextToSpeech.QUEUE_FLUSH, null, null);
             this.finish();

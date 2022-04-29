@@ -22,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false" >
+        <activity
+            android:name=".PieChartExerciseReportActivity"
+            android:exported="false" />
 
         <receiver
             android:name=".alarm.AlarmReceiver"
@@ -35,7 +38,7 @@
             android:name=".LineChartInStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".PieChartReportActivity"
+            android:name=".PieChartSittingReportActivity"
             android:exported="false" />
         <activity
             android:name=".LineChartInSitDetectionActivity"
