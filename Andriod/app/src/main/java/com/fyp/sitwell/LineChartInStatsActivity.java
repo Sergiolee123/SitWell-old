@@ -34,9 +34,9 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LineChartReportActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class LineChartInStatsActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
-    private static final String TAG = "GraphReportActivity";
+    private static final String TAG = "LineChartInStatsActivity";
     private LineChart mpLineChart;
     private Legend legend;
     private DBHandler dbHandler;
@@ -53,7 +53,7 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.linechart);
+        setContentView(R.layout.activity_line_chart_in_statics);
         PieChartbutton= findViewById(R.id.BtnPieChart);
         topicTextView = findViewById(R.id.topic);
         spinner = findViewById(R.id.spinner);
@@ -62,6 +62,9 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
 
+        /*Log.e(TAG, "cursorCount = "+ cursorCount);
+        cursor=dbHandler.getAllData();
+        Log.e(TAG,"cursor.getCount()"+ cursor.getCount());*/
         setupSpinnerSelection();
         LineChartSetup();
         loadLineChartData();
@@ -97,8 +100,8 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
 
     private void LineChartSetup() {
         mpLineChart = findViewById(R.id.linechart);
-        mpLineChart.setOnChartGestureListener(LineChartReportActivity.this);
-        mpLineChart.setOnChartValueSelectedListener(LineChartReportActivity.this);
+        mpLineChart.setOnChartGestureListener(LineChartInStatsActivity.this);
+        mpLineChart.setOnChartValueSelectedListener(LineChartInStatsActivity.this);
         mpLineChart.setDragEnabled(true);
         mpLineChart.setScaleEnabled(false);
         mpLineChart.setDrawGridBackground(true);
@@ -120,7 +123,7 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
         YAxis yAxis1 = mpLineChart.getAxisRight();
         yAxis1.setEnabled(false);
 
-        ValueFormatter xAxisFormatter = new DayAxisValueFormatter(mpLineChart);
+        ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter(mpLineChart);
         XAxis xAxis = mpLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(xAxisFormatter);
@@ -246,8 +249,6 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
         mpLineChart.setData(data);
         mpLineChart.invalidate();
     }
-
-
 
     private ArrayList<Float> getDataValues(){
         ArrayList<Float> arrayList = new ArrayList<Float>();
@@ -393,11 +394,9 @@ public class LineChartReportActivity extends AppCompatActivity implements OnChar
     }
 
 
-
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
-
 
     public class DayAxisValueFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;

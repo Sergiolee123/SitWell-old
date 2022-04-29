@@ -3,6 +3,7 @@ package com.fyp.sitwell;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigation_view;
     private Toolbar  mToolBar;
     private FirebaseAuth mFirebaseAuth;
+    private static DBHandler dbHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         navigation_view = (NavigationView) findViewById(R.id.nav_view);
         mToolBar      = findViewById(R.id.toolbar);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        dbHandler= new DBHandler(this);
+        dbHandler.getUserSittingRec().setUserID(mFirebaseAuth.getCurrentUser().getUid());
+        Log.e("MainActivity", ""+mFirebaseAuth.getCurrentUser().getUid());
         navigation_view.setCheckedItem(R.id.nav_home);
         getSupportFragmentManager().beginTransaction().replace(R.id.container ,
                 new MainFragment()).commit();

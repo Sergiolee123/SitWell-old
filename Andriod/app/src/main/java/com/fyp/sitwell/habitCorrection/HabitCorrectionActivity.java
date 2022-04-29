@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.fyp.sitwell.DBHandler;
-import com.fyp.sitwell.LineChartReportActivity;
+import com.fyp.sitwell.LineChartInSitDetectionActivity;
 import com.fyp.sitwell.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
@@ -312,7 +312,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         dbHandler.printDetails();
 
 
-        Intent intent = new Intent( getApplicationContext(), LineChartReportActivity.class);
+        Intent intent = new Intent( getApplicationContext(), LineChartInSitDetectionActivity.class);
         startActivity(intent);
     }
 
