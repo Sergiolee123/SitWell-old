@@ -91,6 +91,8 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         String dateStr = cursor.getString(0);
         String [] datesArr = dateStr.split(",");
         String lastDate = datesArr[datesArr.length-1];
+        Log.e(TAG,""+lastDate);
+
         /*int datesLength = datesArr.length;
         while(cursorCount--<0){
             datesLength--;

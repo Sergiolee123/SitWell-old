@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public class StatsFragment  extends Fragment {
 
-    private Button lineChartBtn;
+    private Button lineChartBtn, pieChartBtn;
 
     @Nullable
     @Override
@@ -20,6 +20,14 @@ public class StatsFragment  extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stats ,container ,false);
 
         lineChartBtn=view.findViewById(R.id.lineChartBtn);
+        pieChartBtn=view.findViewById(R.id.pieChartBtn);
+
+        pieChartBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), PieChartReportActivity.class));
+            }
+        });
 
         lineChartBtn.setOnClickListener(new View.OnClickListener(){
             @Override
