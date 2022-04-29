@@ -59,19 +59,17 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         spinner = findViewById(R.id.spinner);
         PieChartbutton.setOnClickListener(this);
         dbHandler = new DBHandler(this);
+        spinnerItemsList = new ArrayList<>();
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
 
-        /*Log.e(TAG, "cursorCount = "+ cursorCount);
-        cursor=dbHandler.getAllData();
-        Log.e(TAG,"cursor.getCount()"+ cursor.getCount());*/
         setupSpinnerSelection();
         LineChartSetup();
         loadLineChartData();
     }
 
     private void setupSpinnerSelection(){
-        spinnerItemsList = new ArrayList<>();
+        spinnerItemsList.clear();
         if(cursorCount<7){
             spinnerItemsList.add("Recent Days");
         }
@@ -79,13 +77,14 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
             spinnerItemsList.add("Last 7 days");
         }
         if(cursorCount==14){
-            spinnerItemsList.add("Last 7 days");
             spinnerItemsList.add("Last 14 days");
+            spinnerItemsList.add("Last 7 days");
+
         }
         if(cursorCount==21){
-            spinnerItemsList.add("Last 7 days");
-            spinnerItemsList.add("Last 14 days");
             spinnerItemsList.add("Last 21 days");
+            spinnerItemsList.add("Last 14 days");
+            spinnerItemsList.add("Last 7 days");
         }
         String [] arr  = new String[spinnerItemsList.size()];
         for (int i=0;i<arr.length;i++) {
@@ -171,7 +170,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         weekOneRec= new ArrayList<Entry>();
         weekTwoRec= new ArrayList<Entry>();
         weekThreeRec= new ArrayList<Entry>();
-        topicTextView.setText("Last "+arr.size()+ " Days Sitting performance");
+        topicTextView.setText("sth wrong here");
 
         try {
             int y = 0;
@@ -285,6 +284,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     //sth wrong here ****
     private void updateSpinnerSelection(String pos){
         mpLineChart.clear();
+        topicTextView.setText("");
         if(spinnerItemsList.size()>0){
             ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
             int init_days=getInitialLabelDay();
@@ -306,6 +306,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days"+" Days Sitting performance");
             }
 
             if(cursorCount==14 && pos.equals("Last 7 days")){
@@ -316,6 +317,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days"+" Days Sitting performance");
             }
             if(cursorCount==14 && pos.equals("Last 14 days")){
                 LineDataSet set = new LineDataSet(weekOneRec, "Days "+init_days+"-"+(init_days+6));
@@ -333,6 +335,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set1.setValueTextSize(12f);
                 set1.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set1);
+                topicTextView.setText("Last 14 days"+" Days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 7 days")){
                 LineDataSet set = new LineDataSet(weekThreeRec, "Days "+(init_days+7*2)+"-"+(init_days+7*2+6));
@@ -342,6 +345,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 7 days"+" Days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 14 days")){
                 LineDataSet set1 = new LineDataSet(weekTwoRec, "Days "+(init_days+7)+"-"+(init_days+7+6));
@@ -359,8 +363,11 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+                topicTextView.setText("Last 14 days"+" Days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 21 days")){
+                topicTextView.setText("Last 21 days"+" Days Sitting performance");
+
                 LineDataSet set2 = new LineDataSet(weekOneRec, "Days "+(init_days)+"-"+(init_days+6));
                 set2.setFillAlpha(50);
                 set2.setColor(Color.YELLOW);
@@ -384,6 +391,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+
             }
 
             LineData data = new LineData(lineDataSets);

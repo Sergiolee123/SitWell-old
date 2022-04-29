@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         dbHandler= new DBHandler(this);
         dbHandler.getUserSittingRec().setUserID(mFirebaseAuth.getCurrentUser().getUid());
+        dbHandler.userId= mFirebaseAuth.getCurrentUser().getUid();
+
         Log.e("MainActivity", ""+mFirebaseAuth.getCurrentUser().getUid());
         navigation_view.setCheckedItem(R.id.nav_home);
         getSupportFragmentManager().beginTransaction().replace(R.id.container ,
