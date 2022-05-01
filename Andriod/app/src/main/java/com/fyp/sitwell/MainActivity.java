@@ -19,7 +19,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.fyp.sitwell.alarm.MuscleRelaxSetting;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         dbHandler= new DBHandler(this);
         dbHandler.getUserSittingRec().setUserID(mFirebaseAuth.getCurrentUser().getUid());
-        dbHandler.userId= mFirebaseAuth.getCurrentUser().getUid();
+        dbHandler.userID = mFirebaseAuth.getCurrentUser().getUid();
 
         Log.e("MainActivity", ""+mFirebaseAuth.getCurrentUser().getUid());
         navigation_view.setCheckedItem(R.id.nav_home);
@@ -134,11 +133,17 @@ public class MainActivity extends AppCompatActivity {
             navigation_view.setCheckedItem(R.id.nav_home);
         }
 
-        if (resultCode == Activity.RESULT_OK && requestCode == 222) {
+        if (resultCode == Activity.RESULT_OK && requestCode == 112) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container ,
                     new MainFragment()).commit();
             navigation_view.setCheckedItem(R.id.nav_home);
         }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == 113) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container ,
+                    new MainFragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_home);
+        }       
 
     }
 

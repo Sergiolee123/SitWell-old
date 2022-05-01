@@ -34,12 +34,12 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pie_chart_sitting_report);
+        dbHandler=new DBHandler(this);
         pieChart=findViewById(R.id.pieChart);
         homeBtn=findViewById(R.id.HomeBtn);
         userProgTextView=findViewById(R.id.userProgText);
         PerfectMsgTextView=findViewById(R.id.PerfectMessage);
         pieChartTextView=findViewById(R.id.pieChartText);
-        dbHandler=new DBHandler(this);
         cursor = dbHandler.getUserProgress();
         cursor2 = dbHandler.getLatestRec();
 

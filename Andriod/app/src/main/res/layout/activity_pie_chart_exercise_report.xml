@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".PieChartExerciseReportActivity">
+tools:context=".PieChartExFreqReportActivity">
 
 <TextView
     android:id="@+id/topic"
@@ -32,9 +32,9 @@ tools:context=".PieChartExerciseReportActivity">
 </TextView>
 <TextView
     android:id="@+id/pieChartText"
-    android:text="Incorrect Sitting PieChart"
+    android:text="Exercise Proportion PieChart"
     android:layout_marginTop="25dp"
-    android:textSize="11pt"
+    android:textSize="10pt"
     android:gravity="center"
     android:layout_centerInParent="true"
     android:textColor="@color/black"

@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class UserSittingRecModel {
     private String userID ="", startTime="", endTime="";
-    private int recordID =0 ,neckNum=0, backNum=0, SHLDRNum=0,  leftArmNum=0, rightArmNum=0, sitWellNum=0, sitPoorNum=0;
+    private int recordID =0 ,neckNum=0, backNum=0, SHLDRNum=0,  leftArmNum=0, rightArmNum=0, sitWellNum=0, sitPoorNum=0, programRepeatedTimes=0;
     private float duration=0, sitAccuracy =0;
 
     private final String TAG = "UserSittingRecModel";
@@ -121,5 +121,13 @@ public class UserSittingRecModel {
 
     public void setSitAccuracy(float sitAccuracy) {
         this.sitAccuracy = sitAccuracy;
+    }
+
+    public int getProgramRepeatedTimes() {
+        return programRepeatedTimes;
+    }
+
+    public void setProgramRepeatedTimes(int programRepeatedTimes) {
+        this.programRepeatedTimes = programRepeatedTimes;
     }
 }

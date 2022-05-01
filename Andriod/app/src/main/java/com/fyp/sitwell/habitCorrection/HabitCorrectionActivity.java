@@ -300,15 +300,15 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }catch (Exception e){
         }
 
-        dbHandler.userId=uid;
+        dbHandler.userID =uid;
         dbHandler.getUserSittingRec().setUserID(uid);
         dbHandler.getUserSittingRec().setEndTime(dateStr());
         endTime = System.currentTimeMillis();
         dbHandler.getUserSittingRec().setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime)));
         dbHandler.calAccuracy();
-        dbHandler.addNewRecord();
+        dbHandler.addNewSittingRecord();
         dbHandler.getUserSittingRec().resetAllCol();
-        dbHandler.insertRandomRecord();
+        dbHandler.insertRandomSittingRecord();
         dbHandler.printDetails();
 
 

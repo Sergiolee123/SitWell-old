@@ -22,10 +22,12 @@ class DBConstant {
 
     static final String progDaysLeft_col = "progDaysLeft";
     static final String progStatus_col = "progStatus";
-    static final String ProgramRepeatedTimes_col = "ProgramRepeatedTimes";
+    static final String programRepeatedTimes_col = "ProgramRepeatedTimes";
     static final String datesString_col = "datesString";
 
-    static final String exericseTypes_col="exericseTypes";
-    static final String exerciseDate_col="exerciseDate";
-    static final String exerciseCount_col="exerciseCount";
+    static final String exRecID_col = "exRecID";
+    static final String strengthExerciseCount_col="strengthExerciseCount";
+    static final String relaxExerciseCount_col="relaxExerciseCount";
+
+
 }

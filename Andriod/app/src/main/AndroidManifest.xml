@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fyp.sitwell"
-    android:installLocation="internalOnly" >
+    android:installLocation="internalOnly">
 
     <queries>
         <intent>
@@ -21,14 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SitWell"
-        android:usesCleartextTraffic="false" >
+        android:usesCleartextTraffic="false">
         <activity
-            android:name=".PieChartExerciseReportActivity"
+            android:name=".PieChartExFreqReportActivity"
             android:exported="false" />
 
         <receiver
             android:name=".alarm.AlarmReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="repeat_relax" />
             </intent-filter>
@@ -64,7 +64,7 @@
         <activity
             android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

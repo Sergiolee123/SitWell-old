@@ -4,17 +4,16 @@ import android.util.Log;
 
 public class UserExerciseRecModel {
     private String userID="";
-    private String exerciseType="";
-    private String exerciseDate="";
-    private int exerciseCount=0;
+    private int strengthExerciseCount =0;
+    private int relaxCount=0;
+    private int progRepeatedTimes=0;
 
     private final String TAG = "UserExerciseRecModel";
 
     public void resetAllCol(){
-        exerciseType="";
-        exerciseDate="";
-        exerciseCount=0;
-        Log.d(TAG, "reset all values in UserExerciseRecModel but record ID");
+        relaxCount=0;
+        strengthExerciseCount =0;
+        Log.d(TAG, "reset all values in UserExerciseRecModel but userID");
     }
 
     public String getUserID() {
@@ -25,27 +24,29 @@ public class UserExerciseRecModel {
         this.userID = userID;
     }
 
-    public String getExerciseType() {
-        return exerciseType;
+    public int getStrengthExerciseCount() {
+        return strengthExerciseCount;
     }
 
-    public void setExerciseType(String exerciseType) {
-        this.exerciseType = exerciseType;
+    public void setStrengthExerciseCount(int strengthExerciseCount) {
+        this.strengthExerciseCount = strengthExerciseCount;
+        Log.e("strengthExerciseCount","value = "+strengthExerciseCount);
     }
 
-    public String getExerciseDate() {
-        return exerciseDate;
+    public int getRelaxCount() {
+        return relaxCount;
     }
 
-    public void setExerciseDate(String exerciseDate) {
-        this.exerciseDate = exerciseDate;
+    public void setRelaxCount(int relaxCount) {
+        this.relaxCount = relaxCount;
     }
 
-    public int getExerciseCount() {
-        return exerciseCount;
+    public int getProgRepeatedTimes() {
+        return progRepeatedTimes;
     }
 
-    public void setExerciseCount(int exerciseCount) {
-        this.exerciseCount = exerciseCount;
+    public void setProgRepeatedTimes(int progRepeatedTimes) {
+        this.progRepeatedTimes = progRepeatedTimes;
     }
+
 }
