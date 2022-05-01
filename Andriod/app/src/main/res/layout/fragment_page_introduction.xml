@@ -2,15 +2,120 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
 
     <TextView
+        android:id="@+id/text_title_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_content_about"
+        android:elegantTextHeight="true"
+        android:lineSpacingExtra="4sp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@string/title_about"/>
+
+    <TextView
+        android:id="@+id/text_content_about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_about"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="24sp"
-        android:text="setting"/>
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="20dp"
+        android:lineSpacingExtra="4sp"
+        android:elegantTextHeight="true"
+        android:textSize="16sp"
+        android:text="@string/content_about"/>
+
+    <TextView
+        android:id="@+id/text_title_how"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_content_about"
+        app:layout_constraintBottom_toTopOf="@+id/text_content_how"
+        android:elegantTextHeight="true"
+        android:lineSpacingExtra="4sp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@string/title_how"/>
+
+    <TextView
+        android:id="@+id/text_content_how"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_how"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="20dp"
+        android:lineSpacingExtra="4sp"
+        android:elegantTextHeight="true"
+        android:textSize="16sp"
+        android:text="@string/content_how"/>
+
+    <TextView
+        android:id="@+id/text_title_correction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_content_how"
+        app:layout_constraintBottom_toTopOf="@+id/text_content_correction"
+        android:elegantTextHeight="true"
+        android:lineSpacingExtra="4sp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@string/title_correction"/>
+
+    <TextView
+        android:id="@+id/text_content_correction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_correction"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="20dp"
+        android:lineSpacingExtra="4sp"
+        android:elegantTextHeight="true"
+        android:textSize="16sp"
+        android:text="@string/content_correction"/>
+
+    <TextView
+        android:id="@+id/text_title_relaxAndTraining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_content_correction"
+        app:layout_constraintBottom_toTopOf="@+id/text_content_relaxAndTraining"
+        android:elegantTextHeight="true"
+        android:lineSpacingExtra="4sp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@string/title_relaxAndTraining"/>
+
+    <TextView
+        android:id="@+id/text_content_relaxAndTraining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_relaxAndTraining"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="20dp"
+        android:lineSpacingExtra="4sp"
+        android:elegantTextHeight="true"
+        android:textSize="16sp"
+        android:text="@string/content_relaxAndTraining"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
