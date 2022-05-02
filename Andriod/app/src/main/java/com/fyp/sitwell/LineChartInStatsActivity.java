@@ -34,8 +34,12 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class LineChartInStatsActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
@@ -54,6 +58,8 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private Button BtnPieChart;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
+    private boolean checkXAxisLabel=false;
+    String [] weekArr = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +73,15 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
 
-        //handle xAxisLabel
-        xAxisLabel.add("Mon");
-        xAxisLabel.add("Tue");
-        xAxisLabel.add("Wed");
-        xAxisLabel.add("Thu");
-        xAxisLabel.add("Fri");
-        xAxisLabel.add("Sat");
-        xAxisLabel.add("Sun");
 
-        setupSpinnerSelection();
-        LineChartSetup();
-        loadLineChartData();
+        setUpXaxisLabels();
+        if(cursorCount>0 && checkXAxisLabel==true){
+            setupSpinnerSelection();
+            LineChartSetup();
+            loadLineChartData();
+        }else{
+            setUpNoDataDisplay();
+        }
 
         BtnPieChart = findViewById(R.id.BtnPieChart);
         BtnPieChart.setOnClickListener(new View.OnClickListener(){
@@ -90,28 +93,49 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         });
     }
 
-    //demo purpose
-    private void setupXAxisLabels(){
-        Cursor cursor =dbHandler.getAllDates();
-        String dateStr = cursor.getString(0);
-        String [] datesArr = dateStr.split(",");
-        String lastDate = datesArr[datesArr.length-1];
-        Log.e(TAG,""+lastDate);
-
-        /*int datesLength = datesArr.length;
-        while(cursorCount--<0){
-            datesLength--;
-            String date = datesArr[datesLength];
-            String [] dateArr= date.split("-");
-            int year = Integer.parseInt(dateArr[0]);
-            int month = Integer.parseInt(dateArr[1]);
-            int day = Integer.parseInt(dateArr[2]);
-            //Date localDate = Date(year,month,day);
-        }
-        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");*/
-
-
+    private void setUpNoDataDisplay(){
+        topicTextView.setText("No sitting Records are found");
     }
+
+    private void setUpXaxisLabels(){
+        Cursor c = dbHandler.getLatestSittingRec();
+        Log.e("fk1",""+c.getCount());
+        c.moveToNext();
+
+        if(c.getCount()==0)return;
+        //***
+        String latestDate = c.getString(0);
+        Log.e("latestDate", ""+latestDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt1 = null;
+        try {
+            dt1 = format.parse(latestDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DateFormat df = new SimpleDateFormat("EE");
+        Log.e("GET THE DAY OF THE WEEK", ""+ df.format(dt1));
+        //***
+
+        int dayCount =0;
+        int dayEndPos=0;
+        //get the dayEndPos
+        for (int i=0;i<weekArr.length;i++){
+            if(weekArr[i].equals(df.format(dt1))){
+                dayCount++;
+            }
+            if(dayCount==2){
+                dayEndPos=i;
+                break;
+            }
+        }
+        xAxisLabel.clear();
+        for(int i=dayEndPos-cursorCount+1;i<=dayEndPos;i++){
+            xAxisLabel.add(weekArr[i]);
+        }
+        checkXAxisLabel=true;
+    }
+
 
     private void setupSpinnerSelection(){
         spinnerItemsList.clear();
@@ -474,6 +498,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         public DayAxisValueFormatter2(BarLineChartBase<?> chart) {
             this.chart = chart;
         }
+
 
         @Override
         public String getFormattedValue(float value) {

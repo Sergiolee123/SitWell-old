@@ -31,8 +31,12 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class LineChartInSitDetectionActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
@@ -40,15 +44,19 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     private LineChart mpLineChart;
     private Legend legend;
     private DBHandler dbHandler;
-    private static Cursor cursor;
+    private Cursor cursor;
     private int cursorCount;
-    private Button PieChartbutton;
     private TextView topicTextView;
     private Spinner spinner;
     private static ArrayList<String> spinnerItemsList;
     private static ArrayList<Entry> weekOneRec;
     private static ArrayList<Entry> weekTwoRec;
     private static ArrayList<Entry> weekThreeRec;
+    private Button PieChartbutton;
+
+    private ArrayList<String> xAxisLabel = new ArrayList<>();
+    private boolean checkXAxisLabel=false;
+    String [] weekArr = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +70,56 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
 
-        setupSpinnerSelection();
-        LineChartSetup();
-        loadLineChartData();
+        setUpXaxisLabels();
+        if(cursorCount>0 && checkXAxisLabel==true){
+            setupSpinnerSelection();
+            LineChartSetup();
+            loadLineChartData();
+        }else{
+            setUpNoDataDisplay();
+        }
+    }
+
+    private void setUpNoDataDisplay(){
+        topicTextView.setText("No sitting Records are found");
+    }
+
+    private void setUpXaxisLabels(){
+        Cursor c = dbHandler.getLatestSittingRec();
+        Log.e("fk1",""+c.getCount());
+        c.moveToNext();
+
+        if(c.getCount()==0)return;
+
+        String latestDate = c.getString(0);
+        Log.e("latestDate", ""+latestDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date dt1 = null;
+        try {
+            dt1 = format.parse(latestDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DateFormat df = new SimpleDateFormat("EE");
+        Log.e("GET THE DAY OF THE WEEK", ""+ df.format(dt1));
+
+        int dayCount =0;
+        int dayEndPos=0;
+        //get the dayStartPos
+        for (int i=0;i<weekArr.length;i++){
+            if(weekArr[i].equals(df.format(dt1))){
+                dayCount++;
+            }
+            if(dayCount==2){
+                dayEndPos=i;
+                break;
+            }
+        }
+        xAxisLabel.clear();
+        for(int i=dayEndPos-cursorCount+1;i<=dayEndPos;i++){
+            xAxisLabel.add(weekArr[i]);
+        }
+        checkXAxisLabel=true;
     }
 
     private void setupSpinnerSelection(){
@@ -120,7 +175,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         YAxis yAxis1 = mpLineChart.getAxisRight();
         yAxis1.setEnabled(false);
 
-        ValueFormatter xAxisFormatter = new DayAxisValueFormatter(mpLineChart);
+        ValueFormatter xAxisFormatter = new DayAxisValueFormatter2(mpLineChart);
         XAxis xAxis = mpLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(xAxisFormatter);
@@ -416,6 +471,20 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         @Override
         public String getFormattedValue(float value) {
             return "Day " + (int) (value+1);
+        }
+    }
+
+    public class DayAxisValueFormatter2 extends ValueFormatter{
+        private final BarLineChartBase<?> chart;
+
+        public DayAxisValueFormatter2(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+
+        @Override
+        public String getFormattedValue(float value) {
+            return xAxisLabel.get((int) value);
         }
     }
 
