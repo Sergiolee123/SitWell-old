@@ -66,15 +66,12 @@ public class MainFragment  extends Fragment {
     private void setUpRemainDayText(){
         Cursor c1 = dbHandler.checkRepeatedUserInProgress();
         if(c1.getCount()==0){
-            remainingDayTextView.setText("Remaining Day: 63");
+            remainingDayTextView.setText("Remaining Days: 63");
         }else{
             Cursor cursor = dbHandler.getUserProgress();
             cursor.moveToNext();
-            remainingDayTextView.setText("Remaining Day:"+cursor.getInt(0));
+            remainingDayTextView.setText("Remaining Days: "+cursor.getInt(0));
         }
-
-
-
 
     }
 }

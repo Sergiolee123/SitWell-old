@@ -33,5 +33,8 @@ public class MuscleRelaxActivity extends AppCompatActivity {
         trainingMethod = new HashMap<>(5);
         trainingMethod.put("Neck Muscle relax", NeckMuscleRelax.class);
         trainingMethod.put("Wrist relax", WristMuscleRelax.class);
+        trainingMethod.put("shoulder relax", WristMuscleRelax.class);
+        trainingMethod.put("back relax", WristMuscleRelax.class);
+        trainingMethod.put("arm relax", WristMuscleRelax.class);
     }
 }

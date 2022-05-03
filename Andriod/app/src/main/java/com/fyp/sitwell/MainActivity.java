@@ -204,13 +204,13 @@ public class MainActivity extends AppCompatActivity {
         if (!age.equals("")){
 
             int value = Integer.parseInt(age);
-            if (value >= 18 && value <= 45) {
+            if (value >= 18 && value <= 50) {
 
                 layoutAge.setError(null);
                 layoutAge.setErrorEnabled(false);
                 return true;
             }else {
-                showError(layoutAge,"You don't meet the age requirement. Age:18-45");
+                showError(layoutAge,"You don't meet the age requirement. Age:18-50");
                 return false;
             }
         }else{
@@ -221,15 +221,10 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean validWeight(TextInputLayout layoutWeight,String weight) {
         if(!weight.equals("")) {
-            int value = Integer.parseInt(weight);
-            if (value >= 45 && value <= 90) {
                 layoutWeight.setError(null);
                 layoutWeight.setErrorEnabled(false);
                 return true;
-            }else{
-                showError(layoutWeight,"You don't meet the weight requirement. Weight:45-90kg");
-                return false;
-            }
+
         }else{
             showError(layoutWeight,"Please enter your weight");
             return false;

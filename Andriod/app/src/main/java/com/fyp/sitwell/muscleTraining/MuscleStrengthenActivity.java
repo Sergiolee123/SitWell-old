@@ -32,8 +32,8 @@ public class MuscleStrengthenActivity extends AppCompatActivity {
 
     private void setTrainingMethod(){
         trainingMethod = new HashMap<>(5);
-        trainingMethod.put("lying lateral leg lift", GluteStrengthen.class);
-        trainingMethod.put("a", GluteStrengthen.class);
+        trainingMethod.put("back muscle", GluteStrengthen.class);
+        trainingMethod.put("neck muscle", GluteStrengthen.class);
     }
 
 }
