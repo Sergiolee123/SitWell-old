@@ -1,6 +1,7 @@
 package com.fyp.sitwell;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN_GOOGLE = 9001;
     private static final String TAG = "LoginActivity";
+    private static final String PREFS_NAME = "PrefsFile";
 
     private Button mGoogleLoginBtn;
     @Override
@@ -91,14 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            // Snackbar.make(mLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
                             if(isNew){
                                 Toast.makeText(LoginActivity.this, "New user",Toast.LENGTH_SHORT).show();
                             }else{
                                 Intent intent = new Intent(getApplicationContext(),IntroductionActivity.class);
                                 startActivity(intent);
-                                //updateUI(user);
+
                             }
                         } else {
                             // If sign in fails, display a message to the user.
