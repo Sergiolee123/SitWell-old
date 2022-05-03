@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -83,7 +83,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //sth incomplete here only insert the record in Usersitting Record table, but does not update User Progress Table
     public void insertRandomSittingRecord(){
         long result;
-        int insertRecNum= 3;
+        int insertRecNum= 21;
         while(insertRecNum-->0) {
             try (SQLiteDatabase db = getWritableDatabase()) {
                 ContentValues values = new ContentValues();
@@ -491,7 +491,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return c;
     }
 
-    public Cursor getLatestSittingRec(){
+    public Cursor getTheLatestSittingRecDate(){
         String date = getDateOnly();
         SQLiteDatabase db = this.getReadableDatabase();
         //this is for demo purpose
@@ -500,6 +500,13 @@ public class DBHandler extends SQLiteOpenHelper {
         //this is for real time
         /*return db.rawQuery("Select " + DBConstant.endTime_col + " from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up " + " WHERE ur.ProgramRepeatedTimes = up.ProgramRepeatedTimes " +
                  " AND "+ DBConstant.endTime_col + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);*/
+    }
+
+    public Cursor getTheLatestSittingRecData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select " + DBConstant.neckCount +"," + DBConstant.backCount + "," + DBConstant.SHLDRCount +"," + DBConstant.LT_ARM_Count + "," +DBConstant.RT_ARM_Count+ "," +DBConstant.sitWellCount+ "," +DBConstant.sitPoorCount
+                +" from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up " + " WHERE ur.ProgramRepeatedTimes = up.ProgramRepeatedTimes " +
+                " AND "+ DBConstant.endTime_col + " LIKE '20%'" + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);
     }
 
     public Cursor getUserProgress(){

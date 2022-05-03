@@ -21,7 +21,7 @@ import android.util.Size;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fyp.sitwell.DBHandler;
+import com.fyp.sitwell.report.DBHandler;
 import com.fyp.sitwell.R;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;

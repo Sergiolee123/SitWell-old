@@ -14,8 +14,8 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.fyp.sitwell.DBHandler;
-import com.fyp.sitwell.LineChartInSitDetectionActivity;
+import com.fyp.sitwell.report.DBHandler;
+import com.fyp.sitwell.report.LineChartInSitDetectionActivity;
 import com.fyp.sitwell.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;

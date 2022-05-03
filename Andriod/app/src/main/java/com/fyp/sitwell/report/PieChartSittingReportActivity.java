@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fyp.sitwell.R;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -29,6 +30,8 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
     private static Cursor cursor, cursor2;
     private Button homeBtn;
     private TextView userProgTextView, PerfectMsgTextView, pieChartTextView;
+    private int neckCount=0,backCount=0, SHLDRCount=0,LT_ARM_Count=0,RT_ARM_Count=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +44,20 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         PerfectMsgTextView=findViewById(R.id.PerfectMessage);
         pieChartTextView=findViewById(R.id.pieChartText);
         cursor = dbHandler.getUserProgress();
-        cursor2 = dbHandler.getLatestSittingRec();
+        cursor2 = dbHandler.getTheLatestSittingRecData();
 
+        Log.e("cursor2.getCount()",cursor2.getCount()+"");
+        Log.e("cursor.getCount()",cursor.getCount()+"");
         if(cursor2.getCount()==1){
             cursor2.moveToNext();
-            if(cursor2.getInt(0)==0 &&cursor2.getInt(1) ==0 && cursor2.getInt(2)==0 && cursor2.getInt(3)==0 && cursor2.getInt(4)==0){
+            neckCount=cursor2.getInt(0);
+            backCount=cursor2.getInt(1);
+            SHLDRCount=cursor2.getInt(2);
+            LT_ARM_Count=cursor2.getInt(3);
+            RT_ARM_Count=cursor2.getInt(4);
+            Log.e("fk1",""+cursor2.getInt(0) + " "+ cursor2.getInt(1)+ " "+ cursor2.getInt(2)+ " "+ cursor2.getInt(3)+ " "+ cursor2.getInt(4));
+            if( neckCount==0 && backCount==0 && SHLDRCount==0 && LT_ARM_Count==0  && RT_ARM_Count==0){
+                Log.e("fk2","hihi");
                 setUpPerfectMsg();
             }else{
                 setupPieChart();
@@ -81,11 +93,6 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("0.00");
         userProgTextView.setText("Finished "+ df.format(progStats)+ " %");
 
-        int neckCount= cursor2.getInt(0);
-        int backCount = cursor2.getInt(1);
-        int SHLDRCount = cursor2.getInt(2);
-        int LT_ARM_Count = cursor2.getInt(3);
-        int RT_ARM_Count = cursor2.getInt(4);
         int total_count = (cursor2.getInt(5) + cursor2.getInt(6))*5;
 
         Log.e("neckCount", ""+neckCount);

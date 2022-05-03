@@ -23,7 +23,7 @@
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
         <activity
-            android:name=".PieChartExFreqReportActivity"
+            android:name=".report.PieChartExFreqReportActivity"
             android:exported="false" />
 
         <receiver
@@ -35,13 +35,13 @@
         </receiver>
 
         <activity
-            android:name=".LineChartInStatsActivity"
+            android:name=".report.LineChartInStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".PieChartSittingReportActivity"
+            android:name=".report.PieChartSittingReportActivity"
             android:exported="false" />
         <activity
-            android:name=".LineChartInSitDetectionActivity"
+            android:name=".report.LineChartInSitDetectionActivity"
             android:exported="false" />
         <activity
             android:name=".alarm.MuscleRelaxSetting"
@@ -83,7 +83,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity
-            android:name=".ReportActivity"
+            android:name=".report.ReportActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity

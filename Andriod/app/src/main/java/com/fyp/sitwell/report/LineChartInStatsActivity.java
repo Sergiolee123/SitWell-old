@@ -1,7 +1,10 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
+
+import static java.time.LocalDate.parse;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -16,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fyp.sitwell.R;
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -38,9 +42,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-public class LineChartInSitDetectionActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class LineChartInStatsActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener{
 
-    private static final String TAG = "LineChartInSitDetectionActivity";
+    private static final String TAG = "LineChartInStatsActivity";
     private LineChart mpLineChart;
     private Legend legend;
     private DBHandler dbHandler;
@@ -52,7 +56,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     private static ArrayList<Entry> weekOneRec;
     private static ArrayList<Entry> weekTwoRec;
     private static ArrayList<Entry> weekThreeRec;
-    private Button PieChartbutton;
+    private Button BtnPieChart;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
     private boolean checkXAxisLabel=false;
@@ -61,14 +65,15 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.linechart);
-        PieChartbutton= findViewById(R.id.BtnPieChart);
-        topicTextView = findViewById(R.id.topic);
-        spinner = findViewById(R.id.spinner);
-        PieChartbutton.setOnClickListener(this);
+        setContentView(R.layout.activity_line_chart_in_statics);
+        topicTextView = findViewById(R.id.topic1);
+        spinner = findViewById(R.id.spinner1);
+        BtnPieChart=findViewById(R.id.BtnPieChart);
         dbHandler = new DBHandler(this);
+        spinnerItemsList = new ArrayList<>();
         cursor =dbHandler.getSelectedQuerySitAccuray();
         cursorCount= cursor.getCount();
+
 
         setUpXaxisLabels();
         if(cursorCount>0 && checkXAxisLabel==true){
@@ -78,6 +83,15 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         }else{
             setUpNoDataDisplay();
         }
+
+        BtnPieChart = findViewById(R.id.BtnPieChart);
+        BtnPieChart.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
     }
 
     private void setUpNoDataDisplay(){
@@ -85,12 +99,12 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     }
 
     private void setUpXaxisLabels(){
-        Cursor c = dbHandler.getLatestSittingRec();
+        Cursor c = dbHandler.getTheLatestSittingRecDate();
         Log.e("fk1",""+c.getCount());
         c.moveToNext();
 
         if(c.getCount()==0)return;
-
+        //***
         String latestDate = c.getString(0);
         Log.e("latestDate", ""+latestDate);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -102,10 +116,11 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         }
         DateFormat df = new SimpleDateFormat("EE");
         Log.e("GET THE DAY OF THE WEEK", ""+ df.format(dt1));
+        //***
 
         int dayCount =0;
         int dayEndPos=0;
-        //get the dayStartPos
+        //get the dayEndPos
         for (int i=0;i<weekArr.length;i++){
             if(weekArr[i].equals(df.format(dt1))){
                 dayCount++;
@@ -122,8 +137,9 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         checkXAxisLabel=true;
     }
 
+
     private void setupSpinnerSelection(){
-        spinnerItemsList = new ArrayList<>();
+        spinnerItemsList.clear();
         if(cursorCount<7){
             spinnerItemsList.add("Recent Days");
         }
@@ -133,6 +149,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         if(cursorCount==14){
             spinnerItemsList.add("Last 14 days");
             spinnerItemsList.add("Last 7 days");
+
         }
         if(cursorCount==21){
             spinnerItemsList.add("Last 21 days");
@@ -151,9 +168,9 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     }
 
     private void LineChartSetup() {
-        mpLineChart = findViewById(R.id.linechart);
-        mpLineChart.setOnChartGestureListener(LineChartInSitDetectionActivity.this);
-        mpLineChart.setOnChartValueSelectedListener(LineChartInSitDetectionActivity.this);
+        mpLineChart = findViewById(R.id.linechart1);
+        mpLineChart.setOnChartGestureListener(LineChartInStatsActivity.this);
+        mpLineChart.setOnChartValueSelectedListener(LineChartInStatsActivity.this);
         mpLineChart.setDragEnabled(true);
         mpLineChart.setScaleEnabled(false);
         mpLineChart.setDrawGridBackground(true);
@@ -175,7 +192,8 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         YAxis yAxis1 = mpLineChart.getAxisRight();
         yAxis1.setEnabled(false);
 
-        ValueFormatter xAxisFormatter = new DayAxisValueFormatter2(mpLineChart);
+        //ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter(mpLineChart);
+        ValueFormatter xAxisFormatter = new LineChartInStatsActivity.DayAxisValueFormatter2(mpLineChart);
         XAxis xAxis = mpLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(xAxisFormatter);
@@ -223,39 +241,40 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         weekOneRec= new ArrayList<Entry>();
         weekTwoRec= new ArrayList<Entry>();
         weekThreeRec= new ArrayList<Entry>();
-        topicTextView.setText("Last "+arr.size()+ " Days Sitting performance");
+        topicTextView.setText("sth wrong here");
+       // Log.e("y_label",""+getInitialLabelDay());
 
         try {
-            int y = 0;
+            int y_label = 0;
             if(arr.size()<=7){
                 for (int i = 0; i < arr.size(); i++) {
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
             }else if(arr.size() == 14) {
-                y = 0;
+                y_label = 0;
                 Log.e("condition 2","condition 2");
-                y = 0;
+                y_label = 0;
                 for(int i=0;i<arr.size()/2;i++){
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for(int i=arr.size()/2;i<arr.size();i++){
-                    weekTwoRec.add(new Entry(y++, arr.get(i)));
+                    weekTwoRec.add(new Entry(y_label++, arr.get(i)));
                 }
                 Log.e("weekTwoRec", ""+weekTwoRec.size());
             }else if (arr.size() == 21) {
                 Log.e("condition 3","condition 3");
-                y = 0;
+                y_label = 0;
                 for (int i = 0; i < arr.size()/3; i++) {
-                    weekOneRec.add(new Entry(y++, arr.get(i)));
+                    weekOneRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for (int i = arr.size()/3; i < arr.size()/3*2; i++) {
-                    weekTwoRec.add(new Entry(y++, arr.get(i)));
+                    weekTwoRec.add(new Entry(y_label++, arr.get(i)));
                 }
-                y = 0;
+                y_label = 0;
                 for (int i = arr.size()/3*2; i < arr.size(); i++) {
-                    weekThreeRec.add(new Entry(y++, arr.get(i)));
+                    weekThreeRec.add(new Entry(y_label++, arr.get(i)));
                 }
             }
             int initial_day = getInitialLabelDay();
@@ -302,8 +321,6 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         mpLineChart.invalidate();
     }
 
-
-
     private ArrayList<Float> getDataValues(){
         ArrayList<Float> arrayList = new ArrayList<Float>();
         while(cursor.moveToNext()){
@@ -327,16 +344,17 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        if (parent.getId() == R.id.spinner) {
+        if (parent.getId() == R.id.spinner1) {
             String valueFromSpinner = parent.getItemAtPosition(pos).toString();
             Toast toast = Toast.makeText(this, valueFromSpinner, Toast.LENGTH_SHORT);
             toast.show();
         }
 
         updateSpinnerSelection(parent.getItemAtPosition(pos).toString());
+
     }
 
-    //sth wrong here ****
+
     private void updateSpinnerSelection(String pos){
         mpLineChart.clear();
         if(spinnerItemsList.size()>0){
@@ -421,6 +439,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 topicTextView.setText("Last 14 days Sitting performance");
             }
             if(cursorCount==21 && pos.equals("Last 21 days")){
+
                 LineDataSet set2 = new LineDataSet(weekOneRec, "Days "+(init_days)+"-"+(init_days+6));
                 set2.setFillAlpha(50);
                 set2.setColor(Color.YELLOW);
@@ -444,6 +463,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 set.setValueTextSize(12f);
                 set.setValueTextColor(Color.BLACK);
                 lineDataSets.add(set);
+
                 topicTextView.setText("Last 21 days Sitting performance");
             }
 
@@ -455,11 +475,9 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     }
 
 
-
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
-
 
     public class DayAxisValueFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;
@@ -474,6 +492,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         }
     }
 
+    //sth wrong need to do the checking
     public class DayAxisValueFormatter2 extends ValueFormatter{
         private final BarLineChartBase<?> chart;
 

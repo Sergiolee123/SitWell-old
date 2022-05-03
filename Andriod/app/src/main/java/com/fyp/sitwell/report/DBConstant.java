@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 class DBConstant {
     static final int DB_VERSION =1;
