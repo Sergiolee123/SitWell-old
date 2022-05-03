@@ -39,4 +39,17 @@
         <item>Last 14 days</item>
         <item>Last 21 days</item>
     </string-array>
+    <string name="title_about">About SitWell</string>
+    <string name="content_about">SitWell is a sitting posture correct app that will provide a 9-weeks course to correct your sitting habit.</string>
+    <string name="title_how">How it works?</string>
+    <string name="content_how">There is mainly composed of three important components: correction, relaxation and training.</string>
+    <string name="title_correction">Correction</string>
+    <string name="content_correction">It will connect to your computer camera and notify you when you have a unhealthy posture.</string>
+    <string name="title_relaxAndTraining">Relaxation &amp; Training</string>
+    <string name="content_relaxAndTraining">It will guide you to do some relaxation/training of muscles through your phone\'s camera and voice.</string>
+
+
+
+
+
 </resources>
