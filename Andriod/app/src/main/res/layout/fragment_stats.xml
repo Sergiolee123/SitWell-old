@@ -9,7 +9,7 @@
         android:id="@+id/lineChartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
+        android:layout_marginTop="16dp"
         android:text="Sitting Detection Line chart"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -20,32 +20,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sitting Detection Pie chart"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineChartBtn"
-        app:layout_constraintVertical_bias="0.319"></Button>
+        android:layout_marginTop="30sp"
+      ></Button>
 
     <Button
         android:id="@+id/pieChartExBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sitting Detection Pie chart"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.471"
+        android:text="Exercise Proportion Pie chart"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pieChartBtn"
+        android:layout_marginTop="30sp"
         ></Button>
 
-    <TextView
-        android:id="@+id/textView2"
+    <Button
+        android:id="@+id/pieChartRecommendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TTTTTTT"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Muscle Recommendation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/pieChartExBtn"
+        android:layout_marginTop="30sp"
+        ></Button>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

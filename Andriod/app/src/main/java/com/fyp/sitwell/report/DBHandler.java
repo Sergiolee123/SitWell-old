@@ -457,7 +457,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    public Cursor getSelectedQuerySitAccuray(){
+    public Cursor getSelectedQuerySitRecs(){
+        Cursor cursor = getAllSittingData();
+        int recCount = cursor.getCount();
+        if(recCount<7){
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" +" ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
+            return cursor;
+        }else if(recCount/7==1){//print 最近既7天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select * from " +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
+            return cursor;
+        }else if(recCount/7==2 ){ //print 最近既14天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
+            return cursor;
+        }else if(recCount/7>=3){//print 最近既21天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'"+
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
+            return cursor;
+        }
+
+        return null;
+    }
+
+    public Cursor getSelectedQuerySitAccuracy(){
         Cursor cursor = getAllSittingData();
         int recCount = cursor.getCount();
         if(recCount<7){
@@ -612,6 +640,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //***
     public Cursor getRecentUserExerciseData(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("Select * from "+ DBConstant.DB3_NAME + " uxr," + DBConstant.DB2_NAME + " up" +" WHERE uxr.userID ="+ "'" + userID + "'" + " AND "
@@ -623,8 +652,9 @@ public class DBHandler extends SQLiteOpenHelper {
     //called in GraphReportActivity to plot line graph
     public Cursor getAllSittingData() { //result ASC
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = "+ "'" + userSittingRec.getUserID()+ "'", null);
-        //Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME , null);
+        //Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = "+ "'" + userSittingRec.getUserID()+ "'", null);
+        Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up" + " WHERE ur.userID = "+ "'" + userSittingRec.getUserID()+ "'" +
+                " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
         return cursor;
     }
 

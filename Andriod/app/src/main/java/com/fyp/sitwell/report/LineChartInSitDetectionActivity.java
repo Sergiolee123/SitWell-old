@@ -62,13 +62,13 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.linechart);
+        setContentView(R.layout.activity_line_chart_in_sit_corr);
         PieChartbutton= findViewById(R.id.BtnPieChart);
         topicTextView = findViewById(R.id.topic);
         spinner = findViewById(R.id.spinner);
         PieChartbutton.setOnClickListener(this);
         dbHandler = new DBHandler(this);
-        cursor =dbHandler.getSelectedQuerySitAccuray();
+        cursor =dbHandler.getSelectedQuerySitAccuracy();
         cursorCount= cursor.getCount();
 
         setUpXaxisLabels();
@@ -116,10 +116,20 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
                 break;
             }
         }
+
+        Log.e("dayCount",""+dayCount);
+        Log.e("dayEndPos",""+dayEndPos);
+        Log.e("df.format(dt1)",""+df.format(dt1));
+
         xAxisLabel.clear();
-        for(int i=dayEndPos-cursorCount+1;i<=dayEndPos;i++){
+        int count = cursorCount;
+        if(count>7)
+            count=7;
+
+        for(int i=dayEndPos-count+1;i<=dayEndPos;i++){
             xAxisLabel.add(weekArr[i]);
         }
+        Log.e("xAxisLabel",""+xAxisLabel.size());
         checkXAxisLabel=true;
     }
 

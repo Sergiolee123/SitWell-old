@@ -71,7 +71,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         BtnPieChart=findViewById(R.id.BtnPieChart);
         dbHandler = new DBHandler(this);
         spinnerItemsList = new ArrayList<>();
-        cursor =dbHandler.getSelectedQuerySitAccuray();
+        cursor =dbHandler.getSelectedQuerySitAccuracy();
         cursorCount= cursor.getCount();
 
 

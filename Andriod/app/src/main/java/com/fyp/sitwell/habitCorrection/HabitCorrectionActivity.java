@@ -86,8 +86,8 @@ public class HabitCorrectionActivity extends FragmentActivity{
             EndBtnClick();
         }));
     }
-    //need to add End detection button
 
+    //need to add End detection button
     protected boolean isSetup(SittingPostureClassification s){
 
         String message = "";

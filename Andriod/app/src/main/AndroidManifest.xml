@@ -23,6 +23,9 @@
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
         <activity
+            android:name=".muscleTrainingRecommendation.MuscleTrainingRecommendationActivity"
+            android:exported="false" />
+        <activity
             android:name=".report.PieChartExFreqReportActivity"
             android:exported="false" />
 
