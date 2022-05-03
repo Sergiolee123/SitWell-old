@@ -43,7 +43,7 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         userProgTextView=findViewById(R.id.userProgText);
         PerfectMsgTextView=findViewById(R.id.PerfectMessage);
         pieChartTextView=findViewById(R.id.pieChartText);
-        cursor = dbHandler.getUserProgress();
+        cursor = dbHandler.getUserProgressStatus();
         cursor2 = dbHandler.getTheLatestSittingRecData();
 
         Log.e("cursor2.getCount()",cursor2.getCount()+"");

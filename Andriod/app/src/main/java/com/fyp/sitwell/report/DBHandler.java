@@ -362,7 +362,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return c;
     }
 
-    //sth problem here
     private boolean checkRepeatedExRec(){
         try {
             SQLiteDatabase db = this.getReadableDatabase();
@@ -409,6 +408,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 userSittingRec.setProgramRepeatedTimes(c.getInt(0));
             }
         }
+    }
+
+    public Cursor checkRepeatedUserInProgress(){
+            SQLiteDatabase db = this.getReadableDatabase();
+            return db.rawQuery("Select * from "+ DBConstant.DB2_NAME + " WHERE userID = " + "'"+userID+"'", null);
     }
 
     private boolean checkProgRepeatedTimeExist(){
@@ -537,11 +541,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 " AND "+ DBConstant.endTime_col + " LIKE '20%'" + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);
     }
 
-    public Cursor getUserProgress(){
+    public Cursor getUserProgressStatus(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select "+DBConstant.progStatus_col+" from "+ DBConstant.DB2_NAME + " WHERE userID ="+ "'"+ userID +"'", null) ;
         return cursor;
     }
+
+    public Cursor getUserProgress(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select "+DBConstant.progDaysLeft_col+" from "+ DBConstant.DB2_NAME + " WHERE userID ="+ "'"+ userID +"'", null) ;
+        return cursor;
+    }
+
 
     private float calProgStatus(float progDaysLeft) {
         Log.e(TAG, "numerator = " + (float)default_days+" - "+progDaysLeft);
