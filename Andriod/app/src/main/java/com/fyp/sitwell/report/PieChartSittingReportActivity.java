@@ -31,6 +31,8 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
     private Button homeBtn;
     private TextView userProgTextView, PerfectMsgTextView, pieChartTextView;
     private int neckCount=0,backCount=0, SHLDRCount=0,LT_ARM_Count=0,RT_ARM_Count=0;
+    private ArrayList<String> spinnerItemsList;
+
 
 
     @Override
@@ -43,6 +45,7 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         userProgTextView=findViewById(R.id.userProgText);
         PerfectMsgTextView=findViewById(R.id.PerfectMessage);
         pieChartTextView=findViewById(R.id.pieChartText);
+        spinnerItemsList = new ArrayList<>();
         cursor = dbHandler.getUserProgressStatus();
         cursor2 = dbHandler.getTheLatestSittingRecData();
 
@@ -57,7 +60,6 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
             RT_ARM_Count=cursor2.getInt(4);
             Log.e("fk1",""+cursor2.getInt(0) + " "+ cursor2.getInt(1)+ " "+ cursor2.getInt(2)+ " "+ cursor2.getInt(3)+ " "+ cursor2.getInt(4));
             if( neckCount==0 && backCount==0 && SHLDRCount==0 && LT_ARM_Count==0  && RT_ARM_Count==0){
-                Log.e("fk2","hihi");
                 setUpPerfectMsg();
             }else{
                 setupPieChart();

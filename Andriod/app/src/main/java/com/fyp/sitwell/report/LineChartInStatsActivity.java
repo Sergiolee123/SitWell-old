@@ -52,10 +52,10 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private int cursorCount;
     private TextView topicTextView;
     private Spinner spinner;
-    private static ArrayList<String> spinnerItemsList;
-    private static ArrayList<Entry> weekOneRec;
-    private static ArrayList<Entry> weekTwoRec;
-    private static ArrayList<Entry> weekThreeRec;
+    private ArrayList<String> spinnerItemsList;
+    private ArrayList<Entry> weekOneRec;
+    private ArrayList<Entry> weekTwoRec;
+    private ArrayList<Entry> weekThreeRec;
     private Button BtnPieChart;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
