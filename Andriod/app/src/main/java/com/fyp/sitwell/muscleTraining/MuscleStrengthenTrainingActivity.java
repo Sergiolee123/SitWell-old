@@ -21,9 +21,11 @@ import android.util.Size;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fyp.sitwell.report.DBHandler;
 import com.fyp.sitwell.R;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseDetection;
@@ -44,22 +46,26 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
+    private DBHandler dbHandler;
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
     PreviewView previewView;
     ImageAnalysis imageAnalysis;
     RepeatCounter repeatCounter;
     TextToSpeech textToSpeech;
-    Boolean started;
+    Boolean started, ended;
     static Class<?> mClass;
     TextView textView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_muscle_training);
-
+        dbHandler=new DBHandler(this);
+        dbHandler.userID = FirebaseAuth.getInstance().getUid();
+        dbHandler.getUserExerciseRec().setUserID(dbHandler.userID);
         mClass = (Class<?>) getIntent().getSerializableExtra("class");
 
         if(mClass == null){
@@ -71,7 +77,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
 
         repeatCounter = new RepeatCounter();
         started = false;
-
+        ended=false;
 
         options =
                 new AccuratePoseDetectorOptions.Builder()
@@ -153,24 +159,24 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
             throw new NullPointerException();
         }
 
-        if(!t.isPrepare()){
+        /*if(!t.isPrepare()){//x
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
             started = false;
-        }else if(!t.isReady()){
+        }else if(!t.isReady()){//x
             Log.e("muscle","isReady");
             message = "Please make sure you are in a correct posture";
             started = false;
-        }else if(t.isReady() && !started){
+        }else if(t.isReady() && !started){//o
             Log.e("muscle","started");
             textView.setText("");
             textToSpeech.speak( "You can start now, the app will count how many time you do"
                     ,TextToSpeech.QUEUE_ADD,null,null);
             started = true;
-        }else if(t.isHalf()){
+        }else if(t.isHalf()){//o
             Log.e("muscle","isUp");
             repeatCounter.finishedHalf();
-        }else if(t.isFinished()){
+        }else if(t.isFinished()){//o
             if(repeatCounter.addCounter()){
                 textToSpeech.speak("You have complete " + repeatCounter.getCounter() + " times"
                         ,TextToSpeech.QUEUE_ADD,null,null);
@@ -180,23 +186,21 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
             textToSpeech.speak("You have finished one side Please change to another side",
                      TextToSpeech.QUEUE_ADD, null, null);
             repeatCounter.setZero();
-        }
+        }*/
+        if(/*t.isEnd()*/true){
+            ended=true;
 
-        if(t.isEnd()){
             textToSpeech.speak(("Good job You have finished this training")
                     ,TextToSpeech.QUEUE_FLUSH, null, null);
             this.finish();
         }
 
-        if(!textToSpeech.isSpeaking() && message != null){
-            textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
+        /*if(!textToSpeech.isSpeaking() && message != null){
+           textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
             textView.setText(t.getInstruction());
-        }
+        }*/
 
         //textView.setText(t.debug());
-
-
-
     }
 
 
@@ -233,11 +237,16 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onStop() {
-
         super.onStop();
+        if(ended){
+            dbHandler.getUserExerciseRec().setStrengthExerciseCount(dbHandler.getUserExerciseRec().getStrengthExerciseCount()+1);
+            Log.e("muscleTrainingActivity",""+dbHandler.getUserExerciseRec().getStrengthExerciseCount()+1);
+            dbHandler.getUserExerciseRec().setRelaxCount(dbHandler.getUserExerciseRec().getRelaxCount());
+            dbHandler.insertExerciseRec("strength");
+            dbHandler.getUserExerciseRec().resetAllCol();
+        }
         imageAnalysis.clearAnalyzer();
         textToSpeech.shutdown();
         this.finish();

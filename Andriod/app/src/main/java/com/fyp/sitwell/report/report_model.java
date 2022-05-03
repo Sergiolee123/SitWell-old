@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 import java.text.DecimalFormat;
 

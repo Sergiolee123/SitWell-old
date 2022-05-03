@@ -14,8 +14,8 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.fyp.sitwell.DBHandler;
-import com.fyp.sitwell.LineChartReportActivity;
+import com.fyp.sitwell.report.DBHandler;
+import com.fyp.sitwell.report.LineChartInSitDetectionActivity;
 import com.fyp.sitwell.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
@@ -89,8 +89,8 @@ public class HabitCorrectionActivity extends FragmentActivity{
             EndBtnClick();
         }));
     }
-    //need to add End detection button
 
+    //need to add End detection button
     protected boolean isSetup(SittingPostureClassification s){
 
         String message = "";
@@ -306,19 +306,19 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }catch (Exception e){
         }
 
-        dbHandler.userId=uid;
+        dbHandler.userID =uid;
         dbHandler.getUserSittingRec().setUserID(uid);
         dbHandler.getUserSittingRec().setEndTime(dateStr());
         endTime = System.currentTimeMillis();
         dbHandler.getUserSittingRec().setDuration((TimeUnit.MILLISECONDS.toSeconds(endTime-startTime)));
         dbHandler.calAccuracy();
-        dbHandler.addNewRecord();
+        dbHandler.addNewSittingRecord();
         dbHandler.getUserSittingRec().resetAllCol();
-        dbHandler.insertRandomRecord();
+        dbHandler.insertRandomSittingRecord();
         dbHandler.printDetails();
 
 
-        Intent intent = new Intent( getApplicationContext(), LineChartReportActivity.class);
+        Intent intent = new Intent( getApplicationContext(), LineChartInSitDetectionActivity.class);
         startActivity(intent);
     }
 

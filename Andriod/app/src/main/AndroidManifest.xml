@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,30 +22,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
+        <activity
+            android:name=".muscleTrainingRecommendation.MuscleTrainingRecommendationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".report.PieChartExFreqReportActivity"
+            android:exported="false" />
 
-    <receiver android:name=".alarm.AlarmReceiver"
-        android:exported="false">
-    <intent-filter>
-        <action android:name="repeat_relax" />
-    </intent-filter>
-    </receiver>
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="repeat_relax" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".habitCorrection.HabitCorrectionSetting"
             android:exported="false"/>
         <activity
-            android:name=".PieChartReportActivity"
+            android:name=".report.LineChartInStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".LineChartReportActivity"
+            android:name=".report.PieChartSittingReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".report.LineChartInSitDetectionActivity"
             android:exported="false" />
         <activity
             android:name=".alarm.MuscleRelaxSetting"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".muscleTraining.MuscleRelaxTrainingActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".muscleTraining.MuscleRelaxActivity"
             android:exported="false" />
@@ -57,7 +66,6 @@
         <activity
             android:name=".IntroductionActivity"
             android:exported="false" />
-
         <activity
             android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -80,7 +88,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity
-            android:name=".ReportActivity"
+            android:name=".report.ReportActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
         <activity

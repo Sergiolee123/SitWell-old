@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,12 +18,13 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TAG2 = "Date";
 
     private static UserSittingRecModel userSittingRec= new UserSittingRecModel();
+    private static UserExerciseRecModel userExerciseRec = new UserExerciseRecModel();
 
     private int ProgramRepeatedTimes=0;
     private static int default_days=63;
     private static HashSet<String> dateSet = new HashSet<>(); //check Date
+    public static String userID;
 
-    public static String userId;
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -44,10 +45,12 @@ public class DBHandler extends SQLiteOpenHelper {
                 DBConstant. RT_ARM_Count + " INTEGER,"+
                 DBConstant.sitWellCount + " INTEGER,"+
                 DBConstant.sitPoorCount + " INTEGER," +
-                DBConstant.sit_accuracy_col + " REAL,"+
+                DBConstant.sit_accuracy_col + " REAL NOT NULL,"+
                 DBConstant.startTime_col + " TEXT NOT NULL,"+
                 DBConstant.endTime_col + " TEXT NOT NULL,"+
                 DBConstant.duration_col + " REAL NOT NULL,"+
+                DBConstant.programRepeatedTimes_col + " INTEGER NOT NULL," +
+                "FOREIGN KEY ("+DBConstant.programRepeatedTimes_col +")" +" REFERENCES "+DBConstant.DB2_NAME +"("+DBConstant.programRepeatedTimes_col+"),"+
                 "FOREIGN KEY ("+DBConstant.userID_col+")" +" REFERENCES "+DBConstant.DB2_NAME +"("+DBConstant.userID_col+")"
                 +" ON DELETE CASCADE "+")";
 
@@ -55,26 +58,38 @@ public class DBHandler extends SQLiteOpenHelper {
                 DBConstant.userID_col + " TEXT PRIMARY KEY," +
                 DBConstant.progDaysLeft_col + " INTEGER DEFAULT 63," +
                 DBConstant.progStatus_col + " REAL," +
-                DBConstant.ProgramRepeatedTimes_col + " INTEGER DEFAULT 0,"+
+                DBConstant.programRepeatedTimes_col + " INTEGER DEFAULT 0,"+
                 DBConstant.datesString_col + " TEXT NOT NULL"
                 + ")";
 
-        //String DB3_query = "CREATE TABLE " + DBConstant.DB3_NAME + " (" + DBConstant.
+        String DB3_query = "CREATE TABLE " + DBConstant.DB3_NAME + " (" +
+                DBConstant.exRecID_col + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                DBConstant.userID_col + " TEXT NOT NULL," +
+                /*DBConstant.exericseTypes_col + " TEXT NOT NULL CHECK ("+DBConstant.exericseTypes_col+"="+"'"+"RELAX" +"'" +" OR " +
+                DBConstant.exericseTypes_col+"="+"'"+"STRENGTH" +"'" +" )," +*/
+                DBConstant.strengthExerciseCount_col +" INTEGER DEFAULT 0,"+
+                DBConstant.relaxExerciseCount_col + " INTEGER DEFAULT 0,"+
+                DBConstant.programRepeatedTimes_col + " INTEGER NOT NULL," +
+                "FOREIGN KEY ("+DBConstant.programRepeatedTimes_col +")" +" REFERENCES "+DBConstant.DB2_NAME +"("+DBConstant.programRepeatedTimes_col+"),"+
+                "FOREIGN KEY ("+DBConstant.userID_col+")" +" REFERENCES "+DBConstant.DB2_NAME +"("+DBConstant.userID_col+")"
+                +" ON DELETE CASCADE "+
+                ")";
 
         db.execSQL(DB1_query);
         db.execSQL(DB2_query);
+        db.execSQL(DB3_query);
     }
 
     //sth incomplete here only insert the record in Usersitting Record table, but does not update User Progress Table
-    public void insertRandomRecord(){
+    public void insertRandomSittingRecord(){
         long result;
-        int insertRecNum= 5;
+        int insertRecNum= 21;
         while(insertRecNum-->0) {
             try (SQLiteDatabase db = getWritableDatabase()) {
                 ContentValues values = new ContentValues();
                 Random rand = new Random();
                 //int int_random = new Random().nextInt(50);
-                values.put(DBConstant.userID_col, userId);
+                values.put(DBConstant.userID_col, userID);
                 values.put(DBConstant.neckCount, rand.nextInt(50));
                 values.put(DBConstant.backCount, rand.nextInt(50));
                 values.put(DBConstant.SHLDRCount, rand.nextInt(50));
@@ -90,6 +105,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 int acc2 = rand.nextInt(100);
                 float accf2 = (float) acc2;
                 values.put(DBConstant.duration_col, accf2);
+                values.put(DBConstant.programRepeatedTimes_col, 0);
 
                 String StoredRecord = " userID = " + userSittingRec.getUserID() + ", recordID = " + userSittingRec.getRecordID() + ", neckNum = " + userSittingRec.getNeckNum() + ", backCount = " + userSittingRec.getBackNum() + ", SHLDRCount = " + userSittingRec.getSHLDRNum() +
                         " , leftArmNum = " + userSittingRec.getLeftArmNum() + ", rightArmNum = " + userSittingRec.getRightArmNum() + ", sitWellNum = " + userSittingRec.getSitWellNum() + ", sitPoorNum = " + userSittingRec.getSitPoorNum() +
@@ -115,21 +131,22 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewRecord() {
+    public void addNewSittingRecord() {
         //the detection ends before the first time of detection, no data collects
         if(userSittingRec.getSitWellNum()==0 && userSittingRec.getSitPoorNum()==0) return;
+
+        setProgRepeatedTimeInSitRec();
 
         //check if the record on the day is stored
         String date = getFullDateTime();
         String [] arr = date.split(" ");
         Cursor cursor = this.getSameDateRec(arr[0]); //retrieve the same day rec
         Log.e(TAG,arr[0]);
-        int cursorCount=cursor.getCount();
-        Log.e(TAG,"cursorCount = "+cursorCount );
+        int sitTotalRecCount=cursor.getCount();
+        Log.e(TAG,"cursorCount = "+sitTotalRecCount );
 
         //no related record is found
-        if(cursorCount==0) {
-            long result;
+        if(sitTotalRecCount==0) {
             try (SQLiteDatabase db = getWritableDatabase()) {
                 ContentValues values = new ContentValues();
                 values.put(DBConstant.userID_col, userSittingRec.getUserID());
@@ -144,28 +161,21 @@ public class DBHandler extends SQLiteOpenHelper {
                 values.put(DBConstant.startTime_col, userSittingRec.getStartTime());
                 values.put(DBConstant.endTime_col, userSittingRec.getEndTime());
                 values.put(DBConstant.duration_col, userSittingRec.getDuration());
+                values.put(DBConstant.programRepeatedTimes_col, userSittingRec.getProgramRepeatedTimes());
+                Log.e("userSittingRec.getProgramRepeatedTimes()",""+userSittingRec.getProgramRepeatedTimes());
 
                String StoredRecord = " userID = " + userSittingRec.getUserID() + ", recordID = " + userSittingRec.getRecordID() + ", neckNum = " + userSittingRec.getNeckNum() + ", backCount = " + userSittingRec.getBackNum() + ", SHLDRCount = " + userSittingRec.getSHLDRNum() +
                        " , leftArmNum = " + userSittingRec.getLeftArmNum() + ", rightArmNum = " + userSittingRec.getRightArmNum() + ", sitWellNum = " + userSittingRec.getSitWellNum() + ", sitPoorNum = " + userSittingRec.getSitPoorNum() +
-                       " , accuracy = " + userSittingRec.getSitAccuracy() + " , startTime = " + userSittingRec.getStartTime() + " , endTime = " + userSittingRec.getEndTime()  + " , duration = " + userSittingRec.getDuration();;
+                       " , accuracy = " + userSittingRec.getSitAccuracy() + " , startTime = " + userSittingRec.getStartTime() + " , endTime = " + userSittingRec.getEndTime()  + " , duration = " + userSittingRec.getDuration();
                 Log.d(TAG, StoredRecord);
 
-                result = db.insert(DBConstant.DB_NAME, null, values);
-                db.close();
-
-                if (result == -1) {
-                    Log.d(TAG, "new record insertion fails");
-                    //return false;
-                } else {
-                    Log.d(TAG, "new record added");
-                    // return true;
-                }
+                db.insert(DBConstant.DB_NAME, null, values);
 
             } catch (Exception e) {
                 Log.d(TAG, "wrong");
             }
 
-        }else if(cursorCount==1){ //found the same rec
+        }else if(sitTotalRecCount==1){ //found the same rec
             cursor.moveToNext();
             float oldRecAcc, oldRecDur,newAur, totalDur;
 
@@ -213,13 +223,13 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(DBConstant.userID_col, userSittingRec.getUserID());
             values.put(DBConstant.progDaysLeft_col, default_days-1);//****
             dateSet.clear();
-            Log.e(TAG2,"set.size() = "+ dateSet.size()+ " set.isEmpty() = "+ dateSet.isEmpty());
+            Log.e(TAG2,"set.size() = "+ dateSet.size());
             for (String s : dateSet) {
                 Log.e(TAG2, "new one , DATE ONLY " + s);
             }
             Log.e(TAG,"calProgStatus :" + calProgStatus(default_days-1));
             values.put(DBConstant.progStatus_col, calProgStatus(default_days-1));
-            values.put(DBConstant.ProgramRepeatedTimes_col,ProgramRepeatedTimes );
+            values.put(DBConstant.programRepeatedTimes_col,ProgramRepeatedTimes );
             values.put(DBConstant.datesString_col, getDateOnly()); //need to do checking
             db.insert(DBConstant.DB2_NAME, null, values);
             db.close();
@@ -241,14 +251,14 @@ public class DBHandler extends SQLiteOpenHelper {
             //reset the progDaysLeft column to default 63
             if(cursor.getInt(1)==0){ //check if progDaysLeft ==0
                 values.put(DBConstant.progDaysLeft_col, default_days-1);
-                values.put(DBConstant.ProgramRepeatedTimes_col, cursor.getInt(3)+1);
+                values.put(DBConstant.programRepeatedTimes_col, cursor.getInt(3)+1);
                 values.put(DBConstant.progStatus_col,  calProgStatus(default_days-1));
                 values.put(DBConstant.datesString_col, ""); //reset the string to ""
 
                 for (String s : dateSet) {
                     Log.e(TAG, "progDaysLeft ==0 REMOVED and added the new one, DATE ONLY" + s);
                 }
-            }else if(cursor.getInt(1)>0){
+            }else if(cursor.getInt(1)>0){ //when progDaysLeft column > 0
                 String datesString = cursor.getString(4);
                 String [] strArr = datesString.split(",");
                 dateSet.clear();
@@ -263,21 +273,22 @@ public class DBHandler extends SQLiteOpenHelper {
                 for(String s: dateSet)
                 Log.e(TAG2, "set elements:"+s);
 
-                if (!dateSet.contains(nowDate)) {
+                //update datesString
+                if (!dateSet.contains(nowDate)) { //newDate
                     Log.e(TAG2, "set does not contain the repeated element");
                     values.put(DBConstant.progDaysLeft_col, cursor.getInt(1)-1);
                     float a = (float)(cursor.getInt(1));
                     values.put(DBConstant.progStatus_col,  calProgStatus(a-1));
                     values.put(DBConstant.datesString_col, cursor.getString(4)+","+nowDate);
                     dateSet.add(nowDate);
-                } else {
+                } else {//sameDate
                     Log.e(TAG2, "set contains the repeated element");
                     values.put(DBConstant.progDaysLeft_col, cursor.getInt(1));
                     float a = (float)(cursor.getInt(1));
                     values.put(DBConstant.progStatus_col,  calProgStatus(a) );
                     values.put(DBConstant.datesString_col, cursor.getString(4));
                 }
-                values.put(DBConstant.ProgramRepeatedTimes_col, cursor.getInt(3));
+                values.put(DBConstant.programRepeatedTimes_col, cursor.getInt(3));
                 for (String s : dateSet) {
                     Log.e(TAG, "DATE ONLY" + s);
                 }
@@ -293,66 +304,242 @@ public class DBHandler extends SQLiteOpenHelper {
         }catch (Exception e){ Log.e(TAG, e.getMessage()); }
     }
 
+    //***notes: userSittingRec Also needs to add repeatNum to return related sitting rec to plot the linechart and pie chart
+    public void insertExerciseRec(String exerciseType){
+        //check if the user record already exists
+        //if yes retreive the rec and update
+        // if no then create a new Rec
+        //then update UserProgress record especially check the Stringdate in UserProgress
+        //the problem is when to reset the relax count and strength count***
+        //exercise rec
+        setProgRepeatedTimeInExRec();
+        boolean checkRepeatedEx = checkRepeatedExRec();  //sth wrong here****
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        if(!checkRepeatedEx){// add new Exercise Record
+            Log.e("!checkRepeatedEx start","add new Exercise Record");
+            values.put(DBConstant.userID_col, userID);
+            values.put(DBConstant.strengthExerciseCount_col, userExerciseRec.getStrengthExerciseCount());
+            Log.e("userExerciseRec.getExerciseCount()) new ex rec", ""+userExerciseRec.getStrengthExerciseCount());
+            values.put(DBConstant.relaxExerciseCount_col, userExerciseRec.getRelaxCount());
+            values.put(DBConstant.programRepeatedTimes_col, userExerciseRec.getProgRepeatedTimes());
+            db.insert(DBConstant.DB3_NAME, null, values);
+            Log.e("!checkRepeatedEx End","add new Exercise Record");
+        }else{ // update the existed exercise record
+            Log.e("checkRepeatedEx",""+checkRepeatedEx);
+            Log.e("checkRepeatedEx","update the existed Exercise Record");
+            Cursor cursor = findRepeatedRowInEx(userExerciseRec.getUserID());//***
+            Log.e("findRepeatedRowInEx cursor", ""+cursor.getCount());
+
+            cursor.moveToNext();
+            Log.e("exercise cursor content",""+cursor.getInt(0)+", "+cursor.getString(1) +", "+ cursor.getInt(2)+", "+ cursor.getInt(3)+", "+ cursor.getInt(4));
+            if(exerciseType.equals("strength")){
+                values.put(DBConstant.strengthExerciseCount_col, cursor.getInt(2)+1);
+                values.put(DBConstant.relaxExerciseCount_col, cursor.getInt(3));
+                Log.e("strength userExerciseRec.getExerciseCount())", ""+cursor.getInt(2)+1);
+            }else if(exerciseType.equals("relax")){
+                values.put(DBConstant.strengthExerciseCount_col, cursor.getInt(2));
+                values.put(DBConstant.relaxExerciseCount_col, cursor.getInt(3)+1);
+                Log.e("relax userExerciseRec.getExerciseCount())", ""+cursor.getInt(2));
+            }
+            values.put(DBConstant.programRepeatedTimes_col, userExerciseRec.getProgRepeatedTimes());
+
+            Log.e("test1",""+userExerciseRec.getUserID());
+            Log.e("test2",""+userExerciseRec.getStrengthExerciseCount());
+            Log.e("test3",""+userExerciseRec.getRelaxCount());
+            db.update(DBConstant.DB3_NAME, values, DBConstant.exRecID_col+"=?", new String[]{""+cursor.getInt(0)});//***
+        }
+        this.updateUserProgress();
+    }
+
+    private Cursor findRepeatedRowInEx(String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select * from "+ DBConstant.DB3_NAME + " uxr," + DBConstant.DB2_NAME + " up" +" WHERE uxr.userID ="+ "'" + userID + "'" + " AND "
+                + "uxr.userID=up.userID"+" AND " + "uxr.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
+        Log.e("end of findRepeatedRowInEx()", ""+"c count = " + c.getCount());
+        return c;
+    }
+
+    //sth problem here
+    private boolean checkRepeatedExRec(){
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery("Select * from " + DBConstant.DB3_NAME + " WHERE userID =" + "'" + userID + "'", null);
+            if(c.getCount()==0)
+                return false;
+            if (c.getCount()==1)
+                return true;
+        }catch (Exception e){
+            return false;
+        }
+        return false;
+    }
+
+
+    private void setProgRepeatedTimeInExRec(){
+        boolean progTimeCreated = checkProgRepeatedTimeExist();
+        Log.e("progTimeCreated = ",""+progTimeCreated);
+        if(!progTimeCreated){
+            userExerciseRec.setProgRepeatedTimes(0);
+            Log.e("!progTimeCreated",""+userExerciseRec.getProgRepeatedTimes());
+        }else{
+            Cursor c = getProgRepeatedTimeCursor();
+            Log.e("c.getCount()",""+c.getCount());
+            c.moveToNext();
+            if(c.getCount()==1){
+                Log.e("c.getCount()",""+c.getCount());
+                userExerciseRec.setProgRepeatedTimes(c.getInt(0));
+                Log.e("progTimeCreated",""+userExerciseRec.getProgRepeatedTimes());
+            }
+        }
+        Log.e("End of setProgRepeatedTimeInExRec","");
+    }
+
+
+    private void setProgRepeatedTimeInSitRec(){
+        boolean progTimeCreated = checkProgRepeatedTimeExist();
+        if(!progTimeCreated)
+            userSittingRec.setProgramRepeatedTimes(0);
+        if(progTimeCreated){
+            Cursor c = getProgRepeatedTimeCursor();
+            c.moveToNext();
+            if(c.getCount()==1){
+                userSittingRec.setProgramRepeatedTimes(c.getInt(0));
+            }
+        }
+    }
+
+    private boolean checkProgRepeatedTimeExist(){
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.rawQuery("Select " + DBConstant.programRepeatedTimes_col + " from " + DBConstant.DB2_NAME + " WHERE userID =" + "'" + userID + "'", null);
+            db.close();
+            Log.e("checkProgRepeatedTimeExist()", ""+c.getCount());
+            if(c.getCount()==0)
+                return false;
+            if(c.getCount()==1)
+                return true;
+
+        }catch (Exception e){
+            return false;
+        }
+        return false;
+    }
+
+    public Cursor getProgRepeatedTimeCursor(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select " + DBConstant.programRepeatedTimes_col + " from " + DBConstant.DB2_NAME + " WHERE userID =" + "'" + userID + "'", null);
+        return c;
+    }
+
     public Cursor getSelectedQuery(){
-        Cursor cursor = getAllData();
+        Cursor cursor = getAllSittingData();
         int recCount  = cursor.getCount();
         if(recCount<7){
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
             return cursor;
         }else if(recCount/7==1){//print 最近既7天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
             return cursor;
         }else if(recCount/7==2 ){ //print 最近既14天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
             return cursor;
         }else if(recCount/7>=3){//print 最近既21天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'"+ " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'"+ " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
             return cursor;
         }
         return null;
     }
 
-    public Cursor getSelectedQuerySitAccuray(){
-        Cursor cursor = getAllData();
+    public Cursor getSelectedQuerySitRecs(){
+        Cursor cursor = getAllSittingData();
         int recCount = cursor.getCount();
         if(recCount<7){
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" +" ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
             return cursor;
         }else if(recCount/7==1){//print 最近既7天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
+            cursor = db.rawQuery("Select * from " +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
             return cursor;
         }else if(recCount/7==2 ){ //print 最近既14天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
             return cursor;
         }else if(recCount/7>=3){//print 最近既21天
             SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME + " WHERE userID = '"+ userId+"'"+ " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
+            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'"+
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
             return cursor;
         }
 
         return null;
     }
 
-    //Piechart   this is useless
-    public Cursor getLatestRec(){
+    public Cursor getSelectedQuerySitAccuracy(){
+        Cursor cursor = getAllSittingData();
+        int recCount = cursor.getCount();
+        if(recCount<7){
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                   " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" +" ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
+            return cursor;
+        }else if(recCount/7==1){//print 最近既7天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
+            return cursor;
+        }else if(recCount/7==2 ){ //print 最近既14天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'" +
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
+            return cursor;
+        }else if(recCount/7>=3){//print 最近既21天
+            SQLiteDatabase db = this.getWritableDatabase();
+            cursor = db.rawQuery("Select "+ DBConstant.sit_accuracy_col +" from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'"+
+                    " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
+            return cursor;
+        }
+
+        return null;
+    }
+
+    public Cursor getAllDates(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select "+ DBConstant.datesString_col + " from " + DBConstant.DB2_NAME + " WHERE userID =" + "'"+ userID + "'", null);
+        return c;
+    }
+
+    public Cursor getTheLatestSittingRecDate(){
         String date = getDateOnly();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select " +DBConstant.neckCount+ ","+DBConstant.backCount+","+DBConstant.SHLDRCount+","+DBConstant.LT_ARM_Count+","+ DBConstant.RT_ARM_Count+","+
-                DBConstant.sitWellCount+","+DBConstant.sitPoorCount+","+DBConstant.sit_accuracy_col
-                +" from " + DBConstant.DB_NAME + " WHERE userID =" + "'"+ userId +"'" + " AND startTime LIKE '"+date+"%'" , null);
-        return cursor;
+        //this is for demo purpose
+        return db.rawQuery("Select " + DBConstant.endTime_col + " from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up " + " WHERE ur.ProgramRepeatedTimes = up.ProgramRepeatedTimes " +
+                 " AND "+ DBConstant.endTime_col + " LIKE '20%'" + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);
+        //this is for real time
+        /*return db.rawQuery("Select " + DBConstant.endTime_col + " from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up " + " WHERE ur.ProgramRepeatedTimes = up.ProgramRepeatedTimes " +
+                 " AND "+ DBConstant.endTime_col + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);*/
+    }
+
+    public Cursor getTheLatestSittingRecData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select " + DBConstant.neckCount +"," + DBConstant.backCount + "," + DBConstant.SHLDRCount +"," + DBConstant.LT_ARM_Count + "," +DBConstant.RT_ARM_Count+ "," +DBConstant.sitWellCount+ "," +DBConstant.sitPoorCount
+                +" from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up " + " WHERE ur.ProgramRepeatedTimes = up.ProgramRepeatedTimes " +
+                " AND "+ DBConstant.endTime_col + " LIKE '20%'" + " ORDER BY " + DBConstant.recordID_col + " DESC LIMIT 1", null);
     }
 
     public Cursor getUserProgress(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select "+DBConstant.progStatus_col+" from "+ DBConstant.DB2_NAME + " WHERE userID ="+ "'"+ userId+"'", null) ;
+        Cursor cursor = db.rawQuery("Select "+DBConstant.progStatus_col+" from "+ DBConstant.DB2_NAME + " WHERE userID ="+ "'"+ userID +"'", null) ;
         return cursor;
     }
 
@@ -362,6 +549,7 @@ public class DBHandler extends SQLiteOpenHelper {
             float denominator = (float)default_days;
         return numerator/denominator ;
     }
+
 
     public Cursor getSameDateRec(String date){ //search By startTime
         SQLiteDatabase db = this.getWritableDatabase();
@@ -390,6 +578,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(DBConstant.startTime_col, startTime);
         values.put(DBConstant.endTime_col, endTime);
         values.put(DBConstant.duration_col, totalDur);
+        values.put(DBConstant.programRepeatedTimes_col, userSittingRec.getProgramRepeatedTimes());
         //db.update(DB_NAME, values, recordID_col+"="+recordID, null);
         db.update(DBConstant.DB_NAME, values, DBConstant.recordID_col+"= ?", new String[]{""+recordID});
         db.close();
@@ -397,7 +586,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private boolean checkRepeatedUser(String userID){
         try{
-            SQLiteDatabase db = this.getWritableDatabase();
+            SQLiteDatabase db = this.getReadableDatabase();
             String select_query = "SELECT * from " + DBConstant.DB2_NAME + " WHERE " + DBConstant.userID_col
                     +" = " + "'" +userID+"'";
             Log.e(TAG, select_query);
@@ -418,11 +607,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private String getFullDateTime(){
         SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
-        String nowDate= formatter1.format(new Date());
-        return nowDate;
+        return formatter1.format(new Date());
     }
 
-    private String getDateOnly(){
+    public String getDateOnly(){
         String nowDate= getFullDateTime();
         String [] arr = nowDate.split(" ");
         Log.e(TAG,"getDateOnly() = "+ arr[0]);
@@ -452,16 +640,26 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //***
+    public Cursor getRecentUserExerciseData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select * from "+ DBConstant.DB3_NAME + " uxr," + DBConstant.DB2_NAME + " up" +" WHERE uxr.userID ="+ "'" + userID + "'" + " AND "
+                + "uxr.userID=up.userID"+" AND " + "uxr.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
+        Log.e("end of findRepeatedRowInEx()", ""+"c count = " + c.getCount());
+        return c;
+    }
+
     //called in GraphReportActivity to plot line graph
-    public Cursor getAllData() { //result ASC
+    public Cursor getAllSittingData() { //result ASC
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = "+ "'" + userSittingRec.getUserID()+ "'", null);
-        //Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME , null);
+        //Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = "+ "'" + userSittingRec.getUserID()+ "'", null);
+        Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up" + " WHERE ur.userID = "+ "'" + userSittingRec.getUserID()+ "'" +
+                " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
         return cursor;
     }
 
     //called in the ReportActivity , can be deleted
-    public Cursor getALLDataDESC(){
+    public Cursor getAllSittingDataDESC(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " order by " + DBConstant.recordID_col + " DESC", null);
         return cursor;
@@ -500,5 +698,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static UserSittingRecModel getUserSittingRec() {
         return userSittingRec;
+    }
+
+    public static UserExerciseRecModel getUserExerciseRec() {
+        return userExerciseRec;
     }
 }

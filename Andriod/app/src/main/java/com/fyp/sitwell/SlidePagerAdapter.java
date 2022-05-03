@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class SlidePagerAdapter extends FragmentStateAdapter {
-    private static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 2;
     public SlidePagerAdapter(FragmentActivity fa) {
         super(fa);
     }
@@ -14,9 +14,7 @@ public class SlidePagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 1:
-                return new ProfilePageFragment();
-            case 2:
-                return new SettingPageFragment();
+                return new InitialSettingPageFragment();
             case 0:
             default:
                 return new IntroPageFragment();

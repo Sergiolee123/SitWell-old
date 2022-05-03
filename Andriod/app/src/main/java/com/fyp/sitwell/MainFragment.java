@@ -23,7 +23,6 @@ public class MainFragment  extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main ,container ,false);
 
-
         mSittingView  = (CardView) view.findViewById(R.id.card_sitting);
         mRelaxView    = (CardView) view.findViewById(R.id.card_relax);
         mExerciseView = (CardView) view.findViewById(R.id.card_exercise);

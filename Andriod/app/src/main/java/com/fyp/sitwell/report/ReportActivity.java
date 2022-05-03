@@ -1,4 +1,4 @@
-package com.fyp.sitwell;
+package com.fyp.sitwell.report;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
+
+import com.fyp.sitwell.R;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class ReportActivity extends AppCompatActivity {
         recyclerView=(RecyclerView)findViewById(R.id.recview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Cursor cursor=new DBHandler(this).getALLDataDESC();
+        Cursor cursor=new DBHandler(this).getAllSittingDataDESC();
 
         StringBuilder msg= new StringBuilder();
         String [] colNames = cursor.getColumnNames();
