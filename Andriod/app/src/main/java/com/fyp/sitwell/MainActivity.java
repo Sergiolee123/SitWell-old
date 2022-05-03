@@ -112,13 +112,13 @@ public class MainActivity extends AppCompatActivity {
     private void showCustomDialog(){
         final Dialog dialog = new Dialog(MainActivity.this);
         int width = (int)(getResources().getDisplayMetrics().widthPixels*0.95);
-        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.75);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.65);
         dialog.setContentView(R.layout.dialog_profile);
         dialog.getWindow().setLayout(width, height);
         dialog.show();
         dialog.setCancelable(false);
         Button mConfirmBtn = dialog.findViewById(R.id.button_confirm);
-        Button mCancelBtn  = dialog.findViewById(R.id.button_cancel);
+        //Button mCancelBtn  = dialog.findViewById(R.id.button_cancel);
 
         TextInputLayout mLayoutHeight = (TextInputLayout) dialog.findViewById(R.id.layout_height);
         TextInputLayout mLayoutWeight =(TextInputLayout) dialog.findViewById(R.id.layout_weight);
@@ -158,12 +158,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        /*
         mCancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
-        });
+        });*/
     }
 
     @Override
