@@ -24,7 +24,7 @@ public class NeckMuscleRelax implements MuscleTrainingInterface{
 
     @Override
     public Boolean isReady() {
-        return null;
+        return true;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NeckMuscleRelax implements MuscleTrainingInterface{
 
     @Override
     public Boolean isEnd() {
-        return null;
+        return true;
     }
 
     @Override

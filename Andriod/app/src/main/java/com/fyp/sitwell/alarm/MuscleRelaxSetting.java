@@ -26,7 +26,6 @@ public class MuscleRelaxSetting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         time = 0;
-        MuscleRelaxAlarm.cancelAlarm(this);
         setContentView(R.layout.activity_muscle_relax_setting);
         errorText = findViewById(R.id.error_text_relex);
         button = findViewById(R.id.relax_setting_btn);
@@ -36,7 +35,7 @@ public class MuscleRelaxSetting extends AppCompatActivity {
         startTime = findViewById(R.id.relax_timePicker_start);
         endTime = findViewById(R.id.relax_timePicker_end);
 
-        button.setOnClickListener((View view) -> {
+        button.setOnClickListener(v -> {
 
             if(!isOneOfTheButtonChecked()){
                 errorText.setText("You should select at least one checkbox");
@@ -61,7 +60,7 @@ public class MuscleRelaxSetting extends AppCompatActivity {
                 errorText.setText("Start time should early then end time");
                 return;
             }
-
+            MuscleRelaxAlarm.cancelAlarm(this);
             Date date = new Date();
             date.setHours(startTime.getHour());
             date.setMinutes(endTime.getMinute());

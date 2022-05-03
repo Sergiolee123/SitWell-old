@@ -27,6 +27,7 @@
         app:cardElevation="5dp"
         app:cardBackgroundColor="#D57D7D"
         app:cardCornerRadius="20dp"
+        android:onClick="startHabitCorrectionSetting"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setting_text">

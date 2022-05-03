@@ -31,6 +31,8 @@
     </intent-filter>
     </receiver>
 
+        <activity android:name=".habitCorrection.HabitCorrectionSetting"
+            android:exported="false"/>
         <activity
             android:name=".PieChartReportActivity"
             android:exported="false" />

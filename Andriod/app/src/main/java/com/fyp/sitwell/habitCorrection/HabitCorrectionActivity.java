@@ -45,6 +45,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
     private Button endBtn;
     private DBHandler dbHandler;
     private String uid;
+    private int alertTime, alertCounter;
     long startTime, endTime;
 
 
@@ -62,6 +63,8 @@ public class HabitCorrectionActivity extends FragmentActivity{
 
         setup = false;
         connected = false;
+        alertTime = HabitLocalStorage.getId(this);
+        alertCounter = 0;
 
         try {
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -132,7 +135,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         }
 
         if(s.isNeckLateralBend()) {
-            message += "Your Neck is not straight@";
+            message += "Your Neck is not straight\n";
             dbHandler.getUserSittingRec().setNeckNum(dbHandler.getUserSittingRec().getNeckNum()+1);
         }
 
@@ -155,11 +158,14 @@ public class HabitCorrectionActivity extends FragmentActivity{
         if(message.equals("")){
             habitCorrectionFragment.clearAll();
             dbHandler.getUserSittingRec().setSitWellNum(dbHandler.getUserSittingRec().getSitWellNum()+1);
-        }else{
+        } else if(alertCounter < alertTime){
+            alertCounter++;
+        } else{
             habitCorrectionFragment.setTextView(message);
             habitCorrectionFragment.showCorrectPose();
             socket.emit("notification", uid, message + " Please refer to your correct posture");
             dbHandler.getUserSittingRec().setSitPoorNum(dbHandler.getUserSittingRec().getSitPoorNum()+1);
+            alertCounter=0;
         }
 
     }

@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.fyp.sitwell.alarm.MuscleRelaxSetting;
+import com.fyp.sitwell.habitCorrection.HabitCorrectionSetting;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.fyp.sitwell.muscleTraining.MuscleRelaxActivity;
@@ -83,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMuscleRelaxSetting(View view){
         startActivity(new Intent(this, MuscleRelaxSetting.class));
+    }
+
+    public void startHabitCorrectionSetting(View view){
+        startActivity(new Intent(this, HabitCorrectionSetting.class));
     }
 
     private void isFirstLogin(){
