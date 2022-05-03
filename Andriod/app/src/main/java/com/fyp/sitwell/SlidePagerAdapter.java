@@ -14,7 +14,7 @@ public class SlidePagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 1:
-                return new SettingPageFragment();
+                return new InitialSettingPageFragment();
             case 0:
             default:
                 return new IntroPageFragment();
