@@ -32,7 +32,7 @@
     </TextView>
     <TextView
         android:id="@+id/pieChartText"
-        android:text="Overall Incorrect Sitting PieChart"
+        android:text="Today's Incorrect Sitting PieChart"
         android:layout_marginTop="25dp"
         android:textSize="10pt"
         android:gravity="center"

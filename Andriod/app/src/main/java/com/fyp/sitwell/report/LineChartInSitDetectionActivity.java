@@ -327,7 +327,8 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     private int getInitialLabelDay(){
         int recordID =0;
         try {
-            Cursor cursor = dbHandler.getSelectedQuery();
+           // Cursor cursor = dbHandler.getSelectedSitRecs();
+            Cursor cursor = dbHandler.getSelectedQuerySitRecs();
             cursor.moveToLast();
             recordID = cursor.getInt(0);
         }catch(Exception e){
@@ -502,7 +503,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     @Override
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, PieChartSittingReportActivity.class);
+        Intent intent = new Intent(this, PieChartSitOverallErrReportActivity.class);
         startActivity(intent);
     }
 

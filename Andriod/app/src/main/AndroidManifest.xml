@@ -37,13 +37,14 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".habitCorrection.HabitCorrectionSetting"
-            android:exported="false"/>
+        <activity
+            android:name=".habitCorrection.HabitCorrectionSetting"
+            android:exported="false" />
         <activity
             android:name=".report.LineChartInStatsActivity"
             android:exported="false" />
         <activity
-            android:name=".report.PieChartSittingReportActivity"
+            android:name=".report.PieChartSitOverallErrReportActivity"
             android:exported="false" />
         <activity
             android:name=".report.LineChartInSitDetectionActivity"

@@ -439,10 +439,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return c;
     }
 
-    public Cursor getSelectedQuery(){
+    /*public Cursor getSelectedSitRecs(){
         Cursor cursor = getAllSittingData();
         int recCount  = cursor.getCount();
-        if(recCount<7){
+       if(recCount<7){
             SQLiteDatabase db = this.getWritableDatabase();
             cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
             return cursor;
@@ -460,6 +460,10 @@ public class DBHandler extends SQLiteOpenHelper {
             return cursor;
         }
         return null;
+    }*/
+    public Cursor getAllSitRecs(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select * from " + DBConstant.DB_NAME + " ur," + " " + DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '" + userID + "'" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes"  , null);
     }
 
     public Cursor getSelectedQuerySitRecs(){

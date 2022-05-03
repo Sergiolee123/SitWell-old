@@ -24,40 +24,37 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class PieChartSittingReportActivity extends AppCompatActivity {
+public class PieChartSitLastRecErrReportActivity extends AppCompatActivity {
     private PieChart pieChart;
     private DBHandler dbHandler;
-    private static Cursor cursor, cursor2;
+    private Cursor cursor, cursor2;
     private Button homeBtn;
     private TextView userProgTextView, PerfectMsgTextView, pieChartTextView;
-    private int neckCount=0,backCount=0, SHLDRCount=0,LT_ARM_Count=0,RT_ARM_Count=0;
-    private ArrayList<String> spinnerItemsList;
-
-
+    private int neckCount=0,backCount=0, SHLDRCount=0,LT_ARM_Count=0,RT_ARM_Count=0 ,sitWellCount=0,sitBadCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pie_chart_sitting_report);
+        setContentView(R.layout.activity_pie_chart_sit_last_rec_err_report);
         dbHandler=new DBHandler(this);
         pieChart=findViewById(R.id.pieChart);
         homeBtn=findViewById(R.id.HomeBtn);
         userProgTextView=findViewById(R.id.userProgText);
         PerfectMsgTextView=findViewById(R.id.PerfectMessage);
         pieChartTextView=findViewById(R.id.pieChartText);
-        spinnerItemsList = new ArrayList<>();
         cursor = dbHandler.getUserProgressStatus();
         cursor2 = dbHandler.getTheLatestSittingRecData();
 
-        Log.e("cursor2.getCount()",cursor2.getCount()+"");
-        Log.e("cursor.getCount()",cursor.getCount()+"");
         if(cursor2.getCount()==1){
+            //handleAllCounts();
             cursor2.moveToNext();
             neckCount=cursor2.getInt(0);
             backCount=cursor2.getInt(1);
             SHLDRCount=cursor2.getInt(2);
             LT_ARM_Count=cursor2.getInt(3);
             RT_ARM_Count=cursor2.getInt(4);
+            sitWellCount=cursor2.getInt(5);
+            sitBadCount=cursor2.getInt(6);
             Log.e("fk1",""+cursor2.getInt(0) + " "+ cursor2.getInt(1)+ " "+ cursor2.getInt(2)+ " "+ cursor2.getInt(3)+ " "+ cursor2.getInt(4));
             if( neckCount==0 && backCount==0 && SHLDRCount==0 && LT_ARM_Count==0  && RT_ARM_Count==0){
                 setUpPerfectMsg();
@@ -78,6 +75,19 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         });
     }
 
+    private void handleAllCounts() {
+        cursor2.moveToNext();
+        neckCount=cursor2.getInt(0);
+        backCount=cursor2.getInt(1);
+        SHLDRCount=cursor2.getInt(2);
+        LT_ARM_Count=cursor2.getInt(3);
+        RT_ARM_Count=cursor2.getInt(4);
+        sitWellCount=cursor2.getInt(5);
+        sitBadCount=cursor2.getInt(6);
+        Log.e("fk1"," "+neckCount+" "+backCount+" "+SHLDRCount+" "+LT_ARM_Count+" "+RT_ARM_Count+" "+sitWellCount+" "+sitBadCount);
+
+    }
+
     private void setUpNoRecMsg(){
         pieChartTextView.setText("No Sitting record is found");
         PerfectMsgTextView.setText("");
@@ -94,8 +104,9 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         float progStats = cursor.getFloat(0)*100;
         DecimalFormat df = new DecimalFormat("0.00");
         userProgTextView.setText("Finished "+ df.format(progStats)+ " %");
+        userProgTextView.setText("Finished  68 %");//demo
 
-        int total_count = (cursor2.getInt(5) + cursor2.getInt(6))*5;
+        int total_count = (sitWellCount + sitBadCount )*5;
 
         Log.e("neckCount", ""+neckCount);
         Log.e("backCount", ""+backCount);
@@ -165,5 +176,6 @@ public class PieChartSittingReportActivity extends AppCompatActivity {
         legend.setDrawInside(false);
         legend.setEnabled(true);
     }
+
 
 }
