@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import com.fyp.sitwell.alarm.MuscleRelaxSetting;
+import com.fyp.sitwell.habitCorrection.HabitCorrectionSetting;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -50,6 +54,15 @@ public class IntroductionActivity extends AppCompatActivity {
         });
         */
 
+    }
+
+    public void startMuscleRelaxSetting(View view){
+        startActivity(new Intent(this, MuscleRelaxSetting.class));
+    }
+
+
+    public void startHabitCorrectionSetting(View view){
+        startActivity(new Intent(this, HabitCorrectionSetting.class));
     }
 
 
