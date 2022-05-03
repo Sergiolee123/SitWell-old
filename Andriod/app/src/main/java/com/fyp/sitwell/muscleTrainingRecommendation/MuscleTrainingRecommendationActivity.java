@@ -41,17 +41,18 @@ public class MuscleTrainingRecommendationActivity extends AppCompatActivity {
         }
 
         if(sitRecsCursor.getCount()!=0){
-            while( sitRecsCursor.moveToNext())
+            while( sitRecsCursor.moveToNext()){
                 //2:neck 3:back 4:shoulder 5:leftArm 6:rightArm 7:sitWell 8:Sitbad
-                neck+=exRecCursor.getInt(2);
-                back+=exRecCursor.getInt(3);
-                shoulder+=exRecCursor.getInt(4);
-                leftArm+=exRecCursor.getInt(5);
-                rightArm+=exRecCursor.getInt(6);
-                sitwell+=exRecCursor.getInt(7);
-                sitbad+=exRecCursor.getInt(8);
+                neck+=sitRecsCursor.getInt(2);
+                back+=sitRecsCursor.getInt(3);
+                shoulder+=sitRecsCursor.getInt(4);
+                leftArm+=sitRecsCursor.getInt(5);
+                rightArm+=sitRecsCursor.getInt(6);
+                sitwell+=sitRecsCursor.getInt(7);
+                sitbad+=sitRecsCursor.getInt(8);
                 Log.e("print sitRecsCursorr", sitRecsCursor.getInt(2)+","+sitRecsCursor.getInt(3)+","+sitRecsCursor.getInt(4)+","+sitRecsCursor.getInt(5)+","+sitRecsCursor.getInt(6)+","+sitRecsCursor.getInt(7)+","+sitRecsCursor.getInt(8));
-        }
+                }
+            }
 
         SharedPreferences pref = getSharedPreferences("PrefsFile", MODE_PRIVATE);
         String pref_height = pref.getString("height","");
