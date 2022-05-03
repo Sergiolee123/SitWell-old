@@ -19,6 +19,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static UserSittingRecModel userSittingRec= new UserSittingRecModel();
     private static UserExerciseRecModel userExerciseRec = new UserExerciseRecModel();
+    /*private static */
 
     private int ProgramRepeatedTimes=0;
     private static int default_days=63;

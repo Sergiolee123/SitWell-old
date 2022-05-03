@@ -131,7 +131,10 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
             }
         }
         xAxisLabel.clear();
-        for(int i=dayEndPos-cursorCount+1;i<=dayEndPos;i++){
+        int count = cursorCount;
+        if(count>7)
+            count=7;
+        for(int i=dayEndPos-count+1;i<=dayEndPos;i++){
             xAxisLabel.add(weekArr[i]);
         }
         checkXAxisLabel=true;

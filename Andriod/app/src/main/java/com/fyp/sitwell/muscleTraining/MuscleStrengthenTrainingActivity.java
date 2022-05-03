@@ -242,7 +242,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
         super.onStop();
         if(ended){
             dbHandler.getUserExerciseRec().setStrengthExerciseCount(dbHandler.getUserExerciseRec().getStrengthExerciseCount()+1);
-            Log.e("muscleTrainingActivity",""+dbHandler.getUserExerciseRec().getStrengthExerciseCount()+1);
+            Log.e("muscleTrainingActivity",""+dbHandler.getUserExerciseRec().getStrengthExerciseCount());
             dbHandler.getUserExerciseRec().setRelaxCount(dbHandler.getUserExerciseRec().getRelaxCount());
             dbHandler.insertExerciseRec("strength");
             dbHandler.getUserExerciseRec().resetAllCol();
