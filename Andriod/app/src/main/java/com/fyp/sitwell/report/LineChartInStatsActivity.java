@@ -52,10 +52,10 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private int cursorCount;
     private TextView topicTextView;
     private Spinner spinner;
-    private static ArrayList<String> spinnerItemsList;
-    private static ArrayList<Entry> weekOneRec;
-    private static ArrayList<Entry> weekTwoRec;
-    private static ArrayList<Entry> weekThreeRec;
+    private ArrayList<String> spinnerItemsList;
+    private ArrayList<Entry> weekOneRec;
+    private ArrayList<Entry> weekTwoRec;
+    private ArrayList<Entry> weekThreeRec;
     private Button BtnPieChart;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
@@ -131,7 +131,10 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
             }
         }
         xAxisLabel.clear();
-        for(int i=dayEndPos-cursorCount+1;i<=dayEndPos;i++){
+        int count = cursorCount;
+        if(count>7)
+            count=7;
+        for(int i=dayEndPos-count+1;i<=dayEndPos;i++){
             xAxisLabel.add(weekArr[i]);
         }
         checkXAxisLabel=true;
@@ -333,7 +336,8 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     private int getInitialLabelDay(){
         int recordID =0;
         try {
-            Cursor cursor = dbHandler.getSelectedQuery();
+            //Cursor cursor = dbHandler.getSelectedSitRecs();
+            Cursor cursor = dbHandler.getSelectedQuerySitRecs();
             cursor.moveToLast();
             recordID = cursor.getInt(0);
         }catch(Exception e){
@@ -510,7 +514,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
     @Override
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, PieChartSittingReportActivity.class);
+        Intent intent = new Intent(this, PieChartSitOverallErrReportActivity.class);
         startActivity(intent);
     }
 

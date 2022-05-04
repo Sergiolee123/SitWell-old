@@ -19,7 +19,7 @@
         android:id="@+id/pieChartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sitting Detection Pie chart"
+        android:text="Overall Sitting Error Pie chart"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineChartBtn"
@@ -47,7 +47,6 @@
         app:layout_constraintTop_toBottomOf="@+id/pieChartExBtn"
         android:layout_marginTop="30sp"
         ></Button>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,10 +49,10 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     private int cursorCount;
     private TextView topicTextView;
     private Spinner spinner;
-    private static ArrayList<String> spinnerItemsList;
-    private static ArrayList<Entry> weekOneRec;
-    private static ArrayList<Entry> weekTwoRec;
-    private static ArrayList<Entry> weekThreeRec;
+    private ArrayList<String> spinnerItemsList;
+    private ArrayList<Entry> weekOneRec;
+    private ArrayList<Entry> weekTwoRec;
+    private ArrayList<Entry> weekThreeRec;
     private Button PieChartbutton;
 
     private ArrayList<String> xAxisLabel = new ArrayList<>();
@@ -327,7 +327,8 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     private int getInitialLabelDay(){
         int recordID =0;
         try {
-            Cursor cursor = dbHandler.getSelectedQuery();
+           // Cursor cursor = dbHandler.getSelectedSitRecs();
+            Cursor cursor = dbHandler.getSelectedQuerySitRecs();
             cursor.moveToLast();
             recordID = cursor.getInt(0);
         }catch(Exception e){
@@ -465,14 +466,11 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
 
     }
 
-
-
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 
-
-    public class DayAxisValueFormatter extends ValueFormatter {
+    /*public class DayAxisValueFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;
 
         public DayAxisValueFormatter(BarLineChartBase<?> chart) {
@@ -483,7 +481,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         public String getFormattedValue(float value) {
             return "Day " + (int) (value+1);
         }
-    }
+    }*/
 
     public class DayAxisValueFormatter2 extends ValueFormatter{
         private final BarLineChartBase<?> chart;
@@ -491,7 +489,6 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         public DayAxisValueFormatter2(BarLineChartBase<?> chart) {
             this.chart = chart;
         }
-
 
         @Override
         public String getFormattedValue(float value) {
@@ -502,7 +499,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
     @Override
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, PieChartSittingReportActivity.class);
+        Intent intent = new Intent(this, PieChartSitOverallErrReportActivity.class);
         startActivity(intent);
     }
 

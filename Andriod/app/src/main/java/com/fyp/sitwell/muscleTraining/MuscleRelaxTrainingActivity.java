@@ -22,8 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fyp.sitwell.R;
+import com.fyp.sitwell.report.DBHandler;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseDetection;
@@ -44,13 +46,14 @@ public class MuscleRelaxTrainingActivity extends AppCompatActivity {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
+    private DBHandler dbHandler;
     PoseDetector poseDetector;
     AccuratePoseDetectorOptions options;
     PreviewView previewView;
     ImageAnalysis imageAnalysis;
     RepeatCounter repeatCounter;
     TextToSpeech textToSpeech;
-    Boolean started;
+    Boolean started, ended;
     static Class<?> mClass;
     TextView textView;
 
@@ -59,6 +62,9 @@ public class MuscleRelaxTrainingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_muscle_training);
+        dbHandler=new DBHandler(this);
+        dbHandler.userID = FirebaseAuth.getInstance().getUid();
+        dbHandler.getUserExerciseRec().setUserID(dbHandler.userID);
 
         mClass = (Class<?>) getIntent().getSerializableExtra("class");
 
@@ -153,7 +159,7 @@ public class MuscleRelaxTrainingActivity extends AppCompatActivity {
             throw new NullPointerException();
         }
 
-        if(!t.isPrepare()){
+       /* if(!t.isPrepare()){
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
             started = false;
@@ -180,18 +186,19 @@ public class MuscleRelaxTrainingActivity extends AppCompatActivity {
             textToSpeech.speak("You have finished one side Please change to another side",
                     TextToSpeech.QUEUE_ADD, null, null);
             repeatCounter.setZero();
-        }
+        }*/
 
-        if(t.isEnd()){
+        if(/*t.isEnd()*/true){
+            ended=true;
             textToSpeech.speak(("Good job You have finished this training")
                     ,TextToSpeech.QUEUE_FLUSH, null, null);
             this.finish();
         }
 
-        if(!textToSpeech.isSpeaking() && message != null){
+       /* if(!textToSpeech.isSpeaking() && message != null){
             textToSpeech.speak(message,TextToSpeech.QUEUE_ADD,null,null);
             textView.setText(t.getInstruction());
-        }
+        }*/
 
         //textView.setText(t.debug());
 
@@ -236,8 +243,14 @@ public class MuscleRelaxTrainingActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
-
         super.onStop();
+        if(ended){
+            dbHandler.getUserExerciseRec().setStrengthExerciseCount(dbHandler.getUserExerciseRec().getStrengthExerciseCount());
+            dbHandler.getUserExerciseRec().setRelaxCount(dbHandler.getUserExerciseRec().getRelaxCount()+1);
+            Log.e("MuscleRelaxTrainingActivity",""+dbHandler.getUserExerciseRec().getRelaxCount());
+            dbHandler.insertExerciseRec("relax");
+            dbHandler.getUserExerciseRec().resetAllCol();
+        }
         imageAnalysis.clearAnalyzer();
         textToSpeech.shutdown();
         this.finish();

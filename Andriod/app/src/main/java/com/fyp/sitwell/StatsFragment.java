@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.fyp.sitwell.muscleTrainingRecommendation.MuscleTrainingRecommendationActivity;
 import com.fyp.sitwell.report.LineChartInStatsActivity;
 import com.fyp.sitwell.report.PieChartExFreqReportActivity;
-import com.fyp.sitwell.report.PieChartSittingReportActivity;
+import com.fyp.sitwell.report.PieChartSitOverallErrReportActivity;
 
 public class StatsFragment  extends Fragment {
 
@@ -41,7 +41,7 @@ public class StatsFragment  extends Fragment {
             @Override
             public void onClick(View view) {
                 //startActivity(new Intent(getActivity(), PieChartSittingReportActivity.class));
-                getActivity().startActivityForResult(new Intent(getActivity(), PieChartSittingReportActivity.class),112);
+                getActivity().startActivityForResult(new Intent(getActivity(), PieChartSitOverallErrReportActivity.class),112);
             }
         });
 
