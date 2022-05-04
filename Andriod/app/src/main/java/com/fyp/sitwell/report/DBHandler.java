@@ -522,6 +522,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    public Cursor getFirstWeekData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select  * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'"+
+                " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" ASC LIMIT 7", null);
+    }
+
+    public Cursor getLastWeekData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("Select  * from " + DBConstant.DB_NAME +" ur," + " "+ DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '"+ userID +"'"+
+                " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
+    }
+
     public Cursor getAllDates(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("Select "+ DBConstant.datesString_col + " from " + DBConstant.DB2_NAME + " WHERE userID =" + "'"+ userID + "'", null);
