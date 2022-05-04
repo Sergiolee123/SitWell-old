@@ -64,24 +64,24 @@ public class MuscleTrainingRecommendationActivity extends AppCompatActivity {
         StringBuilder suggest = new StringBuilder();
 
         if(sitwell>sitbad){
-            suggest.append("You are doing well! Keep going\n");
+            suggest.append("You are doing well! Keep going\n\n");
         }else{
-            suggest.append("You still need improvement, Keep going\n");
+            suggest.append("You still need improvement, Keep going\n\n");
         }
 
         if(relax/strength>5){
-            suggest.append("You should do more muscle strength\n");
+            suggest.append("You should do more muscle strength\n\n");
         } else if(strength>relax){
-            suggest.append("You should do more muscle relax\n");
+            suggest.append("You should do more muscle relax\n\n");
         }
 
         if(weight/height>24){
-            suggest.append("You should do more core muscle strengthen training\n");
-            suggest.append("You also should control your body fat\n");
+            suggest.append("You should do more core muscle strengthen training\n\n");
+            suggest.append("You also should control your body fat\n\n");
         }
 
         if(Integer.parseInt(pref_age)>40){
-            suggest.append("You should do more relaxing during your work, you can set the relax alarm period to 1 hour\n");
+            suggest.append("You should do more relaxing during your work, you can set the relax alarm period to 1 hour\n\n");
         }
 
         ArrayList<Integer> arrayList = new ArrayList<>();
@@ -92,15 +92,15 @@ public class MuscleTrainingRecommendationActivity extends AppCompatActivity {
         arrayList.add(rightArm);
         Collections.sort(arrayList);
         if(neck==arrayList.get(4)){
-            suggest.append("You should do more neck muscle training\n");
+            suggest.append("You should do more neck muscle training\n\n");
         } else if(back==arrayList.get(4)){
-            suggest.append("You should do more back muscle training\n");
+            suggest.append("You should do more back muscle training\n\n");
         } else if(shoulder==arrayList.get(4)){
-            suggest.append("You should do more shoulder muscle training\n");
+            suggest.append("You should do more shoulder muscle training\n\n");
         } else if(leftArm==arrayList.get(4)){
-            suggest.append("You should do more leftArm muscle training\n");
+            suggest.append("You should do more leftArm muscle training\n\n");
         } else if(rightArm==arrayList.get(4)){
-            suggest.append("You should do more rightArm muscle training\n");
+            suggest.append("You should do more rightArm muscle training\n\n");
         }
 
         textView.setText(suggest.toString());
