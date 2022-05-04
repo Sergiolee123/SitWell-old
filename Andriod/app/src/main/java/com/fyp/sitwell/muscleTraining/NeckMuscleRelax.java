@@ -2,10 +2,28 @@ package com.fyp.sitwell.muscleTraining;
 
 import android.graphics.PointF;
 
+import com.google.mlkit.vision.pose.Pose;
 import com.google.mlkit.vision.pose.PoseLandmark;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NeckMuscleRelax implements MuscleTrainingInterface{
 
+
+    private Pose pose;
+    private static String[] sides;
+    private static AtomicInteger sidesIndex;
+    private String side;
+
+    static {
+        sidesIndex = new AtomicInteger(0);
+        sides = new String[]{"right foot","left foot"};
+    }
+
+    public NeckMuscleRelax(Pose pose){
+        this.pose = pose;
+        this.side = sides[sidesIndex.get()];
+    }
 
     private double angleOfTwoPoint(PoseLandmark p1, PoseLandmark p2){
         return Math.toDegrees(Math.atan2(p1.getPosition().y-p2.getPosition().y,

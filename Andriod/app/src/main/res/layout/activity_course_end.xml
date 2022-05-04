@@ -4,30 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".muscleTrainingRecommendation.MuscleTrainingRecommendationActivity">
+    tools:context=".CourseEndActivity">
 
     <TextView
-        android:id="@+id/rec_instruction"
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="The recommendation is base on the data during the course"
         android:textAlignment="center"
-        android:layout_marginTop="25sp"
-        android:textSize="15sp"
+        android:layout_marginTop="15sp"
+        android:textSize="25sp"
+        android:text="You have finished the course!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/recommendation"
+        android:layout_marginTop="15sp"
+        android:id="@+id/final_report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Loading"
-        android:layout_marginTop="25sp"
-        android:lineSpacingExtra="4sp"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/rec_instruction"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

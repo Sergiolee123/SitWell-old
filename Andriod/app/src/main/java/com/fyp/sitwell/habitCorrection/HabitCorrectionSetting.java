@@ -31,7 +31,7 @@ public class HabitCorrectionSetting extends AppCompatActivity {
                 Toast.makeText(this, "Please input a integer number", Toast.LENGTH_LONG).show();
                 return;
             }
-            if(times>10){
+            if(times>9){
                 Toast.makeText(this, "Please input a number in 1-9", Toast.LENGTH_LONG).show();
                 return;
             }

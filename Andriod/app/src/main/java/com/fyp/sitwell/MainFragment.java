@@ -1,5 +1,6 @@
 package com.fyp.sitwell;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -37,6 +38,11 @@ public class MainFragment  extends Fragment {
         mExerciseView = (CardView) view.findViewById(R.id.card_exercise);
         remainingDayTextView=(TextView)view.findViewById(R.id.RemainDayTxtView);
         setUpRemainDayText();
+
+        if(checkCourseEnd(view.getContext())){
+            view.getContext().startActivity(new Intent(view.getContext(), CourseEndActivity.class));
+        }
+
         mSittingView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -75,5 +81,16 @@ public class MainFragment  extends Fragment {
             remainingDayTextView.setText("Remaining Days: 41");
         }
 
+    }
+
+    private Boolean checkCourseEnd(Context context){
+        Cursor c1 = dbHandler.checkRepeatedUserInProgress();
+        if(c1.getCount()==0){
+            return false;
+        }else{
+            Cursor cursor = dbHandler.getUserProgress();
+            cursor.moveToNext();
+            return cursor.getInt(0) <= 0;
+        }
     }
 }
