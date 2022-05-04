@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -57,7 +58,7 @@ public class MuscleRelaxSetting extends AppCompatActivity {
 
             int settingPeriodTime = endTime.getHour() - startTime.getHour();
             if(settingPeriodTime < 1){
-                errorText.setText("Start time should early then end time");
+                errorText.setText("Start time should early then end time and not least then 1 hour");
                 return;
             }
             MuscleRelaxAlarm.cancelAlarm(this);
@@ -75,6 +76,8 @@ public class MuscleRelaxSetting extends AppCompatActivity {
                 }
 
             }
+
+            Toast.makeText(this, "You have succesfully set the alarm", Toast.LENGTH_LONG).show();
 
         });
 

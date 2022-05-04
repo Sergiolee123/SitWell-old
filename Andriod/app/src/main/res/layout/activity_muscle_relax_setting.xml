@@ -18,8 +18,15 @@
         android:textAlignment="center" />
 
     <TextView
+        android:layout_marginTop="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:text="You can set how long the app to remind you to relax\n e.g. start time 9 a.m., end time 6 p.m. \n and period of 1 hour, the app will alert you to relax after each hour between 9 a.m. to 6 a.m."
+        android:textAlignment="center" />
+
+    <TextView
         android:id="@+id/start_text"
-        android:layout_marginTop="15sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start time" />
@@ -32,7 +39,6 @@
 
     <TextView
         android:id="@+id/end_text"
-        android:layout_marginTop="15sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="End time" />
@@ -79,6 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#ed1b0c"
+        android:layout_marginTop="5sp"
         android:textAlignment="center" />
 
     <Button
@@ -86,7 +93,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="35sp"
         android:text="save" />
 
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please input the number of incorrect sitting posture before the app alert you"
+        android:text="Please input the number you want that incorrect sitting posture occurs before the app alert you"
         android:layout_marginTop="25sp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"

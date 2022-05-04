@@ -44,9 +44,9 @@
     <string name="title_how">How it works?</string>
     <string name="content_how">There is mainly composed of three important components: correction, relaxation and training.</string>
     <string name="title_correction">Correction</string>
-    <string name="content_correction">It will connect to your computer camera and notify you when you have a unhealthy posture.</string>
+    <string name="content_correction">It can help you to build the habit of adapting a good sitting posture. It will connect to your computer camera and notify you when you are in a unhealthy sitting posture.</string>
     <string name="title_relaxAndTraining">Relaxation &amp; Training</string>
-    <string name="content_relaxAndTraining">It will guide you to do some relaxation/training of muscles through your phone\'s camera and voice.</string>
+    <string name="content_relaxAndTraining">Studies show that one of the main reason of having a bad sitting posture is due to poor muscle conditions. It will guide you to do some relaxation/training of muscles through your phone\'s camera and voice and improve your sitting posture.</string>
 
 
 </resources>
