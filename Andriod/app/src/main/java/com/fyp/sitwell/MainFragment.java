@@ -40,6 +40,10 @@ public class MainFragment  extends Fragment {
         setUpRemainDayText();
 
         if(checkCourseEnd(view.getContext())){
+            EndLocalStorage.setId(view.getContext());
+        }
+
+        if(EndLocalStorage.getId(view.getContext())==1){
             view.getContext().startActivity(new Intent(view.getContext(), CourseEndActivity.class));
         }
 
@@ -90,7 +94,7 @@ public class MainFragment  extends Fragment {
         }else{
             Cursor cursor = dbHandler.getUserProgress();
             cursor.moveToNext();
-            return cursor.getInt(0) <= 0;
+            return cursor.getInt(0) == 1;
         }
     }
 }
