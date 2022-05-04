@@ -358,7 +358,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private Cursor findRepeatedRowInEx(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("Select * from "+ DBConstant.DB3_NAME + " uxr," + DBConstant.DB2_NAME + " up" +" WHERE uxr.userID ="+ "'" + userID + "'" + " AND "
-                + "uxr.userID=up.userID"+" AND " + "uxr.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
+                + /*"uxr.userID=up.userID"+" "AND " + */"uxr.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
         Log.e("end of findRepeatedRowInEx()", ""+"c count = " + c.getCount());
         return c;
     }

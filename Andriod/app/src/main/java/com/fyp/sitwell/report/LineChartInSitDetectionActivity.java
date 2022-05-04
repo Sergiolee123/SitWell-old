@@ -466,14 +466,11 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
 
     }
 
-
-
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 
-
-    public class DayAxisValueFormatter extends ValueFormatter {
+    /*public class DayAxisValueFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;
 
         public DayAxisValueFormatter(BarLineChartBase<?> chart) {
@@ -484,7 +481,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         public String getFormattedValue(float value) {
             return "Day " + (int) (value+1);
         }
-    }
+    }*/
 
     public class DayAxisValueFormatter2 extends ValueFormatter{
         private final BarLineChartBase<?> chart;
@@ -492,7 +489,6 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
         public DayAxisValueFormatter2(BarLineChartBase<?> chart) {
             this.chart = chart;
         }
-
 
         @Override
         public String getFormattedValue(float value) {

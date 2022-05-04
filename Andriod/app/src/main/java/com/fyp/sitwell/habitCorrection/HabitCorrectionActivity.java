@@ -314,7 +314,7 @@ public class HabitCorrectionActivity extends FragmentActivity{
         dbHandler.calAccuracy();
         dbHandler.addNewSittingRecord();
         dbHandler.getUserSittingRec().resetAllCol();
-        dbHandler.insertRandomSittingRecord();
+        //dbHandler.insertRandomSittingRecord();
         dbHandler.printDetails();
 
 
