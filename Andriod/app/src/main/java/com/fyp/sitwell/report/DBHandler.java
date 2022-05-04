@@ -439,28 +439,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return c;
     }
 
-    /*public Cursor getSelectedSitRecs(){
-        Cursor cursor = getAllSittingData();
-        int recCount  = cursor.getCount();
-       if(recCount<7){
-            SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC ", null);
-            return cursor;
-        }else if(recCount/7==1){//print 最近既7天
-            SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 7", null);
-            return cursor;
-        }else if(recCount/7==2 ){ //print 最近既14天
-            SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 14", null);
-            return cursor;
-        }else if(recCount/7>=3){//print 最近既21天
-            SQLiteDatabase db = this.getWritableDatabase();
-            cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = '"+ userID +"'"+ " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
-            return cursor;
-        }
-        return null;
-    }*/
     public Cursor getAllSitRecs(){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("Select * from " + DBConstant.DB_NAME + " ur," + " " + DBConstant.DB2_NAME + " up " + " WHERE ur.userID = '" + userID + "'" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes"  , null);
@@ -490,7 +468,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     " AND " + "ur.userID=up.userID" + " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" + " ORDER BY " + DBConstant.recordID_col  +" DESC LIMIT 21", null);
             return cursor;
         }
-
         return null;
     }
 
