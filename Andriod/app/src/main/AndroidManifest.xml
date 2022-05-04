@@ -23,6 +23,9 @@
         android:theme="@style/Theme.SitWell"
         android:usesCleartextTraffic="false">
         <activity
+            android:name=".CourseEndActivity"
+            android:exported="false" />
+        <activity
             android:name=".muscleTrainingRecommendation.MuscleTrainingRecommendationActivity"
             android:exported="false" />
         <activity
@@ -37,8 +40,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".habitCorrection.HabitCorrectionSetting"
-            android:exported="false"/>
+        <activity
+            android:name=".habitCorrection.HabitCorrectionSetting"
+            android:exported="false" />
         <activity
             android:name=".report.LineChartInStatsActivity"
             android:exported="false" />
