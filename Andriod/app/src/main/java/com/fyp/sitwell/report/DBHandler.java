@@ -19,13 +19,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static UserSittingRecModel userSittingRec= new UserSittingRecModel();
     private static UserExerciseRecModel userExerciseRec = new UserExerciseRecModel();
-    /*private static */
 
     private int ProgramRepeatedTimes=0;
     private static int default_days=63;
     private static HashSet<String> dateSet = new HashSet<>(); //check Date
     public static String userID;
-
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -66,8 +64,6 @@ public class DBHandler extends SQLiteOpenHelper {
         String DB3_query = "CREATE TABLE " + DBConstant.DB3_NAME + " (" +
                 DBConstant.exRecID_col + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 DBConstant.userID_col + " TEXT NOT NULL," +
-                /*DBConstant.exericseTypes_col + " TEXT NOT NULL CHECK ("+DBConstant.exericseTypes_col+"="+"'"+"RELAX" +"'" +" OR " +
-                DBConstant.exericseTypes_col+"="+"'"+"STRENGTH" +"'" +" )," +*/
                 DBConstant.strengthExerciseCount_col +" INTEGER DEFAULT 0,"+
                 DBConstant.relaxExerciseCount_col + " INTEGER DEFAULT 0,"+
                 DBConstant.programRepeatedTimes_col + " INTEGER NOT NULL," +
@@ -81,7 +77,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(DB3_query);
     }
 
-    //sth incomplete here only insert the record in Usersitting Record table, but does not update User Progress Table
     public void insertRandomSittingRecord(){
         long result;
         int insertRecNum= 21;
@@ -131,7 +126,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    // this method is use to add new course to our sqlite database.
+    // this method is used to add new course to our sqlite database.
     public void addNewSittingRecord() {
         //the detection ends before the first time of detection, no data collects
         if(userSittingRec.getSitWellNum()==0 && userSittingRec.getSitPoorNum()==0) return;
@@ -305,17 +300,10 @@ public class DBHandler extends SQLiteOpenHelper {
         }catch (Exception e){ Log.e(TAG, e.getMessage()); }
     }
 
-    //***notes: userSittingRec Also needs to add repeatNum to return related sitting rec to plot the linechart and pie chart
+    //userSittingRec Also needs to add repeatNum to return related sitting rec to plot the linechart and pie chart
     public void insertExerciseRec(String exerciseType){
-        //check if the user record already exists
-        //if yes retreive the rec and update
-        // if no then create a new Rec
-        //then update UserProgress record especially check the Stringdate in UserProgress
-        //the problem is when to reset the relax count and strength count***
-        //exercise rec
         setProgRepeatedTimeInExRec();
-        boolean checkRepeatedEx = checkRepeatedExRec();  //sth wrong here****
-
+        boolean checkRepeatedEx = checkRepeatedExRec();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -657,13 +645,12 @@ public class DBHandler extends SQLiteOpenHelper {
     //called in GraphReportActivity to plot line graph
     public Cursor getAllSittingData() { //result ASC
         SQLiteDatabase db = this.getWritableDatabase();
-        //Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " WHERE userID = "+ "'" + userSittingRec.getUserID()+ "'", null);
         Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " ur," + DBConstant.DB2_NAME + " up" + " WHERE ur.userID = "+ "'" + userSittingRec.getUserID()+ "'" +
                 " AND " + "ur.ProgramRepeatedTimes=up.ProgramRepeatedTimes" , null);
         return cursor;
     }
 
-    //called in the ReportActivity , can be deleted
+    //called in the ReportActivity
     public Cursor getAllSittingDataDESC(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("Select * from " + DBConstant.DB_NAME + " order by " + DBConstant.recordID_col + " DESC", null);

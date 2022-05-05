@@ -91,7 +91,7 @@ public class PieChartExFreqReportActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("0.00");
         userProgTextView.setText("Finished "+ df.format(progStats)+ " %");
         //demo purpose
-        userProgTextView.setText("Finished 34.9 %");
+        //userProgTextView.setText("Finished 34.9 %");
 
         ArrayList<PieEntry> entries = new ArrayList<>();
         int strengthExCount=cursor.getInt(2);

@@ -87,7 +87,7 @@ public class LineChartInSitDetectionActivity extends AppCompatActivity implement
 
     private void setUpXaxisLabels(){
         Cursor c = dbHandler.getTheLatestSittingRecDate();
-        Log.e("fk1",""+c.getCount());
+        Log.e("c.getCount()",""+c.getCount());
         c.moveToNext();
 
         if(c.getCount()==0)return;

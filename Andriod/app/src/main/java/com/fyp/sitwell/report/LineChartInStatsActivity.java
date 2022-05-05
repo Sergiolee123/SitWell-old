@@ -104,7 +104,7 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         c.moveToNext();
 
         if(c.getCount()==0)return;
-        //***
+
         String latestDate = c.getString(0);
         Log.e("latestDate", ""+latestDate);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -116,7 +116,6 @@ public class LineChartInStatsActivity extends AppCompatActivity implements OnCha
         }
         DateFormat df = new SimpleDateFormat("EE");
         Log.e("GET THE DAY OF THE WEEK", ""+ df.format(dt1));
-        //***
 
         int dayCount =0;
         int dayEndPos=0;

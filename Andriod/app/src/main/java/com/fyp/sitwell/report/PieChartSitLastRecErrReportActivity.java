@@ -104,7 +104,7 @@ public class PieChartSitLastRecErrReportActivity extends AppCompatActivity {
         float progStats = cursor.getFloat(0)*100;
         DecimalFormat df = new DecimalFormat("0.00");
         userProgTextView.setText("Finished "+ df.format(progStats)+ " %");
-        userProgTextView.setText("Finished  68 %");//demo
+        //userProgTextView.setText("Finished  68 %");//demo
 
         int total_count = (sitWellCount + sitBadCount )*5;
 
