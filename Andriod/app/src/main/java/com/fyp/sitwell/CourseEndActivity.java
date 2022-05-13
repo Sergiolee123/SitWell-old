@@ -45,7 +45,7 @@ public class CourseEndActivity extends AppCompatActivity {
         }
 
         if(firstWeekAvg>lastWeekAvg){
-            reviewTextView.setText("You have made regression\n\nYou should repeat this program again");
+            reviewTextView.setText("You still need improvement!\n\nYou should repeat this program again");
         }
 
 

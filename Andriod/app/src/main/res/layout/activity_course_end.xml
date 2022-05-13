@@ -39,6 +39,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Text View"/>
+        android:text="You have made huge improvements
+
+You can end this program now"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

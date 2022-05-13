@@ -159,7 +159,7 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
             throw new NullPointerException();
         }
 
-        /*if(!t.isPrepare()){//x
+        if(!t.isPrepare()){//x
             Log.e("muscle","isPrepare");
             message = "Please make sure your whole body is inside the phone camera";
             started = false;
@@ -186,8 +186,8 @@ public class MuscleStrengthenTrainingActivity extends AppCompatActivity {
             textToSpeech.speak("You have finished one side Please change to another side",
                      TextToSpeech.QUEUE_ADD, null, null);
             repeatCounter.setZero();
-        }*/
-        if(/*t.isEnd()*/true){
+        }
+        if(t.isEnd()){
             ended=true;
 
             textToSpeech.speak(("Good job You have finished this training")
